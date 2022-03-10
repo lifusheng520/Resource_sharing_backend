@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 public class MyLogoutHandler implements LogoutHandler {
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        String headerToken = request.getHeader("Authorization");
+        String headerToken = request.getHeader("token");
         System.out.println("logout header Token = " + headerToken);
         System.out.println("logout request getMethod = " + request.getMethod());
         //

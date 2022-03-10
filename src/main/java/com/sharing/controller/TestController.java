@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
 
     @PostMapping("/")
-    public ResultFormatUtil.ApiResult test() {
+    public String test() {
         return ResultFormatUtil.format(250, "没权限啊~", null);
     }
 }

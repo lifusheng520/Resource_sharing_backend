@@ -32,7 +32,10 @@ class CampusresourcesharingApplicationTests {
 //        System.out.println(map);
 
         String encode = new BCryptPasswordEncoder().encode("123456");
-        System.out.println(encode);
+//        System.out.println(encode);
+
+        User user = new User();
+        user.setUsername("username");
 
     }
 

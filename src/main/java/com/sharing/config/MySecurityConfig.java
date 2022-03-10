@@ -3,6 +3,7 @@ package com.sharing.config;
 import com.sharing.config.handler.*;
 import com.sharing.serviceImpl.MyUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +12,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsUtils;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 /**
  * @author 李福生
@@ -52,6 +57,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(this.userDetailsService).passwordEncoder(this.passwordEncoder());
@@ -62,14 +68,34 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
         super.configure(web);
     }
 
+    /**
+     * 跨域过滤器
+     * @return
+     */
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        // 配置前端服务器前端URL端口
+        corsConfiguration.addAllowedOrigin("http://localhost:8086");
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedMethod("*");
+        // 允许请求携带cookies
+        corsConfiguration.setAllowCredentials(true);
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return new CorsFilter(source);
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .cors().disable()
+                .cors().and()
                 .csrf().disable()
                 .authorizeRequests()
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers("/druid/**").permitAll()
-//                .antMatchers("/auth/**").permitAll()
+                // 允许所有认证请求
+                .antMatchers("/auth/**").permitAll()
                 .antMatchers("/service/**").hasAnyRole("admin", "teacher", "student")
                 .antMatchers("/test/**").hasAnyRole("admin")
                 .and()
@@ -77,7 +103,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 // 退出登录的处理端口
-                .logout().logoutUrl("/auth/logout").permitAll()
+                .logout().logoutUrl("/auth/logout")
                 // 设置退出登录处理器
                 .addLogoutHandler(this.myLogoutHandler)
                 // 退出登录成功处理器

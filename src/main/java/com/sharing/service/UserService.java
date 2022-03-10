@@ -13,24 +13,26 @@ public interface UserService {
 
     /**
      * 查询用户
+     *
      * @return
      */
     User getUserByName(String username);
 
     /**
-     *  获取用户权限
+     * 获取用户权限
+     *
      * @return
      */
     List<String> getRoles(int id);
 
 
     /**
-     * 用户注册
-     * @param user
-     * @return
+     * 添加一个用户
+     *
+     * @param user 用户账号信息
+     * @return 添加状态
      */
-    boolean register(User user);
-
+    int register(User user);
 
 
 }

@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
     // 接收处理运行时异常
     @ExceptionHandler(value = RuntimeException.class)
     @ResponseBody
-    public ResultFormatUtil.ApiResult handler(RuntimeException e) {
+    public String handler(RuntimeException e) {
 //        将异常输出到日志中
         log.error("运行时异常：====>{}", e);
         return ResultFormatUtil.format(233, "运行时错误~", e.getMessage());

@@ -14,15 +14,11 @@ import lombok.Data;
  */
 public enum ResponseCode {
 
-    /**
-     * 登录成功
-     */
     LOGIN_SUCCESS(1001, "登录成功"),
-
-    /**
-     * 登录失败
-     */
-    LOGIN_FAIL(1002, "登录失败"),
+    LOGOUT_SUCCESS(1002, "退出登录成功"),
+    REGISTER_SUCCESS(1003, "注册成功"),
+    REGISTER_FAIL(1004, "注册失败"),
+    REGISTER_REPETITION(1005, "注册账号已经被注册"),
 
     /* 参数错误：1000～1999 */
     PARAM_NOT_VALID(1001, "参数无效"),

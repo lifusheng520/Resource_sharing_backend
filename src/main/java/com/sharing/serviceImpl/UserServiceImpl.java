@@ -35,14 +35,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean register(User user) {
-//        // 获取用户密码并加密
-//        String password = user.getPassword();
-//        password = new BCryptPasswordEncoder().encode(password);
-//        user.setPassword(password);
-//
-//        return this.userMapper.addUser(user) == 1;
-        return false;
+    public int register(User user) {
+        return this.userMapper.addUser(user);
     }
 
 }

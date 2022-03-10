@@ -1,8 +1,8 @@
 package com.sharing.config.handler;
 
+import com.sharing.Utils.ResponseCode;
 import com.sharing.Utils.ResultFormatUtil;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -23,11 +23,7 @@ public class MyLogoutSuccessHandler implements LogoutSuccessHandler {
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
-        SecurityContextHolder.clearContext();
-
-
-        ResultFormatUtil.ApiResult build = ResultFormatUtil.ApiResult.build(201, "退出登录成功~", null);
-
+        ResultFormatUtil.ApiResult build = ResultFormatUtil.ApiResult.build(ResponseCode.LOGOUT_SUCCESS, null);
         ResultFormatUtil.writeJSON(request, response, build);
     }
 }

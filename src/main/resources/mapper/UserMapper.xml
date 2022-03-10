@@ -18,7 +18,10 @@
         );
     </select>
 
-
+    <insert id="addUser" parameterType="user">
+        insert into user(username, password, enabled)
+        values (#{username}, #{password}, #{enabled});
+    </insert>
 
 
 </mapper>
