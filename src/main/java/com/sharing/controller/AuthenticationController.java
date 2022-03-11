@@ -32,7 +32,7 @@ public class AuthenticationController {
 
         // 查询账号是否已经被注册
         User userByName = this.userService.getUserByName(username);
-        if (userByName == null) {   // 重复注册
+        if (userByName != null) {   // 重复注册
             return ResultFormatUtil.format(ResponseCode.REGISTER_REPETITION, null);
         }
 
@@ -43,23 +43,16 @@ public class AuthenticationController {
         user.setUsername(username);
         user.setPassword(encode);
         user.setEnabled(1); // 设置为可用状态
+//        user.setCreate_time();
 
         // 持久化账号到数据库
         int i = this.userService.register(user);
         if (i > 0) {
             // 注册成功
-            return ResultFormatUtil.format(ResponseCode.REGISTER_SUCCESS, user);
+            return ResultFormatUtil.format(ResponseCode.REGISTER_SUCCESS, null);
         } else {
             return ResultFormatUtil.format(ResponseCode.REGISTER_FAIL, user);
         }
     }
-
-
-//    @PostMapping("/login")
-//    @ResponseBody
-//    public ResultFormatUtil.ApiResult login(@RequestBody Map<String, String> params) {
-//        User user = this.userService.getUserByName(params.get("username"));
-//        return ResultFormatUtil.format(123, "登录", user);
-//    }
 
 }

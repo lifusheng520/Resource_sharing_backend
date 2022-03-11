@@ -23,5 +23,9 @@
         values (#{username}, #{password}, #{enabled});
     </insert>
 
+    <select id="">
+
+    </select>
+
 
 </mapper>

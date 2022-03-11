@@ -15,6 +15,7 @@ import java.util.Collection;
  */
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class LoginAuthentication implements UserDetails {
 
     /**
@@ -26,6 +27,16 @@ public class LoginAuthentication implements UserDetails {
      * 用户token
      */
     private String token;
+
+    /**
+     * 用户收到的验证码
+     */
+    private int verificationCode;
+
+    /**
+     * 验证码发送时间
+     */
+    private long sendTime;
 
     /**
      * 用户权限
