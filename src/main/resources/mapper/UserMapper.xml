@@ -19,13 +19,34 @@
     </select>
 
     <insert id="addUser" parameterType="user">
-        insert into user(username, password, enabled)
-        values (#{username}, #{password}, #{enabled});
+        insert into user(username, password, enabled, create_time)
+        values (#{username}, #{password}, #{enabled}, #{create_time});
     </insert>
 
-    <select id="">
-
+    <select id="getUserInfo" parameterType="string" resultType="userinfo">
+        select *
+        from user, user_info
+        where id = user_id
+            and username = #{username};
     </select>
+
+    <update id="updateUserInfo" parameterType="userinfo">
+        update user_info
+        set name=#{name}, sex=#{sex}, address=#{address}
+        where user_id = #{id};
+    </update>
+
+    <update id="updateUserIconInfo" parameterType="userinfo">
+        update user_info
+        set headIcon=#{headIcon}
+        where user_id = #{id};
+    </update>
+
+
+    <update id="insertTime" parameterType="Date">
+        update user_info
+        set birthday=#{date}
+    </update>
 
 
 </mapper>

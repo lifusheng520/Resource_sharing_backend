@@ -1,5 +1,6 @@
 package com.sharing.config.handler;
 
+import com.sharing.Utils.ResponseCode;
 import com.sharing.Utils.ResultFormatUtil;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -21,7 +22,7 @@ import java.io.IOException;
 public class MyAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        ResultFormatUtil.ApiResult result = ResultFormatUtil.ApiResult.build(403, "暂时没有权限进行操作喔~", null);
+        ResultFormatUtil.ApiResult result = ResultFormatUtil.ApiResult.build(ResponseCode.USER_NOT_PERMISSION, null);
         ResultFormatUtil.writeJSON(request, response, result);
     }
 }

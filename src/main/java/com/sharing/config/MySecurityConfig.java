@@ -78,6 +78,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         // 配置前端服务器前端URL端口
         corsConfiguration.addAllowedOrigin("http://localhost:8086");
+//        corsConfiguration.addAllowedOrigin("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
         // 允许请求携带cookies
@@ -96,8 +97,8 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/druid/**").permitAll()
                 // 允许所有认证请求
                 .antMatchers("/auth/**").permitAll()
-                .antMatchers("/service/**").hasAnyRole("admin", "teacher", "student")
-                .antMatchers("/test/**").hasAnyRole("admin")
+                .antMatchers("/file/**").permitAll()
+                .antMatchers("/user/**").hasAnyRole("admin", "teacher", "student", "user")
                 .and()
                 .authorizeRequests()
                 .anyRequest().authenticated()

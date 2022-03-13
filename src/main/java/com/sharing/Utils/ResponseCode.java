@@ -9,25 +9,48 @@ import lombok.Data;
  * @date 2022-3-6
  * @time 下午 01:31
  * rules:
- * #1001～1999 区间表示登录认证状态码
- * #2001～2999 区间表示用户错误
+ * #1001～1999 区间表示登录认证状态码和消息
+ * #2001～2999 区间表示系统异常状态码和消息
+ * #3001～3999 区间表示请求类状态
+ * #4001～4999 区间表示用户业务请求状态和消息
  */
 public enum ResponseCode {
 
+    /**
+     * 用户认证类型的响应状态码和消息
+     */
     LOGIN_SUCCESS(1001, "登录成功"),
     LOGOUT_SUCCESS(1002, "退出登录成功"),
     REGISTER_SUCCESS(1003, "注册成功"),
     REGISTER_FAIL(1004, "注册失败"),
     REGISTER_REPETITION(1005, "注册账号已经被注册"),
+    USER_NOT_LOGIN(1006, "您还没有登录，请先登录再操作"),
+    USER_NOT_PERMISSION(1007, "您没有该资源的访问权限"),
+    SESSION_EXPIRED(1008,"您的登录已过期，请重新登录"),
 
-    /* 参数错误：1000～1999 */
-    PARAM_NOT_VALID(1001, "参数无效"),
-    PARAM_IS_BLANK(1002, "参数为空"),
-    PARAM_TYPE_ERROR(1003, "参数类型错误"),
-    PARAM_NOT_COMPLETE(1004, "参数缺失"),
+    /**
+     * 系统异常状态码和消息
+     */
+    EXCEPTION_RUNTIME(2001, "系统运行时发生异常"),
+    EXCEPTION_IO(2002, "文件IO操作异常"),
+    EXCEPTION_IO_UPLOAD(2003, "文件上传异常"),
+
+    /**
+     * 请求类状态
+     */
+    REQUEST_PARAM_LOSE(3001, "请求参数缺失"),
+    REQUEST_USER_DONT_EXIST(3002, "请求查询的用户不存在"),
+    REQUEST_USER_INFO_SUCCESS(3003, "查询用户信息请求成功"),
+
+    /**
+     * 用户业务
+     */
+    USER_INFO_UPDATE_SUCCESS(4001, "用户信息更新成功"),
+    USER_INFO_UPDATE_FAIL(4002, "用户信息更新失败"),
+    USER_ICON_UPDATE_SUCCESS(4003, "头像上传成功"),
+    USER_ICON_UPDATE_FAIL(4004, "头像上传失败"),
 
     /* 用户错误 */
-    USER_NOT_LOGIN(2001, "用户未登录"),
     USER_ACCOUNT_EXPIRED(2002, "账号已过期"),
     USER_CREDENTIALS_ERROR(2003, "密码错误"),
     USER_CREDENTIALS_EXPIRED(2004, "密码过期"),

@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -43,7 +44,7 @@ public class AuthenticationController {
         user.setUsername(username);
         user.setPassword(encode);
         user.setEnabled(1); // 设置为可用状态
-//        user.setCreate_time();
+        user.setCreate_time(new Date());
 
         // 持久化账号到数据库
         int i = this.userService.register(user);

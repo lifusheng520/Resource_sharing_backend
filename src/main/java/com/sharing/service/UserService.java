@@ -1,6 +1,7 @@
 package com.sharing.service;
 
 import com.sharing.pojo.User;
+import com.sharing.pojo.UserInfo;
 
 import java.util.List;
 
@@ -34,5 +35,27 @@ public interface UserService {
      */
     int register(User user);
 
+    /**
+     * 通过用户名获取用户信息
+     *
+     * @return 用户信息
+     */
+    UserInfo getUserInfo(String username);
+
+    /**
+     * 更新用户信息
+     *
+     * @param info 用户信息
+     * @return 用户结果
+     */
+    int updateUserInfo(UserInfo info);
+
+    /**
+     * 通过用户信息 更新头像文件名
+     *
+     * @param info 用户信息
+     * @return 用户头像文件名称
+     */
+    int updateUserIcon(UserInfo info);
 
 }

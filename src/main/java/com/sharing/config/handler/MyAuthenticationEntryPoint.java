@@ -1,5 +1,6 @@
 package com.sharing.config.handler;
 
+import com.sharing.Utils.ResponseCode;
 import com.sharing.Utils.ResultFormatUtil;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -21,7 +22,7 @@ import java.io.IOException;
 public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        ResultFormatUtil.ApiResult result = ResultFormatUtil.ApiResult.build(401, "请先登录再操作喔~", null);
+        ResultFormatUtil.ApiResult result = ResultFormatUtil.ApiResult.build(ResponseCode.USER_NOT_LOGIN, null);
         ResultFormatUtil.writeJSON(request, response, result);
     }
 }

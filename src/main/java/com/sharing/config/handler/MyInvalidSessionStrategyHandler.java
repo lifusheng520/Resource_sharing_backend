@@ -1,5 +1,6 @@
 package com.sharing.config.handler;
 
+import com.sharing.Utils.ResponseCode;
 import com.sharing.Utils.ResultFormatUtil;
 import org.springframework.security.web.session.InvalidSessionStrategy;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,7 @@ import java.io.IOException;
 public class MyInvalidSessionStrategyHandler implements InvalidSessionStrategy {
     @Override
     public void onInvalidSessionDetected(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        ResultFormatUtil.ApiResult result = ResultFormatUtil.ApiResult.build(2131, "登录过期，请重新登录~", null);
+        ResultFormatUtil.ApiResult result = ResultFormatUtil.ApiResult.build(ResponseCode.SESSION_EXPIRED, null);
 
         ResultFormatUtil.writeJSON(request, response, result);
     }

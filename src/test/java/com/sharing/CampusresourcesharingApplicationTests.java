@@ -3,7 +3,9 @@ package com.sharing;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.sharing.Utils.MyTokenUtil;
 import com.sharing.config.MyEmailSenderConfig;
+import com.sharing.mapper.UserMapper;
 import com.sharing.pojo.User;
+import com.sharing.pojo.UserInfo;
 import com.sharing.service.UserService;
 import com.sharing.serviceImpl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -22,6 +24,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.mail.internet.MimeMessage;
 import java.io.InputStream;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 import java.util.Random;
 
@@ -31,6 +37,9 @@ class CampusresourcesharingApplicationTests {
 
     @Autowired
     private UserService service;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Autowired
     private MyEmailSenderConfig sender;
@@ -61,12 +70,20 @@ class CampusresourcesharingApplicationTests {
 
 //        org.springframework.mail.MailSendException
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication);
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        System.out.println(authentication);
 
 //        Random random = new Random();
 //        double value = random.nextDouble();
 //        int vc = (int) (value * 1000000);
+
+//        Date date = new Date();
+//        int i = this.userMapper.insertTime(date);
+//
+//        System.out.println(i);
+
+        UserInfo admin = this.service.getUserInfo("asd");
+        System.out.println(admin);
 
 
     }
