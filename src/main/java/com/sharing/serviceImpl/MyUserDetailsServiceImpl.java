@@ -4,6 +4,7 @@ import com.sharing.pojo.LoginAuthentication;
 import com.sharing.pojo.User;
 import com.sharing.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,6 +30,9 @@ public class MyUserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserService userService;
 
+    @Value("${files.icon.host.url}")
+    private String userHeadIconFilePath;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         System.out.println("============MyUserDetailsServiceImpl");
@@ -44,7 +48,7 @@ public class MyUserDetailsServiceImpl implements UserDetailsService {
         if (user == null) {
             throw new RuntimeException("用户不存在~");
         }
-        System.out.println("userid"+user.getId());
+        System.out.println("userid" + user.getId());
 
         // 读取用户权限
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
@@ -55,6 +59,10 @@ public class MyUserDetailsServiceImpl implements UserDetailsService {
         for (String role : roles) {
             grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + role));
         }
+
+        // 查询用户头像信息
+        String userIconInfo = this.userService.getUserIconInfo(user.getId());
+        user.setHeadIcon(this.userHeadIconFilePath + userIconInfo);
 
         LoginAuthentication authentication = new LoginAuthentication(user, grantedAuthorities);
         System.out.println(authentication);

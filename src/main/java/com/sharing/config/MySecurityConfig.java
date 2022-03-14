@@ -98,6 +98,8 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 // 允许所有认证请求
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/file/**").permitAll()
+                .antMatchers("/user/authEmail/**").permitAll()
+                .antMatchers("/user/updatePass").permitAll()
                 .antMatchers("/user/**").hasAnyRole("admin", "teacher", "student", "user")
                 .and()
                 .authorizeRequests()

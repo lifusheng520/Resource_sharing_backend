@@ -26,6 +26,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public int getUserIdByUsername(String username) {
+        return this.userMapper.getUserIdByUsername(username);
+    }
+
+    @Override
     public User getUserByName(String username) {
         return this.userMapper.getUserByName(username);
     }
@@ -68,5 +73,31 @@ public class UserServiceImpl implements UserService {
     public int updateUserIcon(UserInfo info) {
         return this.userMapper.updateUserIconInfo(info);
     }
+
+    @Override
+    public String getUserIconInfo(int id) {
+        return this.userMapper.getUserIcon(id);
+    }
+
+    @Override
+    public int updateEmailVerifyCode(UserInfo info) {
+        return this.userMapper.updateEmailVerifyCode(info);
+    }
+
+    @Override
+    public UserInfo getVerifyCodeAndTime(int id) {
+        return this.userMapper.getVerifyCodeAndTime(id);
+    }
+
+    @Override
+    public int updateUserEmail(UserInfo info) {
+        return this.userMapper.updateUserEmail(info);
+    }
+
+    @Override
+    public String getUserEmail(String username) {
+        return this.userMapper.getUserEmailByUsername(username);
+    }
+
 
 }

@@ -26,7 +26,7 @@ public enum ResponseCode {
     REGISTER_REPETITION(1005, "注册账号已经被注册"),
     USER_NOT_LOGIN(1006, "您还没有登录，请先登录再操作"),
     USER_NOT_PERMISSION(1007, "您没有该资源的访问权限"),
-    SESSION_EXPIRED(1008,"您的登录已过期，请重新登录"),
+    SESSION_EXPIRED(1008, "您的登录已过期，请重新登录"),
 
     /**
      * 系统异常状态码和消息
@@ -41,6 +41,7 @@ public enum ResponseCode {
     REQUEST_PARAM_LOSE(3001, "请求参数缺失"),
     REQUEST_USER_DONT_EXIST(3002, "请求查询的用户不存在"),
     REQUEST_USER_INFO_SUCCESS(3003, "查询用户信息请求成功"),
+    REQUEST_PARAM_ERROR(3004, "查询用户信息请求成功"),
 
     /**
      * 用户业务
@@ -49,6 +50,13 @@ public enum ResponseCode {
     USER_INFO_UPDATE_FAIL(4002, "用户信息更新失败"),
     USER_ICON_UPDATE_SUCCESS(4003, "头像上传成功"),
     USER_ICON_UPDATE_FAIL(4004, "头像上传失败"),
+    EMAIL_SEND_FAIL(4005, "邮件发送失败"),
+    EMAIL_SEND_SUCCESS(4006, "邮件发送成功"),
+    EMAIL_VERIFY_CODE_ERROR(4007, "邮箱验证码错误"),
+    EMAIL_VERIFY_CODE_EXPIRED(4008, "邮箱验证码错误"),
+    EMAIL_BIND_SUCCESS(4009, "邮箱绑定成功"),
+    EMAIL_BIND_FAIL(4010, "邮箱绑定失败"),
+    EMAIL_NOT_BIND(4011, "账号还未绑定邮箱"),
 
     /* 用户错误 */
     USER_ACCOUNT_EXPIRED(2002, "账号已过期"),

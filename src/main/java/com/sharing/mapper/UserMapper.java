@@ -23,6 +23,14 @@ import java.util.List;
 public interface UserMapper {
 
     /**
+     * 根据用户名获取用户的id
+     *
+     * @param username 用户名
+     * @return 用户id
+     */
+    int getUserIdByUsername(String username);
+
+    /**
      * 通过用户名查询一个用户
      *
      * @param username 用户账号名
@@ -69,6 +77,46 @@ public interface UserMapper {
      * @return 更新状态
      */
     int updateUserIconInfo(UserInfo info);
+
+    /**
+     * 通过用户id，查询用户头像信息
+     *
+     * @param id 用户id
+     * @return 用户头像文件名
+     */
+    String getUserIcon(int id);
+
+    /**
+     * 更新邮箱验证码，根据id
+     *
+     * @param info 验证码信息
+     * @return 更新状态
+     */
+    int updateEmailVerifyCode(UserInfo info);
+
+    /**
+     * 通过用户id从数据库中查询验证码和发送时间
+     *
+     * @param id 用户id
+     * @return 用户id对应的验证码和发送时间
+     */
+    UserInfo getVerifyCodeAndTime(int id);
+
+    /**
+     * 通过用户id从数据库中的更新用户的邮箱号
+     *
+     * @param info 用户info
+     * @return 更新影响数
+     */
+    int updateUserEmail(UserInfo info);
+
+    /**
+     * 通过用户名从数据库中查询用户邮箱
+     *
+     * @param username 用户名
+     * @return 用户邮箱号
+     */
+    String getUserEmailByUsername(String username);
 
     int insertTime(Date date);
 

@@ -3,9 +3,9 @@ package com.sharing.controller;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.crypto.SecureUtil;
 import com.sharing.Utils.ResponseCode;
 import com.sharing.Utils.ResultFormatUtil;
+import com.sharing.config.MyEmailSenderConfig;
 import com.sharing.pojo.UserInfo;
 import com.sharing.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +13,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -43,6 +47,154 @@ public class UserController {
      */
     @Value("${files.icon.host.url}")
     private String iconHostUrl;
+
+    /**
+     * 邮箱发送器
+     */
+    @Autowired
+    private MyEmailSenderConfig emailSender;
+
+
+
+    @PostMapping("/updatePass")
+    public String updateUserPassword(@RequestBody Map<String, String> params){
+        System.out.println(params);
+
+        return "asdf";
+    }
+
+
+
+
+    /**
+     * 向用户发送一封邮件，用于修改密码的身份验证
+     *
+     * @param username 用户名
+     * @return 发送状态
+     */
+    @GetMapping("/authEmail/{username}")
+    public String authenticationUserEmail(@PathVariable String username) {
+        if (username == null || "".equals(username))
+            return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, "username");
+
+        // 获取用户的邮箱号
+        UserInfo info = this.userService.getUserInfo(username);
+        String email = info.getEmail();
+        if (email == null || "".equals(email))
+            return ResultFormatUtil.format(ResponseCode.EMAIL_NOT_BIND, username);
+
+        // 获取一个六位数的验证码
+        String verifyCode = MyEmailSenderConfig.generateVerifyCode(6);
+
+        // 发送邮箱
+        String title = "重置密码验证";
+        String message = "重置您的账号密码";
+        boolean b = this.emailSender.sendEmail(email, title, message, verifyCode);
+        if (!b)
+            return ResultFormatUtil.format(ResponseCode.EMAIL_SEND_FAIL, username);
+
+        // 将验证码更新到数据库
+        info.setVerifyCode(verifyCode);
+        info.setVerifyTime(new Date());
+        int id = this.userService.getUserIdByUsername(username);
+        info.setId(id);
+        int i = this.userService.updateEmailVerifyCode(info);
+
+        if (i > 0)
+            return ResultFormatUtil.format(ResponseCode.EMAIL_SEND_SUCCESS, username);
+        else
+            return ResultFormatUtil.format(ResponseCode.EMAIL_SEND_FAIL, username);
+    }
+
+    @PostMapping("/bindEmail")
+    public String bindEmailByVerifyCode(@RequestBody Map<String, String> params) {
+        // 获取请求参数
+        int id = Integer.valueOf(params.get("id"));
+        String email = params.get("email");
+        String verifyCode = params.get("verifyCode");
+
+        // 查询数据库中的用户验证码信息
+        UserInfo info = this.userService.getVerifyCodeAndTime(id);
+        String code = info.getVerifyCode();
+
+        // 如果验证码不匹配
+        if (code != null && !code.equals(verifyCode)) {
+            return ResultFormatUtil.format(ResponseCode.EMAIL_VERIFY_CODE_ERROR, email);
+        }
+
+        // 如果验证码已经过期了
+        long currentTimeMillis = System.currentTimeMillis();
+        long time = info.getVerifyTime().getTime();
+        long interval = (currentTimeMillis - time) / 1000;
+        if (interval > MyEmailSenderConfig.VERIFY_VALID_TIME) {
+            return ResultFormatUtil.format(ResponseCode.EMAIL_VERIFY_CODE_EXPIRED, email);
+        }
+
+        // 验证码正确且没有过时，更新用户邮箱号
+        info.setId(id);
+        info.setEmail(email);
+        int i = this.userService.updateUserEmail(info);
+
+        if (i > 0)
+            return ResultFormatUtil.format(ResponseCode.EMAIL_BIND_SUCCESS, email);
+        else
+            return ResultFormatUtil.format(ResponseCode.EMAIL_BIND_FAIL, email);
+    }
+
+    /**
+     * 邮箱验证码发送接口
+     *
+     * @param params 用户的id和邮箱地址参数map
+     * @return 邮件发送的状态码json字符串
+     */
+    @PostMapping("/sendVerifyCode")
+    public String sendUserEmail(@RequestBody Map<String, String> params) {
+        // 获取用户id和邮箱地址
+        int id = Integer.valueOf(params.get("id"));
+        String emailAddress = params.get("email");
+
+        //  获取一个六位数的验证码
+        String verifyCode = MyEmailSenderConfig.generateVerifyCode(6);
+
+        // 向用户输入的邮箱地址发送验证码
+        String title = "邮箱绑定";
+        String message = "绑定安全邮箱";
+        boolean b = this.emailSender.sendEmail(emailAddress, title, message, verifyCode);
+        if (!b) {    // 邮箱发送失败
+            return ResultFormatUtil.format(ResponseCode.EMAIL_SEND_FAIL, emailAddress);
+        }
+
+        // 获取当前时间戳，记录验证码发送时间，并将验证码和发送时间存储到数据库中
+        UserInfo info = new UserInfo();
+        Date time = new Date();
+        info.setId(id);
+        info.setVerifyCode(verifyCode);
+        info.setVerifyTime(time);
+        int i = this.userService.updateEmailVerifyCode(info);
+
+        if (i > 0)
+            return ResultFormatUtil.format(ResponseCode.EMAIL_SEND_SUCCESS, time);
+        else
+            return ResultFormatUtil.format(ResponseCode.EMAIL_SEND_FAIL, emailAddress);
+    }
+
+    @GetMapping("/icon/{iconFileName}")
+    public void getIconUrl(@PathVariable String iconFileName, HttpServletResponse response) throws IOException {
+        // 获取磁盘文件绝对路径
+        String distFile = this.iconUploadPath + iconFileName;
+        File file = new File(distFile);
+
+        // 设置输出流格式
+        ServletOutputStream outputStream = response.getOutputStream();
+        response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(iconFileName, "UTF-8"));
+        response.setContentType("application/octet-stream");
+
+        // 读取文件的字节流
+        outputStream.write(FileUtil.readBytes(file));
+        outputStream.flush();
+        outputStream.close();
+    }
+
 
     /**
      * 头像文件上传接口
@@ -112,7 +264,9 @@ public class UserController {
         if (userInfo == null) {
             return ResultFormatUtil.format(ResponseCode.REQUEST_USER_DONT_EXIST, null);
         }
-
+        // 设置用户头像URL
+        String icon = userInfo.getHeadIcon();
+        userInfo.setHeadIcon(this.iconHostUrl + icon);
         return ResultFormatUtil.format(ResponseCode.REQUEST_USER_INFO_SUCCESS, userInfo);
     }
 

@@ -5,6 +5,11 @@
 
 <mapper namespace="com.sharing.mapper.UserMapper">
 
+    <select id="getUserIdByUsername" resultType="int" parameterType="string">
+        select id from campusresourcesharing.user
+        where username = #{username};
+    </select>
+
     <select id="getUserByName" resultType="user" parameterType="string">
         select * from campusresourcesharing.user
         where username = #{username};
@@ -41,6 +46,35 @@
         set headIcon=#{headIcon}
         where user_id = #{id};
     </update>
+
+    <select id="getUserIcon" parameterType="int" resultType="string">
+        select headIcon from user_info
+        where user_id = #{id};
+    </select>
+
+    <update id="updateEmailVerifyCode" parameterType="userinfo">
+        update user_info
+        set verifyCode = #{verifyCode}, verifyTime = #{verifyTime}
+        where user_id = #{id};
+    </update>
+
+    <select id="getVerifyCodeAndTime" resultType="userinfo" parameterType="int">
+        select * from user_info
+        where user_id = #{id};
+    </select>
+
+    <update id="updateUserEmail" parameterType="userinfo">
+        update user_info
+        set email=#{email}
+        where user_id = #{id};
+    </update>
+
+    <select id="getUserEmailByUsername" parameterType="string" resultType="string">
+        select email
+        from user, user_info
+        where id = user_id and username = #{username};
+    </select>
+
 
 
     <update id="insertTime" parameterType="Date">

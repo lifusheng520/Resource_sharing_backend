@@ -23,4 +23,5 @@ public class User {
     private String password;
     private int enabled;
     private Date create_time;
+    private String headIcon;
 }

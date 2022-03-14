@@ -23,4 +23,5 @@ public class JsonUser {
     private int isEnable;
     private String token;
     private Collection<? extends GrantedAuthority> roles;
+    private String headIcon;
 }

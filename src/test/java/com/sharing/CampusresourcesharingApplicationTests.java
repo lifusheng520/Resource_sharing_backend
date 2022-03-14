@@ -2,6 +2,8 @@ package com.sharing;
 
 import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.sharing.Utils.MyTokenUtil;
+import com.sharing.Utils.ResponseCode;
+import com.sharing.Utils.ResultFormatUtil;
 import com.sharing.config.MyEmailSenderConfig;
 import com.sharing.mapper.UserMapper;
 import com.sharing.pojo.User;
@@ -73,17 +75,16 @@ class CampusresourcesharingApplicationTests {
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //        System.out.println(authentication);
 
-//        Random random = new Random();
-//        double value = random.nextDouble();
-//        int vc = (int) (value * 1000000);
+
+        System.out.println(MyEmailSenderConfig.generateVerifyCode(6));
 
 //        Date date = new Date();
 //        int i = this.userMapper.insertTime(date);
 //
 //        System.out.println(i);
 
-        UserInfo admin = this.service.getUserInfo("asd");
-        System.out.println(admin);
+//        UserInfo admin = this.service.getUserInfo("admin");
+//        System.out.println(ResultFormatUtil.format(ResponseCode.EMAIL_BIND_SUCCESS, admin));
 
 
     }
