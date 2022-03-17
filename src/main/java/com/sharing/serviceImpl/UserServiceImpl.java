@@ -99,5 +99,10 @@ public class UserServiceImpl implements UserService {
         return this.userMapper.getUserEmailByUsername(username);
     }
 
+    @Override
+    public int updatePassword(String username, String password) {
+        return this.userMapper.updateUserPassword(username, password);
+    }
+
 
 }

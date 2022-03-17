@@ -75,6 +75,11 @@
         where id = user_id and username = #{username};
     </select>
 
+    <update id="updateUserPassword" parameterType="string">
+        update user
+        set password = #{password}
+        where username = #{username};
+    </update>
 
 
     <update id="insertTime" parameterType="Date">

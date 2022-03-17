@@ -10,6 +10,7 @@ import com.sharing.pojo.UserInfo;
 import com.sharing.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -55,15 +56,38 @@ public class UserController {
     private MyEmailSenderConfig emailSender;
 
 
-
     @PostMapping("/updatePass")
-    public String updateUserPassword(@RequestBody Map<String, String> params){
-        System.out.println(params);
+    public String updateUserPassword(@RequestBody Map<String, String> params) {
+        String username = params.get("username");
+        String password = params.get("password");
+        String checkPass = params.get("checkPass");
+        String verifyCode = params.get("verifyCode");
 
-        return "asdf";
+        // 从数据库中查询用户名对应的验证码和发送时间
+        UserInfo verifyCodeAndTime = this.userService.getUserInfo(username);
+        String code = verifyCodeAndTime.getVerifyCode();
+        Date time = verifyCodeAndTime.getVerifyTime();
+
+        if (code == null || "".equals(code))
+            return ResultFormatUtil.format(ResponseCode.EMAIL_CODE_NOT_FOUND, username);
+
+        // 校验验证码是否正确且未过期
+        long end = System.currentTimeMillis();
+        long begin = time.getTime();
+        long seconds = (end - begin) / 1000;
+        if (code.equals(verifyCode) && seconds <= MyEmailSenderConfig.VERIFY_VALID_TIME) {
+            // 校验通过，修改用户密码
+            if (password != null && !"".equals(password) && password.equals(checkPass)) {
+                // 加密用户密码
+                int i = this.userService.updatePassword(username, new BCryptPasswordEncoder().encode(password));
+                if (i > 0)
+                    return ResultFormatUtil.format(ResponseCode.UPDATE_PASSWORD_SUCCESS, username);
+            }
+
+        }
+
+        return ResultFormatUtil.format(ResponseCode.UPDATE_PASSWORD_FAIL, username);
     }
-
-
 
 
     /**

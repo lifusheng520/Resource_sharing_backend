@@ -76,15 +76,10 @@ class CampusresourcesharingApplicationTests {
 //        System.out.println(authentication);
 
 
-        System.out.println(MyEmailSenderConfig.generateVerifyCode(6));
-
 //        Date date = new Date();
 //        int i = this.userMapper.insertTime(date);
 //
-//        System.out.println(i);
 
-//        UserInfo admin = this.service.getUserInfo("admin");
-//        System.out.println(ResultFormatUtil.format(ResponseCode.EMAIL_BIND_SUCCESS, admin));
 
 
     }

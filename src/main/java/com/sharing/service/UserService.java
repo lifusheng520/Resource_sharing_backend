@@ -2,10 +2,13 @@ package com.sharing.service;
 
 import com.sharing.pojo.User;
 import com.sharing.pojo.UserInfo;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
+ * 用户操作service
+ *
  * @author 李福生
  * @date 2022-2-25
  * @time 下午 12:45
@@ -105,6 +108,15 @@ public interface UserService {
      * @return 用户邮箱号
      */
     String getUserEmail(String username);
+
+    /**
+     * 通过用户名修改密码
+     *
+     * @param username 用户名
+     * @param password 需要修改的密码
+     * @return 修改结果
+     */
+    int updatePassword(String username, String password);
 
 
 }

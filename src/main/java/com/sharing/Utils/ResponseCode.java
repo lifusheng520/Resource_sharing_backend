@@ -27,6 +27,8 @@ public enum ResponseCode {
     USER_NOT_LOGIN(1006, "您还没有登录，请先登录再操作"),
     USER_NOT_PERMISSION(1007, "您没有该资源的访问权限"),
     SESSION_EXPIRED(1008, "您的登录已过期，请重新登录"),
+    UPDATE_PASSWORD_FAIL(1009, "修改密码失败"),
+    UPDATE_PASSWORD_SUCCESS(1010, "修改密码成功"),
 
     /**
      * 系统异常状态码和消息
@@ -41,7 +43,8 @@ public enum ResponseCode {
     REQUEST_PARAM_LOSE(3001, "请求参数缺失"),
     REQUEST_USER_DONT_EXIST(3002, "请求查询的用户不存在"),
     REQUEST_USER_INFO_SUCCESS(3003, "查询用户信息请求成功"),
-    REQUEST_PARAM_ERROR(3004, "查询用户信息请求成功"),
+    REQUEST_PARAM_ERROR(3004, "请求参数错误"),
+
 
     /**
      * 用户业务
@@ -57,6 +60,14 @@ public enum ResponseCode {
     EMAIL_BIND_SUCCESS(4009, "邮箱绑定成功"),
     EMAIL_BIND_FAIL(4010, "邮箱绑定失败"),
     EMAIL_NOT_BIND(4011, "账号还未绑定邮箱"),
+    EMAIL_CODE_NOT_FOUND(4012, "未查询到邮箱验证码"),
+
+    /**
+     * 资源文件业务
+     */
+    RESOURCE_UPLOAD_SUCCESS(4013, "资源文件上传成功"),
+    RESOURCE_UPLOAD_FAIL(4014, "资源文件上传异常，上传失败"),
+
 
     /* 用户错误 */
     USER_ACCOUNT_EXPIRED(2002, "账号已过期"),

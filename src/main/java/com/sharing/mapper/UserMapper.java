@@ -118,6 +118,15 @@ public interface UserMapper {
      */
     String getUserEmailByUsername(String username);
 
+    /**
+     * 通过用户名修改密码
+     *
+     * @param username 用户名
+     * @param password 需要修改的密码
+     * @return 修改结果
+     */
+    int updateUserPassword(String username, String password);
+
     int insertTime(Date date);
 
 }

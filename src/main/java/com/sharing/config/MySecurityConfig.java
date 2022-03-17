@@ -100,6 +100,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/file/**").permitAll()
                 .antMatchers("/user/authEmail/**").permitAll()
                 .antMatchers("/user/updatePass").permitAll()
+                .antMatchers("/resource/**").permitAll()
                 .antMatchers("/user/**").hasAnyRole("admin", "teacher", "student", "user")
                 .and()
                 .authorizeRequests()
