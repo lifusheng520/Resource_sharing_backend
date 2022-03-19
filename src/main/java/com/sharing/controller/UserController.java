@@ -56,6 +56,12 @@ public class UserController {
     private MyEmailSenderConfig emailSender;
 
 
+    /**
+     * 修改用户密码接口
+     *
+     * @param params 修改参数：用户名，修改密码，验证码
+     * @return 修改结果json
+     */
     @PostMapping("/updatePass")
     public String updateUserPassword(@RequestBody Map<String, String> params) {
         String username = params.get("username");
@@ -83,15 +89,13 @@ public class UserController {
                 if (i > 0)
                     return ResultFormatUtil.format(ResponseCode.UPDATE_PASSWORD_SUCCESS, username);
             }
-
         }
-
         return ResultFormatUtil.format(ResponseCode.UPDATE_PASSWORD_FAIL, username);
     }
 
 
     /**
-     * 向用户发送一封邮件，用于修改密码的身份验证
+     * 向用户发送一封邮件，用于身份验证
      *
      * @param username 用户名
      * @return 发送状态
@@ -130,6 +134,12 @@ public class UserController {
             return ResultFormatUtil.format(ResponseCode.EMAIL_SEND_FAIL, username);
     }
 
+    /**
+     * 绑定邮箱接口
+     *
+     * @param params 绑定参数：用户id、邮箱号、验证码
+     * @return 绑定结果json
+     */
     @PostMapping("/bindEmail")
     public String bindEmailByVerifyCode(@RequestBody Map<String, String> params) {
         // 获取请求参数
@@ -202,6 +212,13 @@ public class UserController {
             return ResultFormatUtil.format(ResponseCode.EMAIL_SEND_FAIL, emailAddress);
     }
 
+    /**
+     * 头像文件下载接口
+     *
+     * @param iconFileName 头像文件名
+     * @param response     响应头
+     * @throws IOException 执行IO操作时的异常
+     */
     @GetMapping("/icon/{iconFileName}")
     public void getIconUrl(@PathVariable String iconFileName, HttpServletResponse response) throws IOException {
         // 获取磁盘文件绝对路径

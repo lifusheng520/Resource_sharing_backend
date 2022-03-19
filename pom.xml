@@ -56,7 +56,6 @@
             <version>1.2.17</version>
         </dependency>
 
-
         <!--        durid数据源-->
         <dependency>
             <groupId>com.alibaba</groupId>

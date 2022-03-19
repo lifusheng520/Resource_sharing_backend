@@ -27,7 +27,7 @@ public enum ResponseCode {
     USER_NOT_LOGIN(1006, "您还没有登录，请先登录再操作"),
     USER_NOT_PERMISSION(1007, "您没有该资源的访问权限"),
     SESSION_EXPIRED(1008, "您的登录已过期，请重新登录"),
-    UPDATE_PASSWORD_FAIL(1009, "修改密码失败"),
+    UPDATE_PASSWORD_FAIL(1009, "验证码错误或失效，修改密码失败"),
     UPDATE_PASSWORD_SUCCESS(1010, "修改密码成功"),
 
     /**
@@ -62,11 +62,20 @@ public enum ResponseCode {
     EMAIL_NOT_BIND(4011, "账号还未绑定邮箱"),
     EMAIL_CODE_NOT_FOUND(4012, "未查询到邮箱验证码"),
 
+
     /**
      * 资源文件业务
      */
     RESOURCE_UPLOAD_SUCCESS(4013, "资源文件上传成功"),
     RESOURCE_UPLOAD_FAIL(4014, "资源文件上传异常，上传失败"),
+    GET_RESOURCE_LIST_SUCCESS(4015, "资源文件列表获取成功"),
+    NULL_RESOURCE(4016, "没有资源"),
+    RESOURCE_NOT_SEARCH(4017, "没有搜索到资源"),
+    RESOURCE_SEARCH_SUCCESS(4018, "搜索资源成功"),
+    DELETE_RESOURCE_SUCCESS(4019, "删除资源成功"),
+    DELETE_RESOURCE_FAIL(4020, "删除资源失败"),
+    UPDATE_RESOURCE_SUCCESS(4021, "资源更新成功"),
+    UPDATE_RESOURCE_FAIL(4022, "资源更新失败"),
 
 
     /* 用户错误 */

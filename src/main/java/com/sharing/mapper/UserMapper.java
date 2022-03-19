@@ -127,6 +127,4 @@ public interface UserMapper {
      */
     int updateUserPassword(String username, String password);
 
-    int insertTime(Date date);
-
 }

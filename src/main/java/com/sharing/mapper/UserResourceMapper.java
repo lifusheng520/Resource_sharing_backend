@@ -33,4 +33,62 @@ public interface UserResourceMapper {
      * @return 添加的状态
      */
     int addUserResource(UserResource userResource);
+
+    /**
+     * 通过用户id查询用户资源集合
+     *
+     * @param user_id 用户id
+     * @return 用户资源集合对象
+     */
+    List<UserResource> getResourceListByUserId(int user_id);
+
+    /**
+     * 通过用户的id，获取分页查询资源列表
+     *
+     * @param user_id 用户id
+     * @param begin   开始的位置
+     * @param size    页面大小（个数）
+     * @return 当前页面的内容list
+     */
+    List<UserResource> getUserResourceByPage(@Param("user_id") int user_id, @Param("begin") int begin, @Param("size") int size);
+
+    /**
+     * 通过用户id，获取用户所拥有的资源数量
+     *
+     * @param user_id 用户id
+     * @return 用户资源数
+     */
+    int getResourceNumber(int user_id);
+
+    /**
+     * 通过关键字搜索查询用户的资源库
+     *
+     * @param user_id 用户id
+     * @param key     搜索关键词
+     * @return 返回一个与关键词相关的list结果集合
+     */
+    List<UserResource> getResourceBySearch(@Param("user_id") int user_id, @Param("key") String key, @Param("begin") int begin, @Param("size") int size);
+
+    /**
+     * 删除选中的多项资源，通过资源的id（假删除，用户没有权限删除）
+     *
+     * @param resourceList 被选中的资源列表
+     * @return 删除执行状态结果
+     */
+    int setDeleteResourceByList(List<UserResource> resourceList);
+
+    /**
+     * 更新用户资源信息，将资源信息修改
+     * @param info  资源信息
+     * @return  返回资源更新状态
+     */
+    int updateResourceInfo(UserResource info);
+
+    /**
+     * 通过资源的id，更新资源的下载量
+     *
+     * @param id 资源id
+     * @return 更新状态
+     */
+    int addResourceDownloads(int id);
 }

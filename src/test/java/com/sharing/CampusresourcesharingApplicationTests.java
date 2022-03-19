@@ -25,13 +25,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.mail.internet.MimeMessage;
+import java.io.File;
 import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @SpringBootTest
 //@MapperScan("com.sharing.mapper")
@@ -80,7 +78,12 @@ class CampusresourcesharingApplicationTests {
 //        int i = this.userMapper.insertTime(date);
 //
 
-
+        String folder = "F:/CampusResourceSharing/files/resource/计算机科学9";
+        String name = "1bb0e3c5-48b7-4744-96bc-640865a4187f8.vsdx";
+        File root = new File(folder);
+        System.out.println(root.exists());
+        File file = new File(folder + File.separator + name);
+        System.out.println(file.exists());
 
     }
 

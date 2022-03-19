@@ -1,8 +1,10 @@
 package com.sharing.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -22,9 +24,13 @@ public class UserResource {
     private long size;
     private String disk_name;
     private String discipline;
+    @DateTimeFormat(pattern = "yyyy-MM-dd  HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd  HH:mm:ss", timezone = "GMT+8")
     private Date upload_time;
+    private int downloads;
     private int favorite_number;
     private int enabled;
     private int isDeleted;
     private String md5;
+    private String description;
 }

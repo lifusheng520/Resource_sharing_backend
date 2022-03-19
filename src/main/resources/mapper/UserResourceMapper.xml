@@ -11,8 +11,62 @@
     </select>
 
     <insert id="addUserResource" parameterType="UserResource">
-        insert into resource(user_id, origin_name, type, size, disk_name, discipline, upload_time, favorite_number, enabled, isDeleted, md5)
-        values (#{user_id}, #{origin_name}, #{type}, #{size}, #{disk_name}, #{discipline}, #{upload_time}, #{favorite_number}, #{enabled}, #{isDeleted}, #{md5});
+        insert into resource(user_id, origin_name, type, size, disk_name, discipline, upload_time, downloads, favorite_number, enabled, isDeleted, md5, description)
+        values (#{user_id}, #{origin_name}, #{type}, #{size}, #{disk_name}, #{discipline}, #{upload_time}, #{downloads}, #{favorite_number}, #{enabled}, #{isDeleted}, #{md5}, #{description});
     </insert>
+
+    <select id="getResourceListByUserId" parameterType="int" resultType="userresource">
+        select * from resource
+        where isDeleted = 0 and user_id = #{user_id};
+    </select>
+
+    <select id="getUserResourceByPage" parameterType="int" resultType="userresource">
+        SELECT * FROM resource
+        where user_id = #{user_id}
+                and isDeleted = 0
+        limit #{begin}, #{size};
+    </select>
+
+    <select id="getResourceNumber" parameterType="int" resultType="int">
+        SELECT count(id) FROM resource
+        where user_id = #{user_id}
+                and isDeleted = 0;
+    </select>
+
+    <select id="getResourceBySearch" resultType="userresource">
+        SELECT * FROM resource
+        where user_id = #{user_id}
+                and isDeleted = 0
+                and origin_name like concat('%',#{key},'%')
+        limit #{begin}, #{size};
+    </select>
+
+    <update id="setDeleteResourceByList" parameterType="list">
+        <foreach collection="list" open="" close="" item="resource" separator=";">
+            update resource
+            <set>
+                isDeleted = 1
+            </set>
+            where id in
+            <foreach collection="list" open="(" close=")" item="item" separator=",">
+                #{item.id}
+            </foreach>
+        </foreach>
+    </update>
+
+    <update id="updateResourceInfo" parameterType="userresource">
+        update resource
+        set origin_name = #{origin_name},
+            enabled = #{enabled},
+            discipline = #{discipline},
+            description = #{description}
+        where id = #{id}
+    </update>
+
+    <update id="addResourceDownloads" parameterType="int">
+        update resource set downloads = downloads + 1
+            where id = #{id};
+    </update>
+
 
 </mapper>
