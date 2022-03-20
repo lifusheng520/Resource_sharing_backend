@@ -5,6 +5,7 @@ import com.sharing.Utils.MyTokenUtil;
 import com.sharing.Utils.ResponseCode;
 import com.sharing.Utils.ResultFormatUtil;
 import com.sharing.config.MyEmailSenderConfig;
+import com.sharing.config.SystemScheduleConfig;
 import com.sharing.mapper.UserMapper;
 import com.sharing.pojo.User;
 import com.sharing.pojo.UserInfo;
@@ -57,33 +58,8 @@ class CampusresourcesharingApplicationTests {
 //
 //        String encode = new BCryptPasswordEncoder().encode("123456");
 ////        System.out.println(encode);
-//
-//        User user = this.service.getUserByName("assfad");
-//        System.out.println(user == null);
-
-//        User user = new User();
-//        user.setUsername("username");
-//        user.setPassword(encode);
-//        user.setEnabled(1);
-//        int i = this.service.register(user);
-//        System.out.println(i);
-
-//        org.springframework.mail.MailSendException
-
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        System.out.println(authentication);
 
 
-//        Date date = new Date();
-//        int i = this.userMapper.insertTime(date);
-//
-
-        String folder = "F:/CampusResourceSharing/files/resource/计算机科学9";
-        String name = "1bb0e3c5-48b7-4744-96bc-640865a4187f8.vsdx";
-        File root = new File(folder);
-        System.out.println(root.exists());
-        File file = new File(folder + File.separator + name);
-        System.out.println(file.exists());
 
     }
 

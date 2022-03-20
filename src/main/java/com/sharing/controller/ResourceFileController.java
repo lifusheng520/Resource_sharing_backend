@@ -259,4 +259,12 @@ public class ResourceFileController {
         outputStream.flush();
         outputStream.close();
     }
+
+    @PostMapping("/test")
+    public void test(@RequestBody MultipartFile file, @RequestBody Map<String, String> params){
+        System.out.println(file.getOriginalFilename());
+        System.out.println(params);
+    }
+
+
 }
