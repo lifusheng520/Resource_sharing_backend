@@ -95,8 +95,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getUserEmail(String username) {
-        return this.userMapper.getUserEmailByUsername(username);
+    public UserInfo getUserInfoById(int id) {
+        return this.userMapper.getUserInfoById(id);
     }
 
     @Override

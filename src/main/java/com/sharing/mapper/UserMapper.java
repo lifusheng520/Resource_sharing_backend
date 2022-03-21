@@ -111,12 +111,12 @@ public interface UserMapper {
     int updateUserEmail(UserInfo info);
 
     /**
-     * 通过用户名从数据库中查询用户邮箱
+     * 通过用户id查询用户信息
      *
-     * @param username 用户名
-     * @return 用户邮箱号
+     * @param id 用户名
+     * @return 用户信息
      */
-    String getUserEmailByUsername(String username);
+    UserInfo getUserInfoById(int id);
 
     /**
      * 通过用户名修改密码

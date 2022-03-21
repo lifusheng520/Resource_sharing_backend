@@ -94,7 +94,9 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .antMatchers("/druid/**").permitAll()
+                .antMatchers("/druid/**", "/index/**").permitAll()
+                // 允许所有的首页请求
+                .antMatchers("/user/icon/**").permitAll()
                 // 允许所有认证请求
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/file/**").permitAll()

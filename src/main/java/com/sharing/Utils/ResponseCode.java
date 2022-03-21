@@ -78,6 +78,13 @@ public enum ResponseCode {
     UPDATE_RESOURCE_FAIL(4022, "资源更新失败"),
 
 
+    /**
+     * 首页业务
+     */
+    INDEX_SYSTEM_INFO_GET_SUCCESS(4023, "首页系统信息获取成功"),
+    INDEX_SYSTEM_GET_RECOMMEND_SUCCESS(4024, "首页推荐资源获取成功"),
+
+
     /* 用户错误 */
     USER_ACCOUNT_EXPIRED(2002, "账号已过期"),
     USER_CREDENTIALS_ERROR(2003, "密码错误"),

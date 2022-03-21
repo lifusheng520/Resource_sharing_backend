@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sharing.mapper.IndexDataMapper">
+
+    <!--开启缓存    采用LRU策略，一小时刷新一次缓存，大小1024个对象-->
+    <cache eviction="LRU" flushInterval="3600000" size="1024"/>
+
+    <select id="getSystemUserNumbers" resultType="int">
+        select count(*) from user;
+    </select>
+
+    <select id="getSystemResourceNumbers" resultType="int">
+        select count(*) from resource;
+    </select>
+
+    <select id="getResourceDownloadsList" resultType="int">
+        select sum(downloads) from resource;
+    </select>
+
+    <select id="getResourceByDiscipline" parameterType="string" resultType="userResource">
+        select * from resource
+        where discipline = #{discipline}
+        order by downloads desc
+        limit 1;
+    </select>
+
+
+</mapper>

@@ -104,10 +104,11 @@ public class ResourceFileController {
         userResource.setDescription(description);
 
         // 如果查询到了文件信息（不为null），说明本次上传的是重复文件，则数据中的disk_name = 查询的disk_name
+        boolean delete;
         if (resourceByMd5 != null && resourceByMd5.size() > 0) {
             userResource.setDisk_name(resourceByMd5.get(0).getDisk_name());
             // 删除重复文件
-            distFile.delete();
+            delete = distFile.delete();
         } else {
             userResource.setDisk_name(fileName);
         }
@@ -131,7 +132,9 @@ public class ResourceFileController {
         String user_id = params.get("user_id");
         String pageSize = params.get("pageSize");
         String currentPage = params.get("currentPage");
-        if (user_id == null || "".equals(user_id) || pageSize == null || "".equals(pageSize) || currentPage == null || "".equals(currentPage))
+        if (user_id == null || "".equals(user_id) || pageSize == null)
+            return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, "user_id,page,size");
+        else if ("".equals(pageSize) || currentPage == null || "".equals(currentPage))
             return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, "user_id,page,size");
 
         Integer size = Integer.valueOf(pageSize);
@@ -161,7 +164,11 @@ public class ResourceFileController {
         String pageSize = params.get("pageSize");
         String currentPage = params.get("currentPage");
         String key = params.get("searcher");
-        if (user_id == null || "".equals(user_id) || pageSize == null || "".equals(pageSize) || currentPage == null || "".equals(currentPage) || key == null || "".equals(key))
+        if (user_id == null || "".equals(user_id) || pageSize == null)
+            return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, key);
+        else if ("".equals(pageSize) || currentPage == null || "".equals(currentPage))
+            return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, key);
+        else if (key == null || "".equals(key))
             return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, key);
 
         Integer size = Integer.valueOf(pageSize);
@@ -174,7 +181,6 @@ public class ResourceFileController {
         resourcePage.setPageList(searchList);
         resourcePage.setPageSize(size);
         resourcePage.setCurrentPage(page);
-
 
         if (searchList == null || searchList.size() == 0)
             return ResultFormatUtil.format(ResponseCode.RESOURCE_NOT_SEARCH, resourcePage);
@@ -249,9 +255,13 @@ public class ResourceFileController {
         // 增加资源的下载量
         this.resourceService.addUserResourceDownloads(id);
 
+        // 获取文件的原文件名
+        String originFileName = this.resourceService.getUserResourceOriginFileName(id);
+
         // 获取响应输出流设置响应头参数
         ServletOutputStream outputStream = response.getOutputStream();
-        response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(diskName, "UTF-8"));
+        // 设置下载的文件名
+        response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(originFileName, "UTF-8"));
         response.setContentType("application/octet-stream");
 
         // 写出资源字节流数据并关闭流
@@ -261,7 +271,7 @@ public class ResourceFileController {
     }
 
     @PostMapping("/test")
-    public void test(@RequestBody MultipartFile file, @RequestBody Map<String, String> params){
+    public void test(@RequestBody MultipartFile file, @RequestBody Map<String, String> params) {
         System.out.println(file.getOriginalFilename());
         System.out.println(params);
     }

@@ -65,5 +65,10 @@ public class UserResourceServiceImpl implements UserResourceService {
         return this.resourceMapper.addResourceDownloads(id);
     }
 
+    @Override
+    public String getUserResourceOriginFileName(int id) {
+        return this.resourceMapper.getResourceOriginFileName(id);
+    }
+
 
 }

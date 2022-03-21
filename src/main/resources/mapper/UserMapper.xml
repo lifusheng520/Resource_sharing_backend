@@ -69,10 +69,10 @@
         where user_id = #{id};
     </update>
 
-    <select id="getUserEmailByUsername" parameterType="string" resultType="string">
-        select email
+    <select id="getUserInfoById" parameterType="int" resultType="userinfo">
+        select *
         from user, user_info
-        where id = user_id and username = #{username};
+        where id = user_id and user_id = #{id};
     </select>
 
     <update id="updateUserPassword" parameterType="string">

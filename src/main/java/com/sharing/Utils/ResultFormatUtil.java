@@ -21,7 +21,7 @@ import java.io.Serializable;
 
 public class ResultFormatUtil implements Serializable {
 
-    public static ObjectMapper objectMapper = new ObjectMapper();
+    public static final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * 格式化响应状态码和对象

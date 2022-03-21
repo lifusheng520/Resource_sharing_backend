@@ -68,5 +68,10 @@
             where id = #{id};
     </update>
 
+    <select id="getResourceOriginFileName" parameterType="int" resultType="string">
+        select origin_name from resource
+        where id = #{id};
+    </select>
+
 
 </mapper>

@@ -88,4 +88,12 @@ public interface UserResourceService {
      */
     int addUserResourceDownloads(int id);
 
+    /**
+     * 通过资源文件的id获取资源文件的原文件名
+     *
+     * @param id 资源对应的id
+     * @return 返回资源的原文件名
+     */
+    String getUserResourceOriginFileName(int id);
+
 }
