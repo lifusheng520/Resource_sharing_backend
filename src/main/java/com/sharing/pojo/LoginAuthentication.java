@@ -39,6 +39,11 @@ public class LoginAuthentication implements UserDetails {
     private long sendTime;
 
     /**
+     * 用户信息的id
+     */
+    private int userInfo_id;
+
+    /**
      * 用户权限
      */
     private Collection<? extends GrantedAuthority> authorities;

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
-import javax.management.relation.RelationSupport;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -35,7 +34,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/resource")
-public class ResourceFileController {
+public class ResourceFileManagerController {
 
     @Value("${files.resource.upload.root.path}")
     private String uploadRootPath;

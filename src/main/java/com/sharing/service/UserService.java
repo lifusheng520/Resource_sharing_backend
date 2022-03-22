@@ -47,6 +47,14 @@ public interface UserService {
     int register(User user);
 
     /**
+     * 初始化用户信息记录
+     *
+     * @param id 用户id
+     * @return 更新结果
+     */
+    int initUserInfo(int id);
+
+    /**
      * 通过用户名获取用户信息
      *
      * @return 用户信息
@@ -104,7 +112,7 @@ public interface UserService {
     /**
      * 通过用户id查询用户信息
      *
-     * @param id 用户名
+     * @param id 用户id
      * @return 用户信息
      */
     UserInfo getUserInfoById(int id);

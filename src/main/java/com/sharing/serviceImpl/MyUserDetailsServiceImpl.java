@@ -2,6 +2,7 @@ package com.sharing.serviceImpl;
 
 import com.sharing.pojo.LoginAuthentication;
 import com.sharing.pojo.User;
+import com.sharing.pojo.UserInfo;
 import com.sharing.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -62,9 +63,19 @@ public class MyUserDetailsServiceImpl implements UserDetailsService {
 
         // 查询用户头像信息
         String userIconInfo = this.userService.getUserIconInfo(user.getId());
-        user.setHeadIcon(this.userHeadIconFilePath + userIconInfo);
+        if (userIconInfo == null || "".equals(userIconInfo))
+            user.setHeadIcon(this.userHeadIconFilePath + "null");
+        else
+            user.setHeadIcon(this.userHeadIconFilePath + userIconInfo);
 
         LoginAuthentication authentication = new LoginAuthentication(user, grantedAuthorities);
+
+        // 查询用户信息
+        UserInfo userInfo = this.userService.getUserInfoById(user.getId());
+        if (userInfo != null)
+            authentication.setUserInfo_id(userInfo.getId());
+        else
+            authentication.setUserInfo_id(0);
         System.out.println(authentication);
 
         System.out.println("============MyUserDetailsServiceImpl");

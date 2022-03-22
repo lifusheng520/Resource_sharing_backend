@@ -48,6 +48,9 @@ public class AuthenticationController {
 
         // 持久化账号到数据库
         int i = this.userService.register(user);
+        int userId = this.userService.getUserIdByUsername(username);
+        this.userService.initUserInfo(userId);
+
         if (i > 0) {
             // 注册成功
             return ResultFormatUtil.format(ResponseCode.REGISTER_SUCCESS, null);

@@ -2,10 +2,7 @@ package com.sharing.serviceImpl;
 
 import com.sharing.mapper.IndexDataMapper;
 import com.sharing.mapper.UserMapper;
-import com.sharing.pojo.IndexData;
-import com.sharing.pojo.UserAndResource;
-import com.sharing.pojo.UserInfo;
-import com.sharing.pojo.UserResource;
+import com.sharing.pojo.*;
 import com.sharing.service.IndexDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,5 +67,10 @@ public class IndexDataServiceImpl implements IndexDataService {
             userAndResourceList.add(userAndResource);
         }
         return userAndResourceList;
+    }
+
+    @Override
+    public List<UploadRankInfo> getUploadMostUserList(int number) {
+        return this.indexDataMapper.getUploadMostUserInfoList(number);
     }
 }

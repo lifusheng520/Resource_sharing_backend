@@ -27,5 +27,14 @@
         limit 1;
     </select>
 
+    <select id="getUploadMostUserInfoList" parameterType="int" resultType="uploadRankInfo">
+        SELECT r.user_id user_id, count(r.id) resourceNumbers, u.name name, u.headIcon headIcon
+        FROM resource r, user_info u
+        where r.user_id = u.user_id
+        group by r.user_id
+        order by resourceNumbers desc
+        limit #{number};
+    </select>
+
 
 </mapper>

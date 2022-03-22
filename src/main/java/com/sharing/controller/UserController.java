@@ -221,9 +221,20 @@ public class UserController {
      */
     @GetMapping("/icon/{iconFileName}")
     public void getIconUrl(@PathVariable String iconFileName, HttpServletResponse response) throws IOException {
-        // 获取磁盘文件绝对路径
-        String distFile = this.iconUploadPath + iconFileName;
-        File file = new File(distFile);
+        File file;
+        String distFile;
+        if (iconFileName == null || "".equals(iconFileName) || "null".equals(iconFileName))
+            distFile = this.iconUploadPath + "ico.png";
+        else
+            // 获取磁盘文件绝对路径
+            distFile = this.iconUploadPath + iconFileName;
+
+        file = new File(distFile);
+
+        // 如果文件不存在，直接返回
+        if (!file.exists())
+            return;
+
 
         // 设置输出流格式
         ServletOutputStream outputStream = response.getOutputStream();
@@ -301,7 +312,7 @@ public class UserController {
         // 从数据库中查询用户信息
         UserInfo userInfo = this.userService.getUserInfo(username);
 
-        // 用户不存在
+        // 用户不存在，提示添加信息
         if (userInfo == null) {
             return ResultFormatUtil.format(ResponseCode.REQUEST_USER_DONT_EXIST, null);
         }

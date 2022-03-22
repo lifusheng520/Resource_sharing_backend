@@ -41,7 +41,7 @@ public enum ResponseCode {
      * 请求类状态
      */
     REQUEST_PARAM_LOSE(3001, "请求参数缺失"),
-    REQUEST_USER_DONT_EXIST(3002, "请求查询的用户不存在"),
+    REQUEST_USER_DONT_EXIST(3002, "还未添加用户信息，请先添加用户信息"),
     REQUEST_USER_INFO_SUCCESS(3003, "查询用户信息请求成功"),
     REQUEST_PARAM_ERROR(3004, "请求参数错误"),
 
@@ -83,6 +83,8 @@ public enum ResponseCode {
      */
     INDEX_SYSTEM_INFO_GET_SUCCESS(4023, "首页系统信息获取成功"),
     INDEX_SYSTEM_GET_RECOMMEND_SUCCESS(4024, "首页推荐资源获取成功"),
+    GET_RECOMMEND_RANK_INFO_SUCCESS(4025, "获取排行榜数据成功"),
+    GET_ALL_RESOURCE_DISCIPLINE_SUCCESS(4026, "资源类别列表获取成功"),
 
 
     /* 用户错误 */

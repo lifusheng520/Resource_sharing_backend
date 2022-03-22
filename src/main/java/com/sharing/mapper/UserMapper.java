@@ -55,6 +55,14 @@ public interface UserMapper {
     int addUser(User user);
 
     /**
+     * 初始化用户信息记录
+     *
+     * @param id 用户id
+     * @return 更新结果
+     */
+    int initUserInfo(int id);
+
+    /**
      * 用过用户名查询数据库中的用户信息
      *
      * @param username 用户名
@@ -126,5 +134,7 @@ public interface UserMapper {
      * @return 修改结果
      */
     int updateUserPassword(String username, String password);
+
+
 
 }

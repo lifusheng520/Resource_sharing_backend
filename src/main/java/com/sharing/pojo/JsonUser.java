@@ -24,4 +24,8 @@ public class JsonUser {
     private String token;
     private Collection<? extends GrantedAuthority> roles;
     private String headIcon;
+    /**
+     * 用户信息的id
+     */
+    private int userInfo_id;
 }

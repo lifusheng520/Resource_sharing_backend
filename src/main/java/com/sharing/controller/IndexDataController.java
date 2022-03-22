@@ -61,5 +61,4 @@ public class IndexDataController {
         return ResultFormatUtil.format(ResponseCode.INDEX_SYSTEM_GET_RECOMMEND_SUCCESS, userAndResourceList);
     }
 
-
 }
