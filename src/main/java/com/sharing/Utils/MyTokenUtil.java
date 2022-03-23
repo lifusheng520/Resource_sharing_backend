@@ -30,7 +30,7 @@ public class MyTokenUtil {
     /**
      * token过期时间30分钟
      */
-    private static final long EXPIRE_TIME = 1000 * 60 * 30;
+    private static final long EXPIRE_TIME = 1000 * 60 * 30l;
 
     /**
      * 秘钥
@@ -108,7 +108,7 @@ public class MyTokenUtil {
 
             return res;
         } catch (ParseException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         return null;
     }

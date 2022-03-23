@@ -280,7 +280,7 @@ public class UserController {
             // 先将头像写入到磁盘
             file.transferTo(distFile);
         } catch (IOException e) {   // 上传失败
-            e.printStackTrace();
+//            e.printStackTrace();
             return ResultFormatUtil.format(ResponseCode.EXCEPTION_IO_UPLOAD, originalFilename);
         }
         // 文件的主机URL

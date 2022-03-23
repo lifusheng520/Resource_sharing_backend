@@ -76,6 +76,7 @@ public enum ResponseCode {
     DELETE_RESOURCE_FAIL(4020, "删除资源失败"),
     UPDATE_RESOURCE_SUCCESS(4021, "资源更新成功"),
     UPDATE_RESOURCE_FAIL(4022, "资源更新失败"),
+    GET_RESOURCE_SUCCESS(4027, "获取资源成功"),
 
 
     /**

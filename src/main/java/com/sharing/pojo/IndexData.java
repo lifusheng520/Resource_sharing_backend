@@ -24,7 +24,7 @@ public class IndexData implements Serializable {
     /**
      * 学科类别
      */
-    public static final String[] discipline = new String[]{"法学", "工学", "管理学", "计算机科学", "教育学", "经济学", "军事学", "理学", "历史学", "农学", "文学", "医学", "艺术学", "哲学"};
+    public static String[] discipline = new String[]{"法学", "工学", "管理学", "计算机科学", "教育学", "经济学", "军事学", "理学", "历史学", "农学", "文学", "医学", "艺术学", "哲学"};
 
     private int userNumber;
     private int resourceNumber;

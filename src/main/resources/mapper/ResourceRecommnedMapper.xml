@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sharing.mapper.ResourceRecommendMapper">
+
+    <select id="getResourceNumbers" resultType="int" parameterType="string">
+        select count(*) from resource
+        <where>
+            <if test="discipline != null">
+                discipline = #{discipline}
+            </if>
+            <if test="like != null">
+                and origin_name like concat('%', #{like}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="getDefaultResourceList" resultType="userresource" parameterType="int">
+        select * from resource
+        order by downloads desc
+        limit #{begin}, #{number};
+    </select>
+
+    <select id="getUserResourceListByDiscipline" resultType="userresource" parameterType="string">
+        select * from resource
+        where discipline = #{discipline}
+        order by downloads desc;
+    </select>
+
+
+</mapper>

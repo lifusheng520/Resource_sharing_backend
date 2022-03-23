@@ -79,7 +79,7 @@ public class ResourceFileManagerController {
         try {
             file.transferTo(distFile);
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             return ResultFormatUtil.format(ResponseCode.EXCEPTION_IO, originalFilename);
         }
 
@@ -165,9 +165,9 @@ public class ResourceFileManagerController {
         String key = params.get("searcher");
         if (user_id == null || "".equals(user_id) || pageSize == null)
             return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, key);
-        else if ("".equals(pageSize) || currentPage == null || "".equals(currentPage))
+        if ("".equals(pageSize) || currentPage == null || "".equals(currentPage))
             return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, key);
-        else if (key == null || "".equals(key))
+        if (key == null || "".equals(key))
             return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, key);
 
         Integer size = Integer.valueOf(pageSize);
@@ -244,7 +244,8 @@ public class ResourceFileManagerController {
      */
     @GetMapping("/download/{diskName}/{id}/{discipline}")
     public void downloadUserResource(@PathVariable String diskName, @PathVariable int id, @PathVariable String discipline, HttpServletResponse response) throws IOException {
-        if (id == 0 || diskName == null || "".equals(diskName) || discipline == null || "".equals(discipline)) return;
+        if (id == 0 || diskName == null || "".equals(diskName)) return;
+        else if (discipline == null || "".equals(discipline)) return;
         // 资源在服务器磁盘中的绝对路径  = 上传根路径 + 文件的科目类别 + 文件的UUid
         String fileName = this.uploadRootPath + File.separator + discipline + File.separator + diskName;
         File file = new File(fileName);
