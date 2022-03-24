@@ -26,12 +26,22 @@ public class ResourceRecommendServiceImpl implements ResourceRecommendService {
     }
 
     @Override
-    public List<UserResource> getUserResourceListByDiscipline(String discipline) {
-        return this.resourceRecommendMapper.getUserResourceListByDiscipline(discipline);
+    public List<UserResource> getUserResourceListByDiscipline(String discipline, int begin, int number) {
+        return this.resourceRecommendMapper.getUserResourceListByDiscipline(discipline, begin, number);
     }
 
     @Override
     public List<UserResource> getDefaultUserResourceList(int begin, int number) {
         return this.resourceRecommendMapper.getDefaultResourceList(begin, number);
+    }
+
+    @Override
+    public List<UserResource> getUserResourceByLike(String like, int begin, int number) {
+        return this.resourceRecommendMapper.getResourceByLike(like, begin, number);
+    }
+
+    @Override
+    public List<UserResource> getUserResourceByCondition(String discipline, String like, int begin, int number) {
+        return this.resourceRecommendMapper.getResourceByCondition(discipline, like, begin, number);
     }
 }

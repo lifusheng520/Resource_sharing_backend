@@ -23,10 +23,30 @@
         limit #{begin}, #{number};
     </select>
 
-    <select id="getUserResourceListByDiscipline" resultType="userresource" parameterType="string">
+    <select id="getUserResourceListByDiscipline" resultType="userresource">
         select * from resource
         where discipline = #{discipline}
-        order by downloads desc;
+        order by downloads desc
+        limit #{begin}, #{number};
+    </select>
+
+    <select id="getResourceByLike" resultType="userresource">
+        select * from resource
+        where origin_name like concat('%', #{like}, '%')
+        limit #{begin}, #{number};
+    </select>
+
+    <select id="getResourceByCondition" resultType="userresource">
+        select * from resource
+        <where>
+            <if test="discipline != null">
+                discipline = #{discipline}
+            </if>
+            <if test="like != null">
+                and origin_name like concat('%', #{like}, '%')
+            </if>
+        </where>
+        limit #{begin}, #{number};
     </select>
 
 

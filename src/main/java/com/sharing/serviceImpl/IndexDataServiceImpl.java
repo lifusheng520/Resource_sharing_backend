@@ -52,6 +52,8 @@ public class IndexDataServiceImpl implements IndexDataService {
         List<UserAndResource> userAndResourceList = new ArrayList<>();
         // 遍历所有的学科类别，查询学科top1资源
         for (String discipline : IndexData.discipline) {
+            if ("全部".equals(discipline))
+                continue;
             // 创建一个用户资源信息完整实体类
             UserAndResource userAndResource = new UserAndResource();
             // 查询科目资源
