@@ -73,5 +73,12 @@
         where id = #{id};
     </select>
 
+    <select id="getResourceNumbersByCondition" resultType="int">
+        select count(*) from resource
+        where user_id = #{user_id}
+                and origin_name like concat('%', #{like}, '%');
+    </select>
+
+
 
 </mapper>

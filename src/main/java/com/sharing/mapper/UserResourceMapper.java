@@ -99,4 +99,13 @@ public interface UserResourceMapper {
      * @return 返回资源的原文件名
      */
     String getResourceOriginFileName(int id);
+
+    /**
+     * 通过用户id，获取用户满足条件的资源数量
+     *
+     * @param user_id 用户id
+     * @param like    查询条件
+     * @return 返回满足条件的资源数量
+     */
+    int getResourceNumbersByCondition(int user_id, String like);
 }

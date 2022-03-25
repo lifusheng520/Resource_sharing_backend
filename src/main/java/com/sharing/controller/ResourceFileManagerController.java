@@ -121,6 +121,31 @@ public class ResourceFileManagerController {
     }
 
     /**
+     * 通过字符串获取合法的页码
+     *
+     * @param number 页码字符串
+     * @param type   需要转换的类型（page、size）
+     * @return 如果type为page：字符串正常将该字符串转换为int返回，否则返回 1。如果type为size，返回正常的页面大小，默认返回10
+     */
+    int getValidPage(String number, String type) {
+        Integer value;
+        if ("page".equals(type)) {
+            if (number == null || "".equals(number))
+                return 1;
+            value = Integer.valueOf(number);
+            if (value < 1)
+                return 1;
+        } else {
+            if (number == null || "".equals(number))
+                return 10;
+            value = Integer.valueOf(number);
+            if (value < 1)
+                return 10;
+        }
+        return value;
+    }
+
+    /**
      * 获取用户资源列表处理接口
      *
      * @param params 参数集
@@ -128,17 +153,21 @@ public class ResourceFileManagerController {
      */
     @PostMapping("/getInfoList")
     public String getResourcePageInfo(@RequestBody Map<String, String> params) {
+        // 获取页面参数
         String user_id = params.get("user_id");
         String pageSize = params.get("pageSize");
         String currentPage = params.get("currentPage");
-        if (user_id == null || "".equals(user_id) || pageSize == null)
-            return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, "user_id,page,size");
-        else if ("".equals(pageSize) || currentPage == null || "".equals(currentPage))
-            return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, "user_id,page,size");
+        String totalPage = params.get("total");
 
-        Integer size = Integer.valueOf(pageSize);
-        Integer page = Integer.valueOf(currentPage);
-        int total = this.resourceService.getUserResourceNumber(Integer.valueOf(user_id));
+        // 获取分页数据
+        int page = this.getValidPage(currentPage, "page");
+        int size = this.getValidPage(pageSize, "size");
+
+        int total = Integer.valueOf(totalPage);
+
+        if (total < 0)
+            total = this.resourceService.getUserResourceNumber(Integer.valueOf(user_id));
+
         List<UserResource> pageList = this.resourceService.getUserResourceByPage(Integer.valueOf(user_id), (page - 1) * size, size);
         MyPage<UserResource> resourcePage = new MyPage<>();
         resourcePage.setTotal(total);
@@ -159,20 +188,21 @@ public class ResourceFileManagerController {
      */
     @PostMapping("/search")
     public String searchUserResource(@RequestBody Map<String, String> params) {
+        // 获取页面参数
         String user_id = params.get("user_id");
         String pageSize = params.get("pageSize");
         String currentPage = params.get("currentPage");
+        String totalPage = params.get("total");
         String key = params.get("searcher");
-        if (user_id == null || "".equals(user_id) || pageSize == null)
-            return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, key);
-        if ("".equals(pageSize) || currentPage == null || "".equals(currentPage))
-            return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, key);
-        if (key == null || "".equals(key))
-            return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, key);
 
-        Integer size = Integer.valueOf(pageSize);
-        Integer page = Integer.valueOf(currentPage);
-        int total = this.resourceService.getUserResourceNumber(Integer.valueOf(user_id));
+        // 获取分页数据
+        int size = this.getValidPage(pageSize, "size");
+        int page = this.getValidPage(currentPage, "page");
+        int total = Integer.valueOf(totalPage);
+
+        if (total < 0)
+            total = this.resourceService.getUserResourceNumbersByCondition(Integer.valueOf(user_id), key);
+
         // 到数据库中查询资源
         List<UserResource> searchList = this.resourceService.getUserResourceBySearch(Integer.valueOf(user_id), key, (page - 1) * size, size);
         MyPage<UserResource> resourcePage = new MyPage<>();
@@ -268,12 +298,6 @@ public class ResourceFileManagerController {
         outputStream.write(FileUtil.readBytes(file));
         outputStream.flush();
         outputStream.close();
-    }
-
-    @PostMapping("/test")
-    public void test(@RequestBody MultipartFile file, @RequestBody Map<String, String> params) {
-        System.out.println(file.getOriginalFilename());
-        System.out.println(params);
     }
 
 

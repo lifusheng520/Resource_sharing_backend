@@ -56,6 +56,15 @@ public interface UserResourceService {
     int getUserResourceNumber(int user_id);
 
     /**
+     * 通过用户id，获取用户满足条件的资源数量
+     *
+     * @param user_id 用户id
+     * @param like    查询条件
+     * @return 返回满足条件的资源数量
+     */
+    int getUserResourceNumbersByCondition(int user_id, String like);
+
+    /**
      * 通过关键字搜索查询用户的资源库
      *
      * @param user_id 用户id

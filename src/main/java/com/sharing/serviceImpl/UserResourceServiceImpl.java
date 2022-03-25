@@ -46,6 +46,11 @@ public class UserResourceServiceImpl implements UserResourceService {
     }
 
     @Override
+    public int getUserResourceNumbersByCondition(int user_id, String like) {
+        return this.resourceMapper.getResourceNumbersByCondition(user_id, like);
+    }
+
+    @Override
     public List<UserResource> getUserResourceBySearch(int user_id, String key, int begin, int size) {
         return this.resourceMapper.getResourceBySearch(user_id, key, begin, size);
     }
