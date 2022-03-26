@@ -86,6 +86,7 @@ public enum ResponseCode {
     INDEX_SYSTEM_GET_RECOMMEND_SUCCESS(4024, "首页推荐资源获取成功"),
     GET_RECOMMEND_RANK_INFO_SUCCESS(4025, "获取排行榜数据成功"),
     GET_ALL_RESOURCE_DISCIPLINE_SUCCESS(4026, "资源类别列表获取成功"),
+    GET_RESOURCE_DETAIL_SUCCESS(4028, "获取资源详细信息成功"),
 
 
     /* 用户错误 */

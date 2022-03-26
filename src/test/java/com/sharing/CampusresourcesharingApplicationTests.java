@@ -8,7 +8,9 @@ import com.sharing.config.MyEmailSenderConfig;
 import com.sharing.config.SystemScheduleConfig;
 import com.sharing.mapper.UserMapper;
 import com.sharing.pojo.User;
+import com.sharing.pojo.UserAndResource;
 import com.sharing.pojo.UserInfo;
+import com.sharing.service.ResourceDetailService;
 import com.sharing.service.UserService;
 import com.sharing.serviceImpl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -45,16 +47,15 @@ class CampusresourcesharingApplicationTests {
     @Autowired
     private MyEmailSenderConfig sender;
 
+    @Autowired
+    private ResourceDetailService resourceDetailService;
+
     @Test
     void contextLoads() throws Exception {
-        List<Integer> list = new ArrayList<>();
-        for(int i = 1; i <= 10; i++){
-            list.add(i);
-        }
 
-        System.out.println(list.subList(1,10));
-        System.out.println(list.size());
-
+        UserAndResource userResourceDetail = resourceDetailService.getUserResourceDetail(64);
+        System.out.println(userResourceDetail.getUserInfo());
+        System.out.println(userResourceDetail.getResource());
 
 
     }
