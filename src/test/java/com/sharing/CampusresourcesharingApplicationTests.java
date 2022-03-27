@@ -1,38 +1,13 @@
 package com.sharing;
 
-import com.nimbusds.jose.crypto.RSASSAVerifier;
-import com.sharing.Utils.MyTokenUtil;
-import com.sharing.Utils.ResponseCode;
-import com.sharing.Utils.ResultFormatUtil;
+import com.sharing.Utils.IllegalWordDisposeUtil;
 import com.sharing.config.MyEmailSenderConfig;
-import com.sharing.config.SystemScheduleConfig;
 import com.sharing.mapper.UserMapper;
-import com.sharing.pojo.User;
-import com.sharing.pojo.UserAndResource;
-import com.sharing.pojo.UserInfo;
 import com.sharing.service.ResourceDetailService;
 import com.sharing.service.UserService;
-import com.sharing.serviceImpl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.mail.javamail.MimeMessagePreparator;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import javax.mail.internet.MimeMessage;
-import java.io.File;
-import java.io.InputStream;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 @SpringBootTest
 //@MapperScan("com.sharing.mapper")
@@ -52,11 +27,11 @@ class CampusresourcesharingApplicationTests {
 
     @Test
     void contextLoads() throws Exception {
+        String content = "我是傻逼,曹尼玛，你妈必死，sdfa弱智，cnm，日你妈妈,你是不是傻";
 
-        UserAndResource userResourceDetail = resourceDetailService.getUserResourceDetail(64);
-        System.out.println(userResourceDetail.getUserInfo());
-        System.out.println(userResourceDetail.getResource());
-
+        String dealString = IllegalWordDisposeUtil.hideIllegalWords(content, '*');
+        System.out.println(content);
+        System.out.println(dealString);
 
     }
 

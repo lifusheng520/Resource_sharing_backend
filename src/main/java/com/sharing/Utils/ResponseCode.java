@@ -13,6 +13,7 @@ import lombok.Data;
  * #2001～2999 区间表示系统异常状态码和消息
  * #3001～3999 区间表示请求类状态
  * #4001～4999 区间表示用户业务请求状态和消息
+ * #5001～5999 区间表示用户 评论业务请求状态和消息
  */
 public enum ResponseCode {
 
@@ -87,6 +88,12 @@ public enum ResponseCode {
     GET_RECOMMEND_RANK_INFO_SUCCESS(4025, "获取排行榜数据成功"),
     GET_ALL_RESOURCE_DISCIPLINE_SUCCESS(4026, "资源类别列表获取成功"),
     GET_RESOURCE_DETAIL_SUCCESS(4028, "获取资源详细信息成功"),
+
+    /**
+     * 资源评论业务
+     */
+    RESOURCE_COMMENT_SUCCESS(5001, "资源评论成功"),
+    RESOURCE_COMMENT_FAIL(5002, "资源评论失败"),
 
 
     /* 用户错误 */

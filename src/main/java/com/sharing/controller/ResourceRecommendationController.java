@@ -37,16 +37,16 @@ public class ResourceRecommendationController {
         Integer value;
         if ("page".equals(type)) {
             if (number == null || "".equals(number))
-                return 1;
+                value =  1;
             value = Integer.valueOf(number);
             if (value < 1)
-                return 1;
+                value =  1;
         } else {
             if (number == null || "".equals(number))
-                return 10;
+                value =  10;
             value = Integer.valueOf(number);
             if (value < 1)
-                return 10;
+                value =  10;
         }
         return value;
     }

@@ -21,5 +21,6 @@ public class UploadRankInfo implements Serializable {
     private int user_id;
     private String headIcon;
     private String name;
+    private String username;
     private int resourceNumbers;
 }

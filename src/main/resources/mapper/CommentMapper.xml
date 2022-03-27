@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sharing.mapper.CommentMapper">
+
+
+    <insert id="addComment" parameterType="comment">
+        insert into comment(resource_id, user_id, to_uid, content, support_number, time)
+        values (#{resource_id}, #{user_id}, #{to_uid}, #{content}, #{support_number}, #{time});
+    </insert>
+
+
+</mapper>
