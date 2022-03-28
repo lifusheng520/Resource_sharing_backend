@@ -10,6 +10,16 @@
         insert into comment(resource_id, user_id, to_uid, content, support_number, time)
         values (#{resource_id}, #{user_id}, #{to_uid}, #{content}, #{support_number}, #{time});
     </insert>
+    
+    <select id="getCommentAndUserInfo" parameterType="int" resultType="commentInfo">
+        SELECT c.user_id user_id, u.headIcon headIcon, u.name name, u2.name to_name, c.time time, c.content content, c.support_number support_number
+        FROM comment c inner join user_info u
+                        on c.user_id = u.user_id
+                left join user_info u2
+                        on c.to_uid = u2.user_id
+        where c.resource_id = #{resource_id}
+        order by c.support_number desc, c.time desc;
+    </select>
 
 
 </mapper>

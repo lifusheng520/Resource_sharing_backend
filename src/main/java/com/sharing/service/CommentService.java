@@ -1,6 +1,9 @@
 package com.sharing.service;
 
 import com.sharing.pojo.Comment;
+import com.sharing.pojo.CommentInfo;
+
+import java.util.List;
 
 /**
  * 评论业务接口
@@ -19,5 +22,13 @@ public interface CommentService {
      * @return 返回添加结果
      */
     int publishComment(Comment comment);
+
+    /**
+     * 根据资源的id获取资源评论区内容
+     *
+     * @param resource_id 资源的id
+     * @return 返回评论信息list
+     */
+    List<CommentInfo> getCommentInfo(int resource_id);
 
 }

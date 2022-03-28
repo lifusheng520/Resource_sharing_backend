@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 //@MapperScan("com.sharing.mapper")
-class CampusresourcesharingApplicationTests {
+class CampusresourcemanagerApplicationTests {
 
     @Autowired
     private UserService service;
@@ -27,11 +27,12 @@ class CampusresourcesharingApplicationTests {
 
     @Test
     void contextLoads() throws Exception {
-        String content = "我是傻逼,曹尼玛，你妈必死，sdfa弱智，cnm，日你妈妈,你是不是傻";
+        String content = "我是傻逼,曹尼玛，你妈必死，SDFA弱智，cnm，日你妈妈,你是不是傻,dsfsdf爱的爱的的的";
+        content = content.toLowerCase();
 
-        String dealString = IllegalWordDisposeUtil.hideIllegalWords(content, '*');
+//        String dealString = IllegalWordDisposeUtil.hideIllegalWords(content, '*');
         System.out.println(content);
-        System.out.println(dealString);
+//        System.out.println(dealString);
 
     }
 

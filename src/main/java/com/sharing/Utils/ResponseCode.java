@@ -94,6 +94,8 @@ public enum ResponseCode {
      */
     RESOURCE_COMMENT_SUCCESS(5001, "资源评论成功"),
     RESOURCE_COMMENT_FAIL(5002, "资源评论失败"),
+    ILLEGAL_RESOURCE_COMMENT_CONTENT(5003, "评论内容违规，请注意言辞"),
+    GET_RESOURCE_COMMENT_INFO_SUCCESS(5004, "获取评论区内容成功"),
 
 
     /* 用户错误 */

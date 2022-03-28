@@ -2,9 +2,12 @@ package com.sharing.serviceImpl;
 
 import com.sharing.mapper.CommentMapper;
 import com.sharing.pojo.Comment;
+import com.sharing.pojo.CommentInfo;
 import com.sharing.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author 李福生
@@ -21,5 +24,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public int publishComment(Comment comment) {
         return this.commentMapper.addComment(comment);
+    }
+
+    @Override
+    public List<CommentInfo> getCommentInfo(int resource_id) {
+        return this.commentMapper.getCommentAndUserInfo(resource_id);
     }
 }

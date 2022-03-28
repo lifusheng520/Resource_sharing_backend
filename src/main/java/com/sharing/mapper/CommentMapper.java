@@ -1,8 +1,11 @@
 package com.sharing.mapper;
 
 import com.sharing.pojo.Comment;
+import com.sharing.pojo.CommentInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * 评论业务数据库操作mapper
@@ -23,4 +26,12 @@ public interface CommentMapper {
      * @return 返回添加结果
      */
     int addComment(Comment comment);
+
+    /**
+     * 根据资源的id查询资源评论区内容和对应用户的信息
+     *
+     * @param resource_id 资源的id
+     * @return 返回评论信息和对应的用户内容lsit
+     */
+    List<CommentInfo> getCommentAndUserInfo(int resource_id);
 }

@@ -1,5 +1,7 @@
 package com.sharing.Utils;
 
+import lombok.Data;
+
 import java.io.*;
 import java.util.*;
 
@@ -10,13 +12,15 @@ import java.util.*;
  * @date 2022-3-27
  * @time 下午 02:41
  */
+
+@Data
 public class IllegalWordDisposeUtil {
 
 
     /**
      * 敏感词容器
      */
-    public static HashMap illegalWordMap;
+    private static HashMap illegalWordMap;
 
     /**
      * 敏感词词库文件的路径
@@ -27,11 +31,7 @@ public class IllegalWordDisposeUtil {
      * 初始化词库内容，将词组导入
      */
     static {
-        try {
-            importIllegalWordsByFile();
-        } catch (IOException e) {
-            System.out.println("敏感词文件导入异常");
-        }
+        importIllegalWordsByFile();
     }
 
     /**
@@ -105,7 +105,8 @@ public class IllegalWordDisposeUtil {
             word = text.charAt(i);
             // 获取对应的key
             nowMap = (Map) nowMap.get(word);
-            if (nowMap != null) {   // 如果存在,则判断是否为最后一个
+            // 有对应的DFA状态，则判断是否为最后一个
+            if (nowMap != null) {
                 //  找到相应key,匹配长度 +1
                 length++;
                 //  如果为最后一个匹配规则,说明匹配到了一个敏感词的状态
@@ -113,7 +114,8 @@ public class IllegalWordDisposeUtil {
                     //结束标志位为true
                     flag = true;
                 }
-            } else {    //  不存在,结束查找
+            } else {
+                //  当前词组的DFA已经到结束,整个词组状态匹配完成结束查找
                 break;
             }
         }
@@ -153,17 +155,44 @@ public class IllegalWordDisposeUtil {
      *
      * @throws IOException 对敏感词库文件读取时发生的异常
      */
-    public static void importIllegalWordsByFile() throws IOException {
+    public static void importIllegalWordsByFile() {
         HashSet<String> set = new HashSet<>();
         File file = new File(wordsFilePath);
-        FileInputStream fis = new FileInputStream(file);
-        InputStreamReader isr = new InputStreamReader(fis);
-        BufferedReader buffer = new BufferedReader(isr);
-        String line;
-        while ((line = buffer.readLine()) != null) {
-            set.add(line);
+        FileInputStream fis = null;
+        InputStreamReader isr = null;
+        BufferedReader buffer = null;
+        try {
+            fis = new FileInputStream(file);
+            isr = new InputStreamReader(fis);
+            buffer = new BufferedReader(isr);
+            String line;
+            while ((line = buffer.readLine()) != null) {
+                // 将敏感词统一转换为小写
+                set.add(line.toLowerCase());
+            }
+        } catch (IOException e) {
+            System.out.println("敏感词库文件导入异常");
+        } finally {
+            if (buffer != null)
+                try {
+                    buffer.close();
+                } catch (IOException e) {
+                    System.out.println("文件缓冲区关闭异常");
+                }
+
+            if (isr != null)
+                try {
+                    isr.close();
+                } catch (IOException e) {
+                    System.out.println("InputStreamReader字节输入流读取器关闭异常");
+                }
+            if (fis != null)
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    System.out.println("FileInputStream文件字节输入流关闭异常");
+                }
         }
-        buffer.close();
 
         // 根据词库构建DFA
         initIllegalWordMap(set);
@@ -179,7 +208,8 @@ public class IllegalWordDisposeUtil {
      */
     public static String hideIllegalWords(String text, char c) {
         // 将字符串对象转换为字符数组
-        char[] chars = text.toCharArray();
+        String lowerCase = text.toLowerCase();
+        char[] chars = lowerCase.toCharArray();
 
         // 遍历字符数组，替换其中的敏感词字符
         for (int i = 0; i < chars.length; i++) {
