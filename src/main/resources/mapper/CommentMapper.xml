@@ -7,10 +7,10 @@
 
 
     <insert id="addComment" parameterType="comment">
-        insert into comment(resource_id, user_id, to_uid, content, support_number, time)
-        values (#{resource_id}, #{user_id}, #{to_uid}, #{content}, #{support_number}, #{time});
+        insert into comment(resource_id, user_id, to_uid, content, support_number, time, isIllegal)
+        values (#{resource_id}, #{user_id}, #{to_uid}, #{content}, #{support_number}, #{time}, #{isIllegal});
     </insert>
-    
+
     <select id="getCommentAndUserInfo" parameterType="int" resultType="commentInfo">
         SELECT c.user_id user_id, u.headIcon headIcon, u.name name, u2.name to_name, c.time time, c.content content, c.support_number support_number
         FROM comment c inner join user_info u
@@ -20,6 +20,31 @@
         where c.resource_id = #{resource_id}
         order by c.support_number desc, c.time desc;
     </select>
+
+    <select id="getAllCommentByUserId" parameterType="int" resultType="comment">
+        SELECT c.*, r.origin_name resource_name, u.name to_name
+        FROM comment c INNER JOIN resource r
+                ON c.resource_id = r.id
+            LEFT JOIN user_info u
+                ON c.to_uid = u.user_id
+        WHERE c.user_id = #{user_id}
+        ORDER BY c.time DESC
+        limit #{begin}, #{number};
+    </select>
+
+    <select id="getCommentNumbersByUserId" parameterType="int" resultType="int">
+        SELECT count(*)
+        FROM comment
+        WHERE user_id = #{user_id};
+    </select>
+
+    <delete id="deleteCommentByList" parameterType="list">
+        DELETE FROM comment
+        WHERE id in
+        <foreach collection="list" open="(" close=")" item="comment" separator=",">
+            #{comment.id}
+        </foreach>
+    </delete>
 
 
 </mapper>

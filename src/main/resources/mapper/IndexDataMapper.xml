@@ -20,7 +20,7 @@
         select sum(downloads) from resource;
     </select>
 
-    <select id="getResourceByDiscipline" parameterType="string" resultType="userResource">
+    <select id="getResourceByDiscipline" parameterType="string" resultType="userResource" useCache="false">
         select * from resource
         where discipline = #{discipline}
         order by downloads desc

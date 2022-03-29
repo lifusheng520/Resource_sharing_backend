@@ -30,4 +30,19 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentInfo> getCommentInfo(int resource_id) {
         return this.commentMapper.getCommentAndUserInfo(resource_id);
     }
+
+    @Override
+    public List<Comment> getUserAllCommentByUserId(int user_id, int begin, int number) {
+        return this.commentMapper.getAllCommentByUserId(user_id, begin, number);
+    }
+
+    @Override
+    public int countUserComment(int user_id) {
+        return this.commentMapper.getCommentNumbersByUserId(user_id);
+    }
+
+    @Override
+    public int deleteCommentByList(List<Comment> commentList) {
+        return this.commentMapper.deleteCommentByList(commentList);
+    }
 }

@@ -39,4 +39,29 @@ public class MyPage<T> {
             return null;
         return this.pageList.subList(begin, end);
     }
+
+    /**
+     * 通过字符串获取合法的页码
+     *
+     * @param number 页码字符串
+     * @param type   需要转换的类型（page、size）
+     * @return 如果type为page：字符串正常将该字符串转换为int返回，否则返回 1。如果type为size，返回正常的页面大小，默认返回10
+     */
+    public static int getValidTransfer(String number, String type) {
+        Integer value;
+        if ("page".equals(type)) {
+            if (number == null || "".equals(number))
+                value =  1;
+            value = Integer.valueOf(number);
+            if (value < 1)
+                value =  1;
+        } else {
+            if (number == null || "".equals(number))
+                value =  10;
+            value = Integer.valueOf(number);
+            if (value < 1)
+                value =  10;
+        }
+        return value;
+    }
 }

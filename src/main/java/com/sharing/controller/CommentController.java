@@ -5,6 +5,7 @@ import com.sharing.Utils.ResponseCode;
 import com.sharing.Utils.ResultFormatUtil;
 import com.sharing.pojo.Comment;
 import com.sharing.pojo.CommentInfo;
+import com.sharing.pojo.MyPage;
 import com.sharing.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,6 +45,25 @@ public class CommentController {
     }
 
     /**
+     * 统计字符串中出现符号sign的值的个数
+     *
+     * @param text 处理的字符串
+     * @param sign 统计的符号
+     * @return 返回包含的个数，若字符串为空或不包含，则返回0
+     */
+    int countStringSign(String text, char sign) {
+        // 空的字符串，直接返回 0
+        if (!this.strIsNotNull(text))
+            return 0;
+        int count = 0;
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == sign)
+                count++;
+        }
+        return count;
+    }
+
+    /**
      * 添加资源评论接口
      *
      * @param params 评论参数
@@ -72,13 +92,21 @@ public class CommentController {
             comment.setTo_uid(-1);
 
         // 对评论进行敏感词过滤，用 * 替其中的换敏感字符
-        String hiddenStr = null;
-        if (this.strIsNotNull(content)) {
-            //  去除空格
-            content = content.replace(" ", "");
-            hiddenStr = IllegalWordDisposeUtil.hideIllegalWords(content, '*');
+        char replace = '*';
+        String hiddenStr = IllegalWordDisposeUtil.hideIllegalWords(tempContent, replace);
+
+        // 统计评论中的屏蔽符号
+        int countHide = this.countStringSign(hiddenStr, replace);
+        int countOrigin = this.countStringSign(content, replace);
+
+        // 如果过滤的字符串中屏蔽符号多余原字符串，说明为违规评论
+        if (countHide > countOrigin) {
+            comment.setContent(hiddenStr);
+            comment.setIsIllegal(1);
+        } else {
+            comment.setContent(content);
+            comment.setIsIllegal(0);
         }
-        comment.setContent(hiddenStr);
 
         // 将过滤后的评论进行持久化
         int i = this.commentService.publishComment(comment);
@@ -86,7 +114,7 @@ public class CommentController {
         ResponseCode responseCode;
         if (i > 0) {
             // 过滤后的内容和原字符串不一样，说明用户评论带有违规内容，给予警告
-            if (!content.equals(hiddenStr)) {
+            if (countHide > countOrigin) {
                 responseCode = ResponseCode.ILLEGAL_RESOURCE_COMMENT_CONTENT;
             } else {
                 responseCode = ResponseCode.RESOURCE_COMMENT_SUCCESS;
@@ -126,5 +154,67 @@ public class CommentController {
         return ResultFormatUtil.format(ResponseCode.GET_RESOURCE_COMMENT_INFO_SUCCESS, commentInfoList);
     }
 
+
+    /**
+     * 根据参数获取评论内容list
+     *
+     * @param params 参数map
+     * @return 返回用户评论内容列表json
+     */
+    @PostMapping("/manager")
+    public String getUserCommentInfo(@RequestBody Map<String, String> params) {
+        // 获取请求参数
+        String user_id = params.get("user_id");
+        String currentPage = params.get("currentPage");
+        String totalPage = params.get("total");
+        String pageSize = params.get("pageSize");
+        if (!this.strIsNotNull(user_id) || !this.strIsNotNull(totalPage))
+            return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, params);
+
+        // 获取分页参数
+        Integer userId = Integer.valueOf(user_id);
+        int page = MyPage.getValidTransfer(currentPage, "page");
+        int size = MyPage.getValidTransfer(pageSize, "size");
+
+        // 根据用户id查询用户的评论
+        List<Comment> commentList = this.commentService.getUserAllCommentByUserId(userId, (page - 1) * size, size);
+
+        // 设置分页参数
+        MyPage<Comment> commentMyPage = new MyPage<>();
+        commentMyPage.setCurrentPage(page);
+        commentMyPage.setPageSize(size);
+        commentMyPage.setPageList(commentList);
+
+        int total = Integer.valueOf(totalPage);
+        if (total < 0) {
+            total = this.commentService.countUserComment(userId);
+        }
+        commentMyPage.setTotal(total);
+
+        return ResultFormatUtil.format(ResponseCode.GET_USER_ALL_COMMENT_SUCCESS, commentMyPage);
+    }
+
+    /**
+     * 删除评论接口
+     *
+     * @param commentList 需要删除的评论内容list集合
+     * @return 返回删除的结果json
+     */
+    @PostMapping("/delete")
+    public String deleteListOfComment(@RequestBody List<Comment> commentList) {
+        if (commentList == null || commentList.size() == 0)
+            return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, commentList);
+
+        // 删除list中包含的评论
+        int i = this.commentService.deleteCommentByList(commentList);
+
+        ResponseCode responseCode;
+        if (i > 0)
+            responseCode = ResponseCode.DELETE_COMMENT_SUCCESS;
+        else
+            responseCode = ResponseCode.DELETE_COMMENT_FAIL;
+
+        return ResultFormatUtil.format(responseCode, commentList);
+    }
 
 }
