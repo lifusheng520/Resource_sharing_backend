@@ -85,8 +85,8 @@ public class ResourceFileManagerController {
 
         // 生成文件的md5
         String md5 = SecureUtil.md5(distFile);
-        // 到数据库中查询文件是否存在
-        List<UserResource> resourceByMd5 = this.resourceService.getUserResourceByMd5(md5);
+        // 到数据库中查询同科目的文件是否存在，防止同科目文件夹文件重复
+        List<UserResource> resourceByMd5 = this.resourceService.getUserResourceByMd5(discipline, md5);
         // 设置资源信息
         UserResource userResource = new UserResource();
         userResource.setUser_id(id);
@@ -279,23 +279,30 @@ public class ResourceFileManagerController {
         // 资源在服务器磁盘中的绝对路径  = 上传根路径 + 文件的科目类别 + 文件的UUid
         String fileName = this.uploadRootPath + File.separator + discipline + File.separator + diskName;
         File file = new File(fileName);
-        // 如果文件不存在
-        if (!file.exists()) return;
-
-        // 增加资源的下载量
-        this.resourceService.addUserResourceDownloads(id);
-
-        // 获取文件的原文件名
-        String originFileName = this.resourceService.getUserResourceOriginFileName(id);
 
         // 获取响应输出流设置响应头参数
         ServletOutputStream outputStream = response.getOutputStream();
-        // 设置下载的文件名
-        response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(originFileName, "UTF-8"));
-        response.setContentType("application/octet-stream");
 
-        // 写出资源字节流数据并关闭流
-        outputStream.write(FileUtil.readBytes(file));
+        // 如果文件不存在
+        if (!file.exists()) {
+            //设置响应内容类型
+            response.setContentType("application/json;charset=UTF-8");
+            outputStream.write("未找到文件信息！".getBytes());
+
+        } else {
+            // 增加资源的下载量
+            this.resourceService.addUserResourceDownloads(id);
+
+            // 获取文件的原文件名
+            String originFileName = this.resourceService.getUserResourceOriginFileName(id);
+
+            // 设置下载的文件名
+            response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(originFileName, "UTF-8"));
+            response.setContentType("application/octet-stream");
+
+            // 写出资源字节流数据并关闭流
+            outputStream.write(FileUtil.readBytes(file));
+        }
         outputStream.flush();
         outputStream.close();
     }

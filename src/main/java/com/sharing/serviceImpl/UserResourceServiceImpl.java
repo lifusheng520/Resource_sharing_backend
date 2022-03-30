@@ -21,8 +21,8 @@ public class UserResourceServiceImpl implements UserResourceService {
     private UserResourceMapper resourceMapper;
 
     @Override
-    public List<UserResource> getUserResourceByMd5(String md5) {
-        return this.resourceMapper.getResourceByMd5(md5);
+    public List<UserResource> getUserResourceByMd5(String discipline, String md5) {
+        return this.resourceMapper.getResourceByMd5(discipline, md5);
     }
 
     @Override

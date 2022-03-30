@@ -14,6 +14,7 @@ import lombok.Data;
  * #3001～3999 区间表示请求类状态
  * #4001～4999 区间表示用户业务请求状态和消息
  * #5001～5999 区间表示用户 评论业务请求状态和消息
+ * #6001～6999 区间表示用户 关注业务请求状态和消息
  */
 public enum ResponseCode {
 
@@ -48,7 +49,7 @@ public enum ResponseCode {
 
 
     /**
-     * 用户业务
+     * 用户个人信息业务
      */
     USER_INFO_UPDATE_SUCCESS(4001, "用户信息更新成功"),
     USER_INFO_UPDATE_FAIL(4002, "用户信息更新失败"),
@@ -99,6 +100,15 @@ public enum ResponseCode {
     GET_USER_ALL_COMMENT_SUCCESS(5005, "获取用户评论成功"),
     DELETE_COMMENT_SUCCESS(5006, "评论删除成功"),
     DELETE_COMMENT_FAIL(5007, "评论删除失败"),
+
+    /**
+     * 用户关注业务
+     */
+    FOCUS_ADD_SUCCESS(6001, "添加关注成功"),
+    FOCUS_ADD_FAIL(6002, "添加关注失败"),
+    GET_FOCUS_LIST_SUCCESS(6003, "获取关注内容列表成功"),
+    CANCEL_FOCUS_SUCCESS(6004, "取消关注成功"),
+    CANCEL_FOCUS_FAIL(6005, "取消关注失败"),
 
 
     /* 用户错误 */

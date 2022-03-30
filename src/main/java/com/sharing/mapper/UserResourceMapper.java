@@ -21,10 +21,11 @@ public interface UserResourceMapper {
     /**
      * 通过md5获取用户资源文件信息
      *
-     * @param md5 md5字符串
+     * @param discipline 文件科目
+     * @param md5        md5字符串
      * @return 返回资源文件对象md5相同的文件的集合
      */
-    List<UserResource> getResourceByMd5(String md5);
+    List<UserResource> getResourceByMd5(String discipline, String md5);
 
     /**
      * 向数据库中添加一条用户上传资源的记录
@@ -79,8 +80,9 @@ public interface UserResourceMapper {
 
     /**
      * 更新用户资源信息，将资源信息修改
-     * @param info  资源信息
-     * @return  返回资源更新状态
+     *
+     * @param info 资源信息
+     * @return 返回资源更新状态
      */
     int updateResourceInfo(UserResource info);
 
