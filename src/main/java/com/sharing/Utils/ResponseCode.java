@@ -109,6 +109,8 @@ public enum ResponseCode {
     GET_FOCUS_LIST_SUCCESS(6003, "获取关注内容列表成功"),
     CANCEL_FOCUS_SUCCESS(6004, "取消关注成功"),
     CANCEL_FOCUS_FAIL(6005, "取消关注失败"),
+    GET_FOCUS_INFO_SUCCESS(6006, "获取关注信息成功"),
+    GET_FOCUS_USER_RESOURCE_SUCCESS(6007, "成功获取关注资源"),
 
 
     /* 用户错误 */

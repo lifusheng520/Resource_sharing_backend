@@ -3,6 +3,7 @@ package com.sharing.controller;
 import com.sharing.Utils.ResponseCode;
 import com.sharing.Utils.ResultFormatUtil;
 import com.sharing.pojo.Focus;
+import com.sharing.pojo.MyPage;
 import com.sharing.service.FocusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -45,8 +46,8 @@ public class FocusController {
     @PostMapping("/add")
     public String addFocus(@RequestBody Map<String, String> params) {
         // 获取请求参数
-        String userId = params.get("userId").replaceAll(" ", "");
-        String focusUserId = params.get("focusUserId").replaceAll(" ", "");
+        String userId = params.get("userId");
+        String focusUserId = params.get("focusUserId");
         if (!this.isNotNull(userId) || !this.isNotNull(focusUserId))
             return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, null);
 
@@ -87,11 +88,17 @@ public class FocusController {
     }
 
 
+    /**
+     * 取消关注功能接口
+     *
+     * @param params 请求参数
+     * @return 返回删除用户的关注id的结果json
+     */
     @PostMapping("/cancel")
     public String cancelFocus(@RequestBody Map<String, String> params) {
         // 获取请求参数
-        String userId = params.get("userId").replaceAll(" ", "");
-        String focusUserId = params.get("focusUserId").replaceAll(" ", "");
+        String userId = params.get("userId");
+        String focusUserId = params.get("focusUserId");
         if (!this.isNotNull(userId) || !this.isNotNull(focusUserId))
             return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, null);
 
@@ -108,6 +115,58 @@ public class FocusController {
             responseCode = ResponseCode.CANCEL_FOCUS_FAIL;
 
         return ResultFormatUtil.format(responseCode, focus_uid);
+    }
+
+    /**
+     * 分页获取关注信息
+     *
+     * @param params 分页数据
+     * @return 返回对应页的关注list
+     */
+    @PostMapping("/getInfo")
+    public String getFocusInfoByPage(@RequestBody Map<String, String> params) {
+        // 获取请求参数
+        String userId = params.get("user_id");
+        String currentPage = params.get("currentPage");
+        String totalPage = params.get("total");
+        String pageSize = params.get("pageSize");
+        if (!this.isNotNull(userId))
+            return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, null);
+
+        // 获取分页参数
+        int page = MyPage.getValidTransfer(currentPage, "page");
+        int size = MyPage.getValidTransfer(pageSize, "size");
+
+        // 分页查询用户关注内容
+        int user_id = Integer.parseInt(userId);
+        List<Focus> focusList = this.focusService.getUserFocusPageListByUserId(user_id, (page - 1) * size, size);
+
+        // 设置分页参数
+        MyPage<Focus> myPage = new MyPage<>();
+        myPage.setCurrentPage(page);
+        myPage.setPageSize(size);
+        myPage.setPageList(focusList);
+
+        int total = Integer.valueOf(totalPage);
+        if (total < 0)
+            total = this.focusService.countFocusNumberByUserId(user_id);
+
+        myPage.setTotal(total);
+
+        ResponseCode responseCode = ResponseCode.GET_FOCUS_INFO_SUCCESS;
+        return ResultFormatUtil.format(responseCode, myPage);
+    }
+
+    @GetMapping("/getAllInfo/{user_id}")
+    public String getAllFocusInfo(@PathVariable Integer user_id) {
+        if (user_id == null || user_id == 0)
+            return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, null);
+
+        // 查询全部数据
+        List<Focus> focusList = this.focusService.getUserFocusPageListByUserId(user_id, -1, -1);
+
+        ResponseCode responseCode = ResponseCode.GET_FOCUS_INFO_SUCCESS;
+        return ResultFormatUtil.format(responseCode, focusList);
     }
 
 

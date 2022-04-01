@@ -146,7 +146,7 @@ public class ResourceFileManagerController {
     }
 
     /**
-     * 获取用户资源列表处理接口
+     * 获取用户资源列表接口
      *
      * @param params 参数集
      * @return 返回一个用户资源对象列表json

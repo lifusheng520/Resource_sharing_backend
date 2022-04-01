@@ -45,4 +45,9 @@ public class CommentServiceImpl implements CommentService {
     public int deleteCommentByList(List<Comment> commentList) {
         return this.commentMapper.deleteCommentByList(commentList);
     }
+
+    @Override
+    public int countResourceCommentNumber(int resource_id) {
+        return this.commentMapper.countResourceCommentNumber(resource_id);
+    }
 }

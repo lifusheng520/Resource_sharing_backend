@@ -46,5 +46,10 @@
         </foreach>
     </delete>
 
+    <select id="countResourceCommentNumber" parameterType="int" resultType="int">
+        select count(*) from comment
+        where resource_id = #{resource_id};
+    </select>
+
 
 </mapper>

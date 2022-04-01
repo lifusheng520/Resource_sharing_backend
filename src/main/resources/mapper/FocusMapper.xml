@@ -22,5 +22,20 @@
                 and focus_uid = #{focus_uid};
     </delete>
 
+    <select id="getFocusPageListByUserId" parameterType="int" resultType="focus">
+        SELECT f.*, u.name focusUserName, u.headIcon focusUserIcon
+        FROM focus f LEFT JOIN user_info u
+        ON f.focus_uid = u.user_id
+        WHERE f.user_id = #{user_id}
+        ORDER BY f.time DESC
+        <if test="begin >= 0 and number> 0">
+            limit #{begin}, #{number};
+        </if>
+    </select>
+    <select id="countFocusByUserId" parameterType="int" resultType="int">
+        SELECT count(*) FROM focus
+        WHERE user_id = #{user_id};
+    </select>
+
 
 </mapper>

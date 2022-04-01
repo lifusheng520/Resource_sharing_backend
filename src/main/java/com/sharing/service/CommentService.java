@@ -57,5 +57,13 @@ public interface CommentService {
      */
     int deleteCommentByList(List<Comment> commentList);
 
+    /**
+     * 根据资源的id，统计资源所拥有的评论数量
+     *
+     * @param resource_id 资源的id
+     * @return 返回资源的评论总数
+     */
+    int countResourceCommentNumber(int resource_id);
+
 
 }
