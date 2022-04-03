@@ -17,7 +17,7 @@
     </select>
 
     <select id="getFocusResourceByUserId" resultMap="userAndResourceMap" parameterType="int">
-        SELECT r.*, u.*
+        SELECT r.*, u.name name, u.headIcon headIcon, u.user_id user_id
         FROM resource r INNER JOIN user_info u
         ON r.user_id = u.user_id
         WHERE r.user_id = #{user_id}
@@ -27,6 +27,7 @@
 
     <resultMap id="userAndResourceMap" type="com.sharing.pojo.UserAndResource">
         <association property="userInfo" javaType="com.sharing.pojo.UserInfo">
+            <result column="user_id" property="id"/>
             <result column="name" property="name"/>
             <result column="headIcon" property="headIcon"/>
         </association>
@@ -40,7 +41,6 @@
             <result column="discipline" property="discipline"/>
             <result column="upload_time" property="upload_time"/>
             <result column="downloads" property="downloads"/>
-            <result column="favorite_number" property="favorite_number"/>
             <result column="enabled" property="enabled"/>
             <result column="isDeleted" property="isDeleted"/>
             <result column="md5" property="md5"/>
@@ -54,8 +54,11 @@
         where user_id = #{user_id};
     </select>
 
-
-
-
+    <select id="getUserAndResourceByResourceId" parameterType="int" resultMap="userAndResourceMap">
+        SELECT r.*, u.name name, u.headIcon headIcon, u.user_id user_id
+        FROM resource r INNER JOIN user_info u
+        ON r.user_id = u.user_id
+        WHERE r.id = #{resource_id};
+    </select>
 
 </mapper>

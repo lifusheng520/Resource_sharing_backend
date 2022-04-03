@@ -14,7 +14,8 @@ import lombok.Data;
  * #3001～3999 区间表示请求类状态
  * #4001～4999 区间表示用户业务请求状态和消息
  * #5001～5999 区间表示用户 评论业务请求状态和消息
- * #6001～6999 区间表示用户 关注业务请求状态和消息
+ * #6001～6050 区间表示用户 关注业务请求状态和消息
+ * #6051～6999 区间表示用户 关注业务请求状态和消息
  */
 public enum ResponseCode {
 
@@ -111,6 +112,12 @@ public enum ResponseCode {
     CANCEL_FOCUS_FAIL(6005, "取消关注失败"),
     GET_FOCUS_INFO_SUCCESS(6006, "获取关注信息成功"),
     GET_FOCUS_USER_RESOURCE_SUCCESS(6007, "成功获取关注资源"),
+
+    /**
+     * 点赞支持类业务
+     */
+    RESOURCE_ADD_SUPPORT_SUCCESS(6051, "点赞成功，感谢你的支持"),
+    RESOURCE_DELETE_SUPPORT_SUCCESS(6052, "取消点赞成功"),
 
 
     /* 用户错误 */

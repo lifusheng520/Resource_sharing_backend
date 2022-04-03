@@ -1,9 +1,6 @@
 package com.sharing.mapper;
 
-import com.sharing.pojo.UploadRankInfo;
-import com.sharing.pojo.User;
-import com.sharing.pojo.UserInfo;
-import com.sharing.pojo.UserResource;
+import com.sharing.pojo.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -57,6 +54,13 @@ public interface IndexDataMapper {
      * @return 返回上传次数最多的用户信息
      */
     List<UploadRankInfo> getUploadMostUserInfoList(int number);
+
+    /**
+     * 通过科目获取下载最多的资源
+     * @param discipline    资源科目
+     * @return  返回资源个用户信息
+     */
+    UserAndResource getUserAndResourceByDiscipline(String discipline);
 
 
 }

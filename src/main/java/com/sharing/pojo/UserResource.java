@@ -35,4 +35,6 @@ public class UserResource implements Serializable {
     private String md5;
     private String description;
 
+    private int supportNumber;
+
 }

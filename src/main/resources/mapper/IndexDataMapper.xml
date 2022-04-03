@@ -37,5 +37,38 @@
         limit #{number};
     </select>
 
+    <select id="getUserAndResourceByDiscipline" resultMap="userAndResourceMap" parameterType="string">
+        SELECT r.*, u.headIcon headIcon, u.name name, u.user_id user_id
+        FROM resource r INNER JOIN user_info u
+        ON r.user_id = u.user_id
+        WHERE r.discipline = #{discipline}
+        ORDER BY r.downloads DESC
+        limit 1;
+    </select>
+
+    <resultMap id="userAndResourceMap" type="com.sharing.pojo.UserAndResource">
+        <association property="userInfo" javaType="com.sharing.pojo.UserInfo">
+            <result column="user_id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="headIcon" property="headIcon"/>
+        </association>
+        <association property="resource" javaType="com.sharing.pojo.UserResource">
+            <result column="id" property="id"/>
+            <result column="user_id" property="user_id"/>
+            <result column="origin_name" property="origin_name"/>
+            <result column="type" property="type"/>
+            <result column="size" property="size"/>
+            <result column="disk_name" property="disk_name"/>
+            <result column="discipline" property="discipline"/>
+            <result column="upload_time" property="upload_time"/>
+            <result column="downloads" property="downloads"/>
+            <result column="enabled" property="enabled"/>
+            <result column="isDeleted" property="isDeleted"/>
+            <result column="md5" property="md5"/>
+            <result column="description" property="description"/>
+        </association>
+    </resultMap>
+
+
 
 </mapper>

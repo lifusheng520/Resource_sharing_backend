@@ -6,6 +6,7 @@ import com.sharing.pojo.IndexData;
 import com.sharing.pojo.MyPage;
 import com.sharing.pojo.UserAndResource;
 import com.sharing.service.ResourceDetailService;
+import com.sharing.service.SupportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,9 @@ public class ResourceFileServerController {
 
     @Autowired
     private ResourceDetailService resourceDetailService;
+
+    @Autowired
+    private SupportService supportService;
 
     @Value("${files.icon.host.url}")
     private String iconHostURL;
@@ -54,6 +58,10 @@ public class ResourceFileServerController {
             return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, "id");
 
         UserAndResource userResourceDetail = this.resourceDetailService.getUserResourceDetail(resourceId);
+        // 查询点赞数量
+        int id = userResourceDetail.getResource().getId();
+        int number = this.supportService.countResourceSupportNumbers(id);
+        userResourceDetail.getResource().setSupportNumber(number);
 
         // 设置头像URL
         String headIcon = userResourceDetail.getUserInfo().getHeadIcon();
@@ -101,14 +109,14 @@ public class ResourceFileServerController {
         myPage.setPageList(userAndResources);
 
         int total = Integer.valueOf(totalPage);
-        if(total < 0)
+        if (total < 0)
             total = this.resourceDetailService.countUserResourceNumbers(user_id);
 
         myPage.setTotal(total);
 
         return ResultFormatUtil.format(ResponseCode.GET_FOCUS_USER_RESOURCE_SUCCESS, myPage);
-
     }
+
 
 
 }

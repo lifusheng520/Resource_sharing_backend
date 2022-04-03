@@ -6,6 +6,7 @@ import com.sharing.pojo.UserInfo;
 import com.sharing.pojo.UserResource;
 import com.sharing.service.CommentService;
 import com.sharing.service.ResourceDetailService;
+import com.sharing.service.SupportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -30,25 +31,26 @@ public class ResourceDetailServiceImpl implements ResourceDetailService {
     private ResourceDetailMapper resourceDetailMapper;
 
     @Autowired
-    private CommentService commentService;
+    private SupportService supportService;
 
     @Override
-    public UserAndResource getUserResourceDetail(int id) {
-        UserAndResource userAndResource = new UserAndResource();
-        UserResource resource = this.resourceDetailMapper.getResourceById(id);
-        userAndResource.setResource(resource);
-        UserInfo userInfo = this.resourceDetailMapper.getUserInfoById(resource.getUser_id());
-        userAndResource.setUserInfo(userInfo);
-        return userAndResource;
+    public UserAndResource getUserResourceDetail(int resource_id) {
+        return this.resourceDetailMapper.getUserAndResourceByResourceId(resource_id);
     }
 
     @Override
     public List<UserAndResource> getFocusUserResourceByUserId(int user_id, int begin, int number) {
         List<UserAndResource> userAndResources = this.resourceDetailMapper.getFocusResourceByUserId(user_id, begin, number);
         for (UserAndResource item : userAndResources) {
+            // 设置头像
             String headIcon = item.getUserInfo().getHeadIcon();
             if (headIcon != null && !"".equals(headIcon))
                 item.getUserInfo().setHeadIcon(this.iconHostURL + headIcon);
+
+            // 查询点赞数量
+            int resourceId = item.getResource().getId();
+            int i = this.supportService.countResourceSupportNumbers(resourceId);
+            item.getResource().setSupportNumber(i);
         }
         return userAndResources;
     }
@@ -57,4 +59,5 @@ public class ResourceDetailServiceImpl implements ResourceDetailService {
     public int countUserResourceNumbers(int user_id) {
         return this.resourceDetailMapper.countResourceNumberByUserId(user_id);
     }
+
 }

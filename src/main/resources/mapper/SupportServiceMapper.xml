@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sharing.mapper.SupportServiceMapper">
+
+    <select id="countResourceSupportNumbers" parameterType="int" resultType="int">
+        select count(*) from resource_support
+        where resource_id = #{resource_id};
+    </select>
+
+    <select id="countSupportRecord" parameterType="int" resultType="int">
+        select count(*) from resource_support
+        where resource_id = #{resource_id}
+                and user_id = #{user_id};
+    </select>
+
+    <delete id="deleteResourceSupportRecord" parameterType="int">
+         DELETE FROM resource_support
+        WHERE user_id = #{user_id}
+                and resource_id = #{resource_id};
+    </delete>
+
+    <insert id="addResourceSupportRecord" parameterType="int">
+        insert into resource_support(user_id, resource_id)
+        values (#{user_id}, #{resource_id});
+    </insert>
+
+</mapper>

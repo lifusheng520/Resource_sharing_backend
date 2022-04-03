@@ -36,9 +36,6 @@ public class MyUserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("============MyUserDetailsServiceImpl");
-
-        System.out.println("username==>" + username);
 
         if (username == null || "".equals(username)) {
             throw new UsernameNotFoundException("用户名不能为空~");
@@ -49,13 +46,10 @@ public class MyUserDetailsServiceImpl implements UserDetailsService {
         if (user == null) {
             throw new RuntimeException("用户不存在~");
         }
-        System.out.println("userid" + user.getId());
 
         // 读取用户权限
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         List<String> roles = this.userService.getRoles(user.getId());
-
-        System.out.println("roles======" + roles);
 
         for (String role : roles) {
             grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + role));
@@ -76,9 +70,6 @@ public class MyUserDetailsServiceImpl implements UserDetailsService {
             authentication.setUserInfo_id(userInfo.getId());
         else
             authentication.setUserInfo_id(0);
-        System.out.println(authentication);
-
-        System.out.println("============MyUserDetailsServiceImpl");
 
         // 返回spring security 的user对象
         return authentication;

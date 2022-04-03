@@ -16,10 +16,10 @@ public interface ResourceDetailService {
     /**
      * 获取用户资源详细信息
      *
-     * @param id 资源id
+     * @param resource_id 资源id
      * @return 返回用户和资源信息
      */
-    UserAndResource getUserResourceDetail(int id);
+    UserAndResource getUserResourceDetail(int resource_id);
 
     /**
      * 通过用户id获取用户详细数据list
@@ -38,5 +38,7 @@ public interface ResourceDetailService {
      * @return 返回用户拥有的资源数量
      */
     int countUserResourceNumbers(int user_id);
+
+
 
 }

@@ -12,8 +12,8 @@
     </select>
 
     <insert id="addUserResource" parameterType="UserResource">
-        insert into resource(user_id, origin_name, type, size, disk_name, discipline, upload_time, downloads, favorite_number, enabled, isDeleted, md5, description)
-        values (#{user_id}, #{origin_name}, #{type}, #{size}, #{disk_name}, #{discipline}, #{upload_time}, #{downloads}, #{favorite_number}, #{enabled}, #{isDeleted}, #{md5}, #{description});
+        insert into resource(user_id, origin_name, type, size, disk_name, discipline, upload_time, downloads, enabled, isDeleted, md5, description)
+        values (#{user_id}, #{origin_name}, #{type}, #{size}, #{disk_name}, #{discipline}, #{upload_time}, #{downloads}, #{enabled}, #{isDeleted}, #{md5}, #{description});
     </insert>
 
     <select id="getResourceListByUserId" parameterType="int" resultType="userresource">

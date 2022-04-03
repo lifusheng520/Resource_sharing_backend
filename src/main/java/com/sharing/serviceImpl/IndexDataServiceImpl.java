@@ -4,6 +4,8 @@ import com.sharing.mapper.IndexDataMapper;
 import com.sharing.mapper.UserMapper;
 import com.sharing.pojo.*;
 import com.sharing.service.IndexDataService;
+import com.sharing.service.ResourceDetailService;
+import com.sharing.service.SupportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,7 +29,7 @@ public class IndexDataServiceImpl implements IndexDataService {
     private IndexDataMapper indexDataMapper;
 
     @Autowired
-    private UserMapper userMapper;
+    private SupportService supportService;
 
     @Value("${files.icon.host.url}")
     private String iconHostURL;
@@ -54,18 +56,17 @@ public class IndexDataServiceImpl implements IndexDataService {
         for (String discipline : IndexData.discipline) {
             if ("全部".equals(discipline))
                 continue;
-            // 创建一个用户资源信息完整实体类
-            UserAndResource userAndResource = new UserAndResource();
             // 查询科目资源
-            UserResource resource = this.indexDataMapper.getResourceByDiscipline(discipline);
-            // 根据资源的用户id获取用户信息
-            UserInfo userInfo = this.userMapper.getUserInfoById(resource.getUser_id());
+            UserAndResource userAndResource = this.indexDataMapper.getUserAndResourceByDiscipline(discipline);
+            // 获取资源点赞数量
+            int id = userAndResource.getResource().getId();
+            int supportNumbers = this.supportService.countResourceSupportNumbers(id);
+            userAndResource.getResource().setSupportNumber(supportNumbers);
             // 设置头像URL
-            String url = this.iconHostURL + userInfo.getHeadIcon();
-            userInfo.setHeadIcon(url);
+            String icon = userAndResource.getUserInfo().getHeadIcon();
+            if (icon != null && !"".equals(icon))
+                userAndResource.getUserInfo().setHeadIcon(this.iconHostURL + icon);
             // 添加用户信息和资源信息
-            userAndResource.setUserInfo(userInfo);
-            userAndResource.setResource(resource);
             userAndResourceList.add(userAndResource);
         }
         return userAndResourceList;

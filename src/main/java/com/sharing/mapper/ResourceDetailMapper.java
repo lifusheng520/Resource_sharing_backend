@@ -54,5 +54,12 @@ public interface ResourceDetailMapper {
      */
     int countResourceNumberByUserId(int user_id);
 
+    /**
+     * 通过资源id，获取用户资源详细信息
+     *
+     * @param resource_id 资源id
+     * @return 返回资源详细信息类对象
+     */
+    UserAndResource getUserAndResourceByResourceId(int resource_id);
 
 }
