@@ -4,6 +4,7 @@ package com.sharing.controller;
 import com.sharing.Utils.ResponseCode;
 import com.sharing.Utils.ResultFormatUtil;
 import com.sharing.pojo.User;
+import com.sharing.service.FavouriteService;
 import com.sharing.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,6 +25,9 @@ public class AuthenticationController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private FavouriteService favouriteService;
 
     @PostMapping("/register")
     public String register(@RequestBody Map<String, String> params) throws IOException {
@@ -49,7 +53,10 @@ public class AuthenticationController {
         // 持久化账号到数据库
         int i = this.userService.register(user);
         int userId = this.userService.getUserIdByUsername(username);
+        // 初始化用户信息
         this.userService.initUserInfo(userId);
+        // 初始化用户的收藏信息
+        this.favouriteService.initDefaultFavouriteFolder(userId);
 
         if (i > 0) {
             // 注册成功

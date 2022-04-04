@@ -25,13 +25,14 @@ public class IllegalWordDisposeUtil {
     /**
      * 敏感词词库文件的路径
      */
-    private static String wordsFilePath = "D:/毕业设计/敏感词库/敏感词.txt";
+    private static final String wordsFilePath;
 
     /**
      * 初始化词库内容，将词组导入
      */
     static {
         importIllegalWordsByFile();
+        wordsFilePath = "D:/毕业设计/敏感词库/敏感词.txt";
     }
 
     /**

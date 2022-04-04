@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sharing.mapper.FavouriteMapper">
+
+
+    <insert id="insertDefaultFavouriteFolder" parameterType="int">
+        insert into favourite_folder(user_id, folder_name)
+        values (#{user_id}, '默认收藏夹');
+    </insert>
+
+    <select id="queryFavouriteRecordNumbers" parameterType="int" resultType="int">
+        select count(*) from favourite
+        where user_id = #{user_id}
+                and resource_id = #{resource_id};
+    </select>
+
+    <delete id="deleteFavouriteByUserAndResourceId" parameterType="int">
+        DELETE FROM favourite
+        WHERE user_id = #{user_id}
+		        and resource_id = #{resource_id};
+    </delete>
+
+    <insert id="insertFavourite" parameterType="favourite">
+        insert into favourite(user_id, resource_id, time, folder_id, folder_name)
+        values (#{user_id}, #{resource_id}, #{time}, #{folder_id}, #{folder_name});
+    </insert>
+
+    <select id="queryFavouriteFoldersByUserId" parameterType="int" resultType="FavouriteFolder">
+        select * from favourite_folder
+        where user_id = #{user_id};
+    </select>
+
+
+</mapper>

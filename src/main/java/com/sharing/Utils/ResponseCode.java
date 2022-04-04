@@ -16,6 +16,7 @@ import lombok.Data;
  * #5001～5999 区间表示用户 评论业务请求状态和消息
  * #6001～6050 区间表示用户 关注业务请求状态和消息
  * #6051～6999 区间表示用户 关注业务请求状态和消息
+ * #7001～7049 区间表示用户 关注业务请求状态和消息
  */
 public enum ResponseCode {
 
@@ -119,6 +120,15 @@ public enum ResponseCode {
     RESOURCE_ADD_SUPPORT_SUCCESS(6051, "点赞成功，感谢你的支持"),
     RESOURCE_DELETE_SUPPORT_SUCCESS(6052, "取消点赞成功"),
 
+    /**
+     * 收藏业务
+     */
+    FAVOURITE_CANCEL_SUCCESS(7001, "已取消收藏"),
+    FAVOURITE_CANCEL_FAIL(7002, "取消收藏失败"),
+    FAVOURITE_ADD_SUCCESS(7003, "已经添加至收藏"),
+    FAVOURITE_ADD_FAIL(7004, "添加收藏失败"),
+    GET_FAVOURITE_FOLDER_SUCCESS(7005, "获取用户收藏文件夹成功"),
+
 
     /* 用户错误 */
     USER_ACCOUNT_EXPIRED(2002, "账号已过期"),
@@ -129,9 +139,8 @@ public enum ResponseCode {
     USER_ACCOUNT_NOT_EXIST(2007, "账号不存在"),
     USER_ACCOUNT_ALREADY_EXIST(2008, "账号已存在"),
     USER_ACCOUNT_USE_BY_OTHERS(2009, "您的登录已经超时或者已经在另一台机器登录，您被迫下线"),
-    USER_SESSION_INVALID(2010, "登录已经超时"),
-    /* 业务错误 */
-    NO_PERMISSION(4001, "没有权限");
+    USER_SESSION_INVALID(2010, "登录已经超时");
+
 
     private int code;
     private String message;
