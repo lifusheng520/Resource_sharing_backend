@@ -11,26 +11,110 @@
         values (#{user_id}, '默认收藏夹');
     </insert>
 
-    <select id="queryFavouriteRecordNumbers" parameterType="int" resultType="int">
-        select count(*) from favourite
+    <select id="queryFavouriteRecord" parameterType="int" resultType="string">
+        select folder_name from favourite
         where user_id = #{user_id}
                 and resource_id = #{resource_id};
     </select>
 
-    <delete id="deleteFavouriteByUserAndResourceId" parameterType="int">
+    <delete id="deleteFavouriteByIdAndFolderNameList">
         DELETE FROM favourite
         WHERE user_id = #{user_id}
-		        and resource_id = #{resource_id};
+        and resource_id = #{resource_id}
+        and folder_name in
+        <foreach collection="folderNames" item="name" open="(" close=")" separator=",">
+            #{name}
+        </foreach>
     </delete>
 
-    <insert id="insertFavourite" parameterType="favourite">
+    <insert id="insertFavouriteByList" parameterType="list">
         insert into favourite(user_id, resource_id, time, folder_id, folder_name)
-        values (#{user_id}, #{resource_id}, #{time}, #{folder_id}, #{folder_name});
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.user_id}, #{item.resource_id}, #{item.time}, #{item.folder_id}, #{item.folder_name})
+        </foreach>
     </insert>
 
     <select id="queryFavouriteFoldersByUserId" parameterType="int" resultType="FavouriteFolder">
         select * from favourite_folder
-        where user_id = #{user_id};
+        where user_id = #{user_id}
+        order by id;
+    </select>
+
+    <select id="queryFolderNumber" resultType="int">
+        select count(*) from favourite_folder
+        where user_id = #{user_id}
+                and folder_name = #{folder_name};
+    </select>
+
+    <insert id="insertFavouriteFolder" parameterType="favouriteFolder">
+        insert into favourite_folder(user_id, folder_name)
+        values (#{user_id}, #{folder_name});
+    </insert>
+
+    <select id="queryFavouriteListByPage" resultMap="userFavouriteAndResourceInfoMap">
+        select f.*, u.headIcon headIcon, u.name name, r.origin_name origin_name, r.description description
+        from favourite f left join user_info u
+                on f.user_id = u.user_id
+            left join resource r
+                on f.resource_id = r.id
+        where f.user_id = #{user_id}
+        and f.folder_name = #{folder_name}
+        order by f.time desc
+        limit #{begin}, #{number};
+    </select>
+
+    <resultMap id="userFavouriteAndResourceInfoMap" type="com.sharing.pojo.UserFavouriteAndResourceInfo">
+        <association property="userInfo" javaType="com.sharing.pojo.UserInfo">
+            <result column="name" property="name"/>
+            <result column="headIcon" property="headIcon"/>
+        </association>
+        <association property="resource" javaType="com.sharing.pojo.UserResource">
+            <result column="origin_name" property="origin_name"/>
+            <result column="description" property="description"/>
+        </association>
+        <association property="favourite" javaType="com.sharing.pojo.Favourite">
+            <result column="id" property="id"/>
+            <result column="user_id" property="user_id"/>
+            <result column="resource_id" property="resource_id"/>
+            <result column="time" property="time"/>
+            <result column="folder_id" property="folder_id"/>
+            <result column="folder_name" property="folder_name"/>
+        </association>
+    </resultMap>
+
+    <select id="countFolderResourceNumber" resultType="int">
+        select count(*) from favourite
+        where user_id = #{user_id}
+                and folder_name = #{folder_name};
+    </select>
+
+    <delete id="deleteFavouriteByIds" parameterType="list">
+        DELETE FROM favourite
+        WHERE id in
+        <foreach collection="idList" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="updateFavouriteFolder" parameterType="list">
+        update favourite
+        <set>
+            folder_id = #{newFolder.id},
+            folder_name = #{newFolder.folder_name},
+        </set>
+        where id in
+        <foreach collection="favouriteIdList" open="(" close=")" item="item" separator=",">
+            #{item}
+        </foreach>
+    </update>
+
+    <select id="queryFavouriteByIdList" resultType="favourite" parameterType="list">
+        select * from favourite
+        where id in
+        <foreach collection="favouriteIdList" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
     </select>
 
 

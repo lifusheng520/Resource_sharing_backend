@@ -4,20 +4,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 /**
- * 收藏的文件夹
- *
  * @author 李福生
- * @date 2022-4-4
- * @time 上午 10:32
+ * @date 2022-4-6
+ * @time 下午 05:56
  */
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FavouriteFolder{
-    private int id;
-    private int user_id;
-    private String folder_name;
+public class UserFavouriteAndResourceInfo {
+
+    private UserInfo userInfo;
+    private UserResource resource;
+    private Favourite favourite;
+
 }

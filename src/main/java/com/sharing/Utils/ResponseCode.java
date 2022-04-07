@@ -127,7 +127,16 @@ public enum ResponseCode {
     FAVOURITE_CANCEL_FAIL(7002, "取消收藏失败"),
     FAVOURITE_ADD_SUCCESS(7003, "已经添加至收藏"),
     FAVOURITE_ADD_FAIL(7004, "添加收藏失败"),
-    GET_FAVOURITE_FOLDER_SUCCESS(7005, "获取用户收藏文件夹成功"),
+    GET_FAVOURITE_FOLDER_SUCCESS(7005, "获取收藏文件夹成功"),
+    ADD_FAVOURITE_FOLDER_SUCCESS(7006, "添加收藏夹成功"),
+    ADD_FAVOURITE_FOLDER_FAIL(7007, "添加收藏夹失败"),
+    FAVOURITE_FOLDER_EXISTS(7008, "收藏夹已经，不能重复新建"),
+    GET_FAVOURITE_RECORD_SUCCESS(7009, "获取收藏记录成功"),
+    GET_FAVOURITE_RESOURCE_PAGE_SUCCESS(7010, "收藏夹资源分页数据获取成功"),
+    MOVE_FAVOURITE_SUCCESS(7011, "收藏内容已经移到指定收藏夹"),
+    MOVE_FAVOURITE_FAIL(7012, "收藏内容移动失败"),
+    COPY_FAVOURITE_SUCCESS(7013, "收藏内容复制成功"),
+    COPY_FAVOURITE_FAIL(7014, "收藏内容复制失败"),
 
 
     /* 用户错误 */
