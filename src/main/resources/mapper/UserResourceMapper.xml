@@ -55,6 +55,14 @@
         </foreach>
     </update>
 
+    <insert id="insertDeletedResourceRecord" parameterType="DeletedResource">
+        insert into resource_deleted(id, user_id, resource_id, time)
+        values
+        <foreach collection="deletedResourceList" open="" close="" item="item" separator=",">
+            (#{item.id}, #{item.user_id}, #{item.resource_id}, #{item.time})
+        </foreach>
+    </insert>
+
     <update id="updateResourceInfo" parameterType="userresource">
         update resource
         set origin_name = #{origin_name},
@@ -79,6 +87,45 @@
         where user_id = #{user_id}
                 and origin_name like concat('%', #{like}, '%');
     </select>
+
+    <select id="queryDeletedResourceRecordByUserId" parameterType="int" resultType="DeletedResource">
+        SELECT rd.*, r.origin_name origin_name, r.size size, r.discipline discipline
+        FROM resource_deleted rd INNER JOIN resource r
+                    ON rd.resource_id = r.id
+        WHERE rd.user_id = #{user_id}
+        ORDER BY rd.time DESC
+        LIMIT #{begin}, #{number};
+    </select>
+
+    <select id="countDeletedResourceRecordNumbers" resultType="int">
+        select count(*) from resource_deleted
+        where user_id = #{user_id};
+    </select>
+
+    <delete id="realDeleteResourceByList" parameterType="DeletedResource">
+        delete from resource
+        where id in
+        <foreach collection="deletedResourceList" open="(" close=")" item="item" separator=",">
+            #{item.resource_id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteResourceDeletedRecordByList" parameterType="DeletedResource">
+        delete from resource_deleted
+        where id in
+        <foreach collection="deletedResourceList" open="(" close=")" item="item" separator=",">
+            #{item.id}
+        </foreach>
+    </delete>
+
+    <update id="reinstateResourceByList" parameterType="DeletedResource">
+        update resource
+        set isDeleted = 0
+        where id in
+        <foreach collection="reinstateResourceList" open="(" close=")" separator="," item="item">
+            #{item.resource_id}
+        </foreach>
+    </update>
 
 
 

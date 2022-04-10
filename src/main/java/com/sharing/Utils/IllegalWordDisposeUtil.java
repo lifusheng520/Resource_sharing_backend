@@ -31,8 +31,8 @@ public class IllegalWordDisposeUtil {
      * 初始化词库内容，将词组导入
      */
     static {
-        importIllegalWordsByFile();
         wordsFilePath = "D:/毕业设计/敏感词库/敏感词.txt";
+        importIllegalWordsByFile();
     }
 
     /**

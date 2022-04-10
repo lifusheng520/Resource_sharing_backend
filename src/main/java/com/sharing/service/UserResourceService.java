@@ -1,5 +1,6 @@
 package com.sharing.service;
 
+import com.sharing.pojo.DeletedResource;
 import com.sharing.pojo.UserResource;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,7 +17,7 @@ public interface UserResourceService {
      * 通过md5获取用户资源文件信息
      *
      * @param discipline 文件科目
-     * @param md5 md5字符串
+     * @param md5        md5字符串
      * @return 返回资源文件对象md5相同的文件的集合
      */
     List<UserResource> getUserResourceByMd5(String discipline, String md5);
@@ -83,6 +84,14 @@ public interface UserResourceService {
     int deleteUserResourceByList(List<UserResource> resourceList);
 
     /**
+     * 添加被删除的资源记录
+     *
+     * @param deletedResourceList 被删除的资源list集合
+     * @return 返回更新结果
+     */
+    int addDeletedResourceRecord(List<DeletedResource> deletedResourceList);
+
+    /**
      * 更新用户资源信息，将资源信息修改
      *
      * @param userResource
@@ -105,5 +114,48 @@ public interface UserResourceService {
      * @return 返回资源的原文件名
      */
     String getUserResourceOriginFileName(int id);
+
+    /**
+     * 通过用户id获取用户的资源删除记录
+     *
+     * @param user_id 用户id
+     * @param begin   开始取值的位置
+     * @param number  需要取多少个
+     * @return 返回删除记录集合
+     */
+    List<DeletedResource> getDeletedResourceRecordByUserId(int user_id, int begin, int number);
+
+    /**
+     * 统计用户id对应的删除记录数量
+     *
+     * @param user_id 用户id
+     * @return 返回用户删除记录总数
+     */
+    int countDeletedRecord(int user_id);
+
+    /**
+     * 将list集合中包含的资源信息删除
+     *
+     * @param deletedResourceList 需要删除的资源集合
+     * @return 返回删除的结果
+     */
+    int realDeleteUserResourceByList(List<DeletedResource> deletedResourceList);
+
+    /**
+     * 将list中的回收箱中的记录删除
+     *
+     * @param deletedResourceList 需要删除的记录信息
+     * @return 返回删除结果
+     */
+    int deleteResourceDeletedRecordByList(List<DeletedResource> deletedResourceList);
+
+    /**
+     * 将资源从被删除状态恢复
+     *
+     * @param reinstateResourceList 需要恢复的资源信息集合
+     * @return 返回更新结果
+     */
+    int reinstateUserResourceByList(List<DeletedResource> reinstateResourceList);
+
 
 }

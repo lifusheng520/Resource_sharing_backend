@@ -81,6 +81,11 @@ public enum ResponseCode {
     UPDATE_RESOURCE_SUCCESS(4021, "资源更新成功"),
     UPDATE_RESOURCE_FAIL(4022, "资源更新失败"),
     GET_RESOURCE_SUCCESS(4027, "获取资源成功"),
+    GET_DELETED_RECORD_SUCCESS(4028, "成功获取删除资源记录"),
+    REAL_DELETE_RESOURCE_SUCCESS(4029, "资源已经从服务器端删除"),
+    REAL_DELETE_RESOURCE_FAIL(4030, "资源未能从服务器端删除"),
+    REINSTATE_DELETED_RESOURCE_SUCCESS(4031, "资源恢复成功"),
+    REINSTATE_DELETED_RESOURCE_FAIL(4032, "资源恢复失败"),
 
 
     /**

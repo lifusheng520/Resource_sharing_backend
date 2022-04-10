@@ -2,6 +2,7 @@ package com.sharing.serviceImpl;
 
 
 import com.sharing.mapper.UserResourceMapper;
+import com.sharing.pojo.DeletedResource;
 import com.sharing.pojo.UserResource;
 import com.sharing.service.UserResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,11 @@ public class UserResourceServiceImpl implements UserResourceService {
     }
 
     @Override
+    public int addDeletedResourceRecord(List<DeletedResource> deletedResourceList) {
+        return this.resourceMapper.insertDeletedResourceRecord(deletedResourceList);
+    }
+
+    @Override
     public int updateUserResourceInfo(UserResource userResource) {
         return resourceMapper.updateResourceInfo(userResource);
     }
@@ -75,5 +81,29 @@ public class UserResourceServiceImpl implements UserResourceService {
         return this.resourceMapper.getResourceOriginFileName(id);
     }
 
+    @Override
+    public List<DeletedResource> getDeletedResourceRecordByUserId(int user_id, int begin, int number) {
+        return this.resourceMapper.queryDeletedResourceRecordByUserId(user_id, begin, number);
+    }
+
+    @Override
+    public int countDeletedRecord(int user_id) {
+        return this.resourceMapper.countDeletedResourceRecordNumbers(user_id);
+    }
+
+    @Override
+    public int realDeleteUserResourceByList(List<DeletedResource> deletedResourceList) {
+        return this.resourceMapper.realDeleteResourceByList(deletedResourceList);
+    }
+
+    @Override
+    public int deleteResourceDeletedRecordByList(List<DeletedResource> deletedResourceList) {
+        return this.resourceMapper.deleteResourceDeletedRecordByList(deletedResourceList);
+    }
+
+    @Override
+    public int reinstateUserResourceByList(List<DeletedResource> reinstateResourceList) {
+        return this.resourceMapper.reinstateResourceByList(reinstateResourceList);
+    }
 
 }

@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.sharing.Utils.ResponseCode;
 import com.sharing.Utils.ResultFormatUtil;
+import com.sharing.pojo.DeletedResource;
 import com.sharing.pojo.MyPage;
 import com.sharing.pojo.UserResource;
 import com.sharing.service.UserResourceService;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -219,8 +221,8 @@ public class ResourceFileManagerController {
     /**
      * 将用户的资源记录删除标记置为1，
      *
-     * @param resourceList
-     * @return
+     * @param resourceList 要删除的资源list
+     * @return 返回删除结果
      */
     @PostMapping("/delete")
     public String deleteUserResource(@RequestBody List<UserResource> resourceList) {
@@ -229,6 +231,18 @@ public class ResourceFileManagerController {
 
         // 假删除
         int i = this.resourceService.deleteUserResourceByList(resourceList);
+
+        // 放入回收箱
+        ArrayList<DeletedResource> deletedResources = new ArrayList<>();
+        for (UserResource resource : resourceList) {
+            DeletedResource deleted = new DeletedResource();
+            deleted.setUser_id(resource.getUser_id());
+            deleted.setResource_id(resource.getId());
+            deleted.setTime(new Date());
+            deletedResources.add(deleted);
+        }
+        this.resourceService.addDeletedResourceRecord(deletedResources);
+
         if (i > 0)
             return ResultFormatUtil.format(ResponseCode.DELETE_RESOURCE_SUCCESS, resourceList);
         return ResultFormatUtil.format(ResponseCode.DELETE_RESOURCE_FAIL, resourceList);
@@ -307,5 +321,119 @@ public class ResourceFileManagerController {
         outputStream.close();
     }
 
+    /**
+     * 获取回收箱中被删除的资源记录
+     *
+     * @param params 请求参数
+     * @return 返回分页的json数据
+     */
+    @PostMapping("/getDeleted")
+    public String getDeletedRecord(@RequestBody Map<String, String> params) {
+        String user_id = params.get("user_id");
+        String pageSize = params.get("pageSize");
+        String totalPage = params.get("total");
+        String currentPage = params.get("currentPage");
+        if (StrUtil.isEmpty(user_id))
+            return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, null);
+
+        // 获取分页数据
+        int page = MyPage.getValidTransfer(currentPage, "page");
+        int size = MyPage.getValidTransfer(pageSize, "size");
+        int total = Integer.valueOf(totalPage);
+        Integer userId = Integer.valueOf(user_id);
+
+        // 查询当前页的数据
+        List<DeletedResource> deletedRecordList = this.resourceService.getDeletedResourceRecordByUserId(userId, (page - 1) * size, size);
+
+        //设置分页参数
+        MyPage<DeletedResource> deletedResourceMyPage = new MyPage<>();
+        deletedResourceMyPage.setPageSize(size);
+        deletedResourceMyPage.setCurrentPage(page);
+        deletedResourceMyPage.setPageList(deletedRecordList);
+        if (total < 0)
+            total = this.resourceService.countDeletedRecord(userId);
+        deletedResourceMyPage.setTotal(total);
+
+        ResponseCode responseCode = ResponseCode.GET_DELETED_RECORD_SUCCESS;
+        return ResultFormatUtil.format(responseCode, deletedResourceMyPage);
+    }
+
+    /**
+     * 彻底删除资源
+     *
+     * @param deletedResourceList 需要删除的资源list集合
+     * @return 返回删除结果
+     */
+    @PostMapping("/realDelete")
+    public String realDeleteResource(@RequestBody List<DeletedResource> deletedResourceList) {
+        if (deletedResourceList == null || deletedResourceList.size() == 0)
+            return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, null);
+
+        // 删除资源记录
+        int i = this.resourceService.realDeleteUserResourceByList(deletedResourceList);
+
+        // 删除回收箱中的记录
+        int i1 = this.resourceService.deleteResourceDeletedRecordByList(deletedResourceList);
+
+        // 从磁盘中将资源删除
+        for (DeletedResource resource : deletedResourceList) {
+            String origin_name = resource.getOrigin_name();
+            String discipline = resource.getDiscipline();
+            String fileName = this.uploadRootPath + File.separator + origin_name + discipline;
+            this.deleteFile(fileName);
+        }
+
+        ResponseCode responseCode;
+        if (i > 0 && i1 > 0)
+            responseCode = ResponseCode.REAL_DELETE_RESOURCE_SUCCESS;
+        else
+            responseCode = ResponseCode.REAL_DELETE_RESOURCE_FAIL;
+
+        return ResultFormatUtil.format(responseCode, null);
+    }
+
+    /**
+     * 删除单个文件
+     *
+     * @param fileName 被删除文件的文件名
+     * @return 单个文件删除成功返回true, 否则返回false
+     */
+    public boolean deleteFile(String fileName) {
+        File file = new File(fileName);
+        if (file.isFile() && file.exists()) {
+            file.delete();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    /**
+     * 将用户被删除的资源恢复
+     *
+     * @param reinstateList 需要恢复的资源list集合
+     * @return 返回更新结果
+     */
+    @PostMapping("/reinstate")
+    public String reinstateResource(@RequestBody List<DeletedResource> reinstateList) {
+        if (reinstateList == null || reinstateList.size() == 0)
+            return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, null);
+
+        // 将资源从被回收箱中恢复
+        int i = this.resourceService.reinstateUserResourceByList(reinstateList);
+
+        // 删除回收箱内的记录
+        int i1 = this.resourceService.deleteResourceDeletedRecordByList(reinstateList);
+
+
+        ResponseCode responseCode;
+        if (i > 0 && i1 > 0)
+            responseCode = ResponseCode.REINSTATE_DELETED_RESOURCE_SUCCESS;
+        else
+            responseCode = ResponseCode.REINSTATE_DELETED_RESOURCE_FAIL;
+
+        return ResultFormatUtil.format(responseCode, null);
+    }
 
 }
