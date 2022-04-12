@@ -16,7 +16,9 @@ import lombok.Data;
  * #5001～5999 区间表示用户 评论业务请求状态和消息
  * #6001～6050 区间表示用户 关注业务请求状态和消息
  * #6051～6999 区间表示用户 关注业务请求状态和消息
- * #7001～7049 区间表示用户 关注业务请求状态和消息
+ * #7001～7049 区间表示用户 管理员业务请求状态和消息
+ *
+ * #8001～8999 区间表示用户 关注业务请求状态和消息
  */
 public enum ResponseCode {
 
@@ -142,6 +144,14 @@ public enum ResponseCode {
     MOVE_FAVOURITE_FAIL(7012, "收藏内容移动失败"),
     COPY_FAVOURITE_SUCCESS(7013, "收藏内容复制成功"),
     COPY_FAVOURITE_FAIL(7014, "收藏内容复制失败"),
+    GET_FAVOURITE_FOLDER_PAGE_SUCCESS(7015, "成功获取用户收藏夹分页数据"),
+    DELETE_FAVOURITE_FOLDER_SUCCESS(7016, "收藏夹删除成功"),
+    DELETE_FAVOURITE_FOLDER_FAIL(7017, "收藏夹删除失败"),
+
+    /**
+     * 管理员业务
+     */
+    GET_USER_ACCOUNT_INFO_SUCCESS(8001, "获取用户账号信息成功"),
 
 
     /* 用户错误 */

@@ -70,6 +70,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * 跨域过滤器
+     *
      * @return
      */
     @Bean
@@ -129,13 +130,13 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(this.myAuthenticationSuccessHandler)
                 // 登录失败处理器
                 .failureHandler(this.myAuthenticationFailHandler)
-//                .and()
-//                // 记住我
-//                .rememberMe()
-//                // 即登录页面的记住登录按钮的参数名
-//                .rememberMeParameter("remember-me")
-//                // 会话过期时间   （单位：秒）
-//                .tokenValiditySeconds(1800)
+                .and()
+                // 记住我
+                .rememberMe()
+                // 即登录页面的记住登录按钮的参数名
+                .rememberMeParameter("remember-me")
+//                 会话过期时间   （单位：秒）
+                .tokenValiditySeconds(1800)
                 .and()
                 // 未登录设置(登录认证入口)
                 .exceptionHandling().authenticationEntryPoint(this.myAuthenticationEntryPoint)

@@ -32,7 +32,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserInfoController {
 
     @Autowired
     private UserService userService;

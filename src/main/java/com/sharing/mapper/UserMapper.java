@@ -63,6 +63,15 @@ public interface UserMapper {
     int initUserInfo(int id);
 
     /**
+     * 插入用户权限
+     *
+     * @param user_id   用户id
+     * @param role 给定的权限
+     * @return 更新结果
+     */
+    int insertUserRoleInfo(int user_id, String role);
+
+    /**
      * 用过用户名查询数据库中的用户信息
      *
      * @param username 用户名

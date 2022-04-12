@@ -48,8 +48,8 @@
     </select>
 
     <insert id="insertFavouriteFolder" parameterType="favouriteFolder">
-        insert into favourite_folder(user_id, folder_name)
-        values (#{user_id}, #{folder_name});
+        insert into favourite_folder(user_id, folder_name, time)
+        values (#{user_id}, #{folder_name}, #{time});
     </insert>
 
     <select id="queryFavouriteListByPage" resultMap="userFavouriteAndResourceInfoMap">
@@ -115,6 +115,50 @@
         <foreach collection="favouriteIdList" item="id" open="(" close=")" separator=",">
             #{id}
         </foreach>
+    </select>
+
+    <select id="queryFavouriteFoldersByPage" resultType="FavouriteFolder" parameterType="int">
+        SELECT ff.*, (
+                SELECT COUNT(*)
+                FROM favourite
+                WHERE favourite.folder_id = ff.id
+            ) resourceNumber
+        FROM favourite_folder ff
+        WHERE ff.user_id = #{user_id}
+        ORDER BY time DESC
+        LIMIT #{begin}, #{number};
+    </select>
+
+    <select id="countFavouriteFolderNumber" resultType="int" parameterType="int">
+        select count(*) from favourite_folder
+        where user_id = #{user_id};
+    </select>
+
+    <delete id="clearOvertimeDeletedRecord" parameterType="int">
+        DELETE FROM resource_deleted
+        WHERE (NOW() - DATE_ADD(time, INTERVAL #{days} DAY)) >= 0;
+    </delete>
+
+    <delete id="deleteFavouriteByFolderIdList" parameterType="list">
+        DELETE FROM favourite
+        WHERE folder_id in
+        <foreach collection="folderIdList" item="folder_id" separator="," open="(" close=")">
+            #{folder_id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteFavouriteFoldersByIdList" parameterType="list">
+        DELETE FROM favourite_folder
+        WHERE id in
+        <foreach collection="idList" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryInsertFolderId" resultType="int">
+        select id from favourite_folder
+        where user_id = #{user_id}
+                and folder_name = #{folder_name};
     </select>
 
 

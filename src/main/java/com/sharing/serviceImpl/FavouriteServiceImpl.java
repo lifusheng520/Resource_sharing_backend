@@ -103,4 +103,35 @@ public class FavouriteServiceImpl implements FavouriteService {
         int i = this.favouriteMapper.insertFavouriteByList(favourites);
         return i;
     }
+
+    @Override
+    public List<FavouriteFolder> getFavouriteFoldersByPage(int user_id, int begin, int number) {
+        List<FavouriteFolder> folders = this.favouriteMapper.queryFavouriteFoldersByPage(user_id, begin, number);
+        return folders;
+    }
+
+    @Override
+    public int countFavouriteFolderNumber(int user_id) {
+        return this.favouriteMapper.countFavouriteFolderNumber(user_id);
+    }
+
+    @Override
+    public int clearOvertimeDeletedRecord(int days) {
+        return this.favouriteMapper.clearOvertimeDeletedRecord(days);
+    }
+
+    @Override
+    public int cancelFavouriteByFolderIdList(List<Integer> folderIdList) {
+        return this.favouriteMapper.deleteFavouriteByFolderIdList(folderIdList);
+    }
+
+    @Override
+    public int deleteFavouriteFoldersByIdList(List<Integer> idList) {
+        return this.favouriteMapper.deleteFavouriteFoldersByIdList(idList);
+    }
+
+    @Override
+    public int getInsertFolderId(int user_id, String folder_name) {
+        return this.favouriteMapper.queryInsertFolderId(user_id, folder_name);
+    }
 }

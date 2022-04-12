@@ -51,6 +51,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public int initUserRoleInfo(int id, String role) {
+        return this.userMapper.insertUserRoleInfo(id, role);
+    }
+
+    @Override
     public UserInfo getUserInfo(String username) {
 
         // 根据id查询用户信息

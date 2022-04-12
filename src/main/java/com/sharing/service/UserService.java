@@ -55,6 +55,15 @@ public interface UserService {
     int initUserInfo(int id);
 
     /**
+     * 初始化用户权限
+     *
+     * @param id   用户id
+     * @param role 给定的权限
+     * @return 更新结果
+     */
+    int initUserRoleInfo(int id, String role);
+
+    /**
      * 通过用户名获取用户信息
      *
      * @return 用户信息

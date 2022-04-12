@@ -127,4 +127,55 @@ public interface FavouriteMapper {
      */
     List<Favourite> queryFavouriteByIdList(List<Integer> favouriteIdList);
 
+    /**
+     * 分页获取用户的收藏夹信息
+     *
+     * @param user_id 用户id
+     * @param begin   取值的开始位置
+     * @param number  需要取值的个数
+     * @return 返回收藏夹信息list
+     */
+    List<FavouriteFolder> queryFavouriteFoldersByPage(int user_id, int begin, int number);
+
+    /**
+     * 统计用户的收藏夹数量
+     *
+     * @param user_id 用户id
+     * @return 返回用户拥有的收藏夹数量
+     */
+    int countFavouriteFolderNumber(int user_id);
+
+    /**
+     * 清理资源回收箱，超过给定天数的记录将从回收箱中彻底删除
+     *
+     * @param days 给定的天数
+     * @return 返回更新结果
+     */
+    int clearOvertimeDeletedRecord(int days);
+
+    /**
+     * 通过收藏夹的id删除收藏
+     *
+     * @param folderIdList 收藏夹id集合
+     * @return 返回更新结果
+     */
+    int deleteFavouriteByFolderIdList(List<Integer> folderIdList);
+
+    /**
+     * 通过id集合，将集合中的id对应收藏夹删除
+     *
+     * @param idList 收藏夹id集合
+     * @return 返回更新结果
+     */
+    int deleteFavouriteFoldersByIdList(List<Integer> idList);
+
+    /**
+     * 获取刚刚插入的收藏夹的id
+     *
+     * @param user_id     收藏夹的用户id
+     * @param folder_name 收藏夹的名称
+     * @return 返回收藏夹id
+     */
+    int queryInsertFolderId(int user_id, String folder_name);
+
 }

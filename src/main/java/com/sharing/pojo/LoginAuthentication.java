@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 /**
+ * 用户的登录身份认证类
+ *
  * @author 李福生
  * @date 2022-3-5
  * @time 下午 03:20
@@ -83,6 +85,11 @@ public class LoginAuthentication implements UserDetails {
         return true;
     }
 
+    /**
+     * 判断账号是否可用
+     *
+     * @return 如果账号被冻结禁用了返回false，否则可用状态返回true
+     */
     @Override
     public boolean isEnabled() {
         return this.user.getEnabled() == 1;

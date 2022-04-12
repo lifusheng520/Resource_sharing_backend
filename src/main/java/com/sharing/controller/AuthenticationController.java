@@ -53,10 +53,15 @@ public class AuthenticationController {
         // 持久化账号到数据库
         int i = this.userService.register(user);
         int userId = this.userService.getUserIdByUsername(username);
+
         // 初始化用户信息
         this.userService.initUserInfo(userId);
+
         // 初始化用户的收藏信息
         this.favouriteService.initDefaultFavouriteFolder(userId);
+
+        // 初始化用户权限信息
+        this.userService.initUserRoleInfo(userId, "user");
 
         if (i > 0) {
             // 注册成功

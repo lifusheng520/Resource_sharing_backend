@@ -11,7 +11,7 @@
     </select>
 
     <select id="getUserByName" resultType="user" parameterType="string">
-        select * from campusresourcesharing.user
+        select * from user
         where username = #{username};
     </select>
 
@@ -85,5 +85,13 @@
         set password = #{password}
         where username = #{username};
     </update>
+
+    <insert id="insertUserRoleInfo">
+        INSERT INTO user_role(user_id, role_id)
+        VALUES ( #{user_id},
+            (SELECT id FROM role
+            WHERE role = #{role})
+        );
+    </insert>
 
 </mapper>

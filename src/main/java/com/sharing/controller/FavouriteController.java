@@ -74,7 +74,12 @@ public class FavouriteController {
             folder = new FavouriteFolder();
             folder.setUser_id(user_id);
             folder.setFolder_name(folder_name);
+            folder.setTime(new Date());
             int i = this.favouriteService.addFavouriteFolder(folder);
+
+            // 获取收藏夹的id
+            int id = this.favouriteService.getInsertFolderId(user_id, folder_name);
+            folder.setId(id);
             if (i > 0)
                 responseCode = ResponseCode.ADD_FAVOURITE_FOLDER_SUCCESS;
             else
@@ -310,6 +315,76 @@ public class FavouriteController {
             responseCode = ResponseCode.COPY_FAVOURITE_SUCCESS;
         else
             responseCode = ResponseCode.COPY_FAVOURITE_FAIL;
+        return ResultFormatUtil.format(responseCode, null);
+    }
+
+
+    /**
+     * 分页获取用户的收藏夹信息
+     *
+     * @param params 请求参数
+     * @return 返回更新状态
+     */
+    @PostMapping("/getFolders")
+    public String getFavouriteFolderByPage(@RequestBody Map<String, String> params) {
+        if (params == null || params.size() == 0 || StrUtil.isEmpty(params.get("user_id")))
+            return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, null);
+        String currentPage = params.get("currentPage");
+        String totalPage = params.get("total");
+        String pageSize = params.get("pageSize");
+        String user_id = params.get("user_id");
+
+        // 获取分页数据
+        int page = MyPage.getValidTransfer(currentPage, "page");
+        int size = MyPage.getValidTransfer(pageSize, "size");
+        Integer userId = Integer.valueOf(user_id);
+        Integer total = Integer.valueOf(totalPage);
+
+        // 分页查询收藏夹信息
+        List<FavouriteFolder> foldersByPage = this.favouriteService.getFavouriteFoldersByPage(userId, (page - 1) * size, size);
+
+        // 设置分页参数
+        MyPage<FavouriteFolder> myPage = new MyPage<>();
+        myPage.setCurrentPage(page);
+        myPage.setPageSize(size);
+        myPage.setPageList(foldersByPage);
+
+        if (total < 0)
+            total = this.favouriteService.countFavouriteFolderNumber(userId);
+        myPage.setTotal(total);
+
+        ResponseCode responseCode = ResponseCode.GET_FAVOURITE_FOLDER_PAGE_SUCCESS;
+        return ResultFormatUtil.format(responseCode, myPage);
+    }
+
+    /**
+     * 将list集合中的收藏夹删除，并且收藏夹的内容也一并删除，默认收藏夹不删除
+     *
+     * @param folderList 收藏夹集合
+     * @return 返回更新的结果
+     */
+    @PostMapping("/deleteFolders")
+    public String deleteFavouriteFoldersByFolderList(@RequestBody List<FavouriteFolder> folderList) {
+        if (folderList == null || folderList.size() == 0)
+            return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, null);
+
+        ArrayList<Integer> idList = new ArrayList<>();
+        for (FavouriteFolder folder : folderList)
+            if (!"默认收藏夹".equals(folder.getFolder_name()))
+                idList.add(folder.getId());
+
+        // 删除收藏夹的收藏内容
+        this.favouriteService.cancelFavouriteByFolderIdList(idList);
+
+        // 删除收藏夹
+        int i1 = this.favouriteService.deleteFavouriteFoldersByIdList(idList);
+
+        ResponseCode responseCode;
+        if (i1 > 0)
+            responseCode = ResponseCode.DELETE_FAVOURITE_FOLDER_SUCCESS;
+        else
+            responseCode = ResponseCode.DELETE_FAVOURITE_FOLDER_FAIL;
+
         return ResultFormatUtil.format(responseCode, null);
     }
 
