@@ -36,5 +36,14 @@ public interface AdminUserManagerService {
      */
     int lockUserAccount(List<Integer> idList, int enabled);
 
+    /**
+     * 将集合中id对应的账号激活重新使用
+     *
+     * @param unlockIdList  需要激活的账号id
+     * @param enabled 账号状态码
+     * @return 返回更新结果
+     */
+    int unlockUserAccount(List<Integer> unlockIdList, int enabled);
+
 
 }

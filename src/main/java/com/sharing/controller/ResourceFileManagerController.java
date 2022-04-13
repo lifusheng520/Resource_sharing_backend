@@ -103,6 +103,8 @@ public class ResourceFileManagerController {
         userResource.setIsDeleted(0);
         userResource.setMd5(md5);
         userResource.setDescription(description);
+        // 审批状态
+        userResource.setState("审批中");
 
         // 如果查询到了文件信息（不为null），说明本次上传的是重复文件，则数据中的disk_name = 查询的disk_name
         boolean delete;
@@ -116,6 +118,7 @@ public class ResourceFileManagerController {
 
         //  将资源文件记录添加到数据库中
         int i = this.resourceService.addUserResource(userResource);
+
         if (i > 0)
             return ResultFormatUtil.format(ResponseCode.RESOURCE_UPLOAD_SUCCESS, originalFilename);
         else

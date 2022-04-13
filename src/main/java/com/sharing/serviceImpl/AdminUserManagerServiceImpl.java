@@ -45,4 +45,9 @@ public class AdminUserManagerServiceImpl implements AdminUserManagerService {
     public int lockUserAccount(List<Integer> idList, int enabled) {
         return this.adminUserManagerMapper.updateUserAccountEnabled(idList, enabled);
     }
+
+    @Override
+    public int unlockUserAccount(List<Integer> unlockIdList, int enabled) {
+        return this.adminUserManagerMapper.updateUserAccountEnabled(unlockIdList, enabled);
+    }
 }

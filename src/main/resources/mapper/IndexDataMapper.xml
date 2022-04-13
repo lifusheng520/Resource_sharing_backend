@@ -42,6 +42,7 @@
         FROM resource r INNER JOIN user_info u
         ON r.user_id = u.user_id
         WHERE r.discipline = #{discipline}
+            AND r.state = '已通过审批'
         ORDER BY r.downloads DESC
         limit 1;
     </select>

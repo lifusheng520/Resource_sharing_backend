@@ -12,8 +12,8 @@
     </select>
 
     <insert id="addUserResource" parameterType="UserResource">
-        insert into resource(user_id, origin_name, type, size, disk_name, discipline, upload_time, downloads, enabled, isDeleted, md5, description)
-        values (#{user_id}, #{origin_name}, #{type}, #{size}, #{disk_name}, #{discipline}, #{upload_time}, #{downloads}, #{enabled}, #{isDeleted}, #{md5}, #{description});
+        insert into resource(user_id, origin_name, type, size, disk_name, discipline, upload_time, downloads, enabled, isDeleted, md5, description, state)
+        values (#{user_id}, #{origin_name}, #{type}, #{size}, #{disk_name}, #{discipline}, #{upload_time}, #{downloads}, #{enabled}, #{isDeleted}, #{md5}, #{description}, #{state});
     </insert>
 
     <select id="getResourceListByUserId" parameterType="int" resultType="userresource">
@@ -25,6 +25,7 @@
         SELECT * FROM resource
         where user_id = #{user_id}
                 and isDeleted = 0
+        order by upload_time desc
         limit #{begin}, #{size};
     </select>
 
@@ -39,6 +40,7 @@
         where user_id = #{user_id}
                 and isDeleted = 0
                 and origin_name like concat('%',#{key},'%')
+        order by upload_time desc
         limit #{begin}, #{size};
     </select>
 
@@ -127,6 +129,13 @@
         </foreach>
     </update>
 
+    <select id="queryUserResourceByIds" resultType="UserResource" parameterType="list">
+        select * from resource
+        where id in
+        <foreach collection="resourceIdList" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </select>
 
 
 </mapper>

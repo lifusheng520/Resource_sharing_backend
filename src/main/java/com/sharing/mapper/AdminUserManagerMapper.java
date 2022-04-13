@@ -41,4 +41,5 @@ public interface AdminUserManagerMapper {
      */
     int updateUserAccountEnabled(List<Integer> idList, int enabled);
 
+
 }

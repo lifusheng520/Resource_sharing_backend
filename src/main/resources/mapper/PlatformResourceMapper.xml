@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sharing.mapper.PlatformResourceMapper">
+
+    <select id="queryAllResourceByPage" resultMap="CompleteResourceInfoMap">
+        SELECT r.id resource_id, r.origin_name, r.description, r.upload_time, r.discipline, u.username, u.id, ui.name
+        FROM resource r INNER JOIN user u
+        ON r.user_id = u.id
+        LEFT JOIN user_info ui
+        ON r.user_id = ui.user_id
+        WHERE r.state = '已通过审批'
+        <if test="like != null and like != '' ">
+            AND r.origin_name LIKE CONCAT('%', #{like}, '%')
+        </if>
+        ORDER BY r.upload_time DESC
+        LIMIT #{begin}, #{number};
+    </select>
+
+    <resultMap id="CompleteResourceInfoMap" type="com.sharing.pojo.CompleteResourceInfo">
+        <association property="user" javaType="com.sharing.pojo.User">
+            <result column="id" property="id"/>
+            <result column="username" property="username"/>
+        </association>
+        <association property="resource" javaType="com.sharing.pojo.UserResource">
+            <result column="resource_id" property="id"/>
+            <result column="origin_name" property="origin_name"/>
+            <result column="discipline" property="discipline"/>
+            <result column="upload_time" property="upload_time"/>
+            <result column="description" property="description"/>
+        </association>
+        <association property="userInfo" javaType="com.sharing.pojo.UserInfo">
+            <result column="name" property="name"/>
+        </association>
+    </resultMap>
+
+
+    <select id="countAllResourceBySearch" resultType="int">
+        SELECT count(*) FROM resource
+        WHERE state = '已通过审批'
+        <if test="search != null">
+            AND origin_name LIKE CONCAT('%', #{search}, '%')
+        </if>
+    </select>
+
+    <delete id="deleteCommentByResourceId" parameterType="list">
+        delete from comment
+        where resource_id in
+        <foreach collection="resourceIds" open="(" close=")" separator="," item="resourceId">
+            #{resourceId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteFavouriteByResourceId" parameterType="list">
+        delete from favourite
+        where resource_id in
+        <foreach collection="resourceIds" open="(" close=")" separator="," item="resourceId">
+            #{resourceId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteSupportRecordByResourceId" parameterType="list">
+        delete from resource_support
+        where resource_id in
+        <foreach collection="resourceIds" open="(" close=")" separator="," item="resourceId">
+            #{resourceId}
+        </foreach>
+    </delete>
+
+    <delete id="realDeleteResourceByResourceId" parameterType="list">
+        delete from resource
+        where id in
+        <foreach collection="resourceIds" open="(" close=")" separator="," item="resourceId">
+            #{resourceId}
+        </foreach>
+    </delete>
+
+    <select id="queryCheckResourceInfoListByPage" resultType="UserResource" parameterType="int">
+        select * from resource
+        where state = '审批中'
+        order by upload_time desc
+        limit #{begin}, #{number};
+    </select>
+
+    <select id="countCheckResourceNumbers" resultType="int">
+        select count(*) from resource
+        where state = '审批中';
+    </select>
+
+
+</mapper>

@@ -8,8 +8,9 @@
     <select id="getResourceNumbers" resultType="int" parameterType="string">
         select count(*) from resource
         <where>
+            state = '已通过审批'
             <if test="discipline != null">
-                discipline = #{discipline}
+                and discipline = #{discipline}
             </if>
             <if test="like != null">
                 and origin_name like concat('%', #{like}, '%')
@@ -19,6 +20,7 @@
 
     <select id="getDefaultResourceList" resultType="userresource" parameterType="int">
         select * from resource
+        where state = '已通过审批'
         order by downloads desc
         limit #{begin}, #{number};
     </select>
@@ -26,6 +28,7 @@
     <select id="getUserResourceListByDiscipline" resultType="userresource">
         select * from resource
         where discipline = #{discipline}
+            and state = '已通过审批'
         order by downloads desc
         limit #{begin}, #{number};
     </select>
@@ -33,14 +36,16 @@
     <select id="getResourceByLike" resultType="userresource">
         select * from resource
         where origin_name like concat('%', #{like}, '%')
+            and state = '已通过审批'
         limit #{begin}, #{number};
     </select>
 
     <select id="getResourceByCondition" resultType="userresource">
         select * from resource
         <where>
+            state = '已通过审批'
             <if test="discipline != null">
-                discipline = #{discipline}
+                and discipline = #{discipline}
             </if>
             <if test="like != null">
                 and origin_name like concat('%', #{like}, '%')

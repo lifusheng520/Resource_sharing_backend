@@ -7,7 +7,8 @@
 
     <select id="getResourceById" resultType="userResource" parameterType="int">
         select * from resource
-        where id = #{id};
+        where id = #{id}
+            AND r.state = '已通过审批';
     </select>
 
     <select id="getUserInfoById" resultType="userInfo" parameterType="int">
@@ -21,6 +22,7 @@
         FROM resource r INNER JOIN user_info u
         ON r.user_id = u.user_id
         WHERE r.user_id = #{user_id}
+            AND r.state = '已通过审批'
         ORDER BY r.upload_time DESC
         LIMIT #{begin}, #{number};
     </select>
@@ -51,14 +53,16 @@
 
     <select id="countResourceNumberByUserId" parameterType="int" resultType="int">
         select count(*) from resource
-        where user_id = #{user_id};
+        where user_id = #{user_id}
+            AND r.state = '已通过审批';
     </select>
 
     <select id="getUserAndResourceByResourceId" parameterType="int" resultMap="userAndResourceMap">
         SELECT r.*, u.name name, u.headIcon headIcon, u.user_id user_id
         FROM resource r INNER JOIN user_info u
         ON r.user_id = u.user_id
-        WHERE r.id = #{resource_id};
+        WHERE r.id = #{resource_id}
+            AND r.state = '已通过审批';
     </select>
 
 </mapper>

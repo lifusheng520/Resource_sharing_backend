@@ -157,5 +157,13 @@ public interface UserResourceService {
      */
     int reinstateUserResourceByList(List<DeletedResource> reinstateResourceList);
 
+    /**
+     * 通过资源id获取资源信息list
+     *
+     * @param resourceIdList 资源id集合
+     * @return 返回资源信息集合
+     */
+    List<UserResource> getUserResourceByIds(List<Integer> resourceIdList);
+
 
 }

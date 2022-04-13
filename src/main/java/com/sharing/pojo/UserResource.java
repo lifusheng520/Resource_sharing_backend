@@ -34,6 +34,7 @@ public class UserResource implements Serializable {
     private int isDeleted;
     private String md5;
     private String description;
+    private String state;
 
     private int supportNumber;
 

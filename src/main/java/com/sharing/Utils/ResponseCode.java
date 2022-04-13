@@ -98,6 +98,7 @@ public enum ResponseCode {
     GET_RECOMMEND_RANK_INFO_SUCCESS(4025, "获取排行榜数据成功"),
     GET_ALL_RESOURCE_DISCIPLINE_SUCCESS(4026, "资源类别列表获取成功"),
     GET_RESOURCE_DETAIL_SUCCESS(4028, "获取资源详细信息成功"),
+    RESOURCE_IS_NOT_EXIST(4029, "资源已经被删除了"),
 
     /**
      * 资源评论业务
@@ -152,6 +153,13 @@ public enum ResponseCode {
      * 管理员业务
      */
     GET_USER_ACCOUNT_INFO_SUCCESS(8001, "获取用户账号信息成功"),
+    LOCK_USER_ACCOUNT_SUCCESS(8002, "冻结账号成功"),
+    LOCK_USER_ACCOUNT_FAIL(8003, "冻结账号失败"),
+    UNLOCK_USER_ACCOUNT_SUCCESS(8004, "激活账号成功"),
+    UNLOCK_USER_ACCOUNT_FAIL(8005, "激活账号失败"),
+    GET_PLATFORM_RESOURCE_SUCCESS(8006, "获取系统资源成功"),
+    PLATFORM_DELETE_RESOURCE_SUCCESS(8007, "删除成功"),
+    GET_CHECK_RESOURCE_SUCCESS(8008, "获取审批资源成功"),
 
 
     /* 用户错误 */

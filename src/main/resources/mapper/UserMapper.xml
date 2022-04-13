@@ -29,8 +29,8 @@
     </insert>
 
     <insert id="initUserInfo" parameterType="int">
-        insert into user_info(user_id)
-        values (#{id});
+        insert into user_info(user_id, name)
+        values (#{id}, '用户007');
     </insert>
 
     <select id="getUserInfo" parameterType="string" resultType="userinfo">

@@ -58,6 +58,11 @@ public class ResourceFileServerController {
             return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, "id");
 
         UserAndResource userResourceDetail = this.resourceDetailService.getUserResourceDetail(resourceId);
+
+        if (userResourceDetail.getResource().getIsDeleted() == 1) {
+            return ResultFormatUtil.format(ResponseCode.RESOURCE_IS_NOT_EXIST, null);
+        }
+
         // 查询点赞数量
         int id = userResourceDetail.getResource().getId();
         int number = this.supportService.countResourceSupportNumbers(id);
@@ -116,7 +121,6 @@ public class ResourceFileServerController {
 
         return ResultFormatUtil.format(ResponseCode.GET_FOCUS_USER_RESOURCE_SUCCESS, myPage);
     }
-
 
 
 }

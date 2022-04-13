@@ -69,11 +69,11 @@ public class UserManagerController {
     /**
      * 冻结账号
      *
-     * @param infos 请求的分页参数
-     * @return 返回删除结果
+     * @param infos 请求冻结的账号信息
+     * @return 返回被冻结的账号id集合
      */
-    @PostMapping("/lockAccount")
-    public String deleteUserPassword(@RequestBody List<UserInfo> infos) {
+    @PostMapping("/lockAccounts")
+    public String lockUserAccount(@RequestBody List<UserInfo> infos) {
         if (infos == null || infos.size() == 0)
             return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, infos);
 
@@ -94,9 +94,39 @@ public class UserManagerController {
         // 冻结集合中的账号
         int i = this.adminUserManagerService.lockUserAccount(lockList, 0);
 
+        ResponseCode responseCode;
+        if (i > 0)
+            responseCode = ResponseCode.LOCK_USER_ACCOUNT_SUCCESS;
+        else
+            responseCode = ResponseCode.LOCK_USER_ACCOUNT_FAIL;
+        return ResultFormatUtil.format(responseCode, lockList);
+    }
 
-        ResponseCode responseCode = ResponseCode.GET_USER_ACCOUNT_INFO_SUCCESS;
-        return ResultFormatUtil.format(responseCode, null);
+    /**
+     * 冻结账号
+     *
+     * @param accounts 请求冻结的账号信息
+     * @return 返回被冻结的账号id集合
+     */
+    @PostMapping("/unlockAccounts")
+    public String unlockUserAccount(@RequestBody List<UserInfo> accounts) {
+        if (accounts == null || accounts.size() == 0)
+            return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, accounts);
+
+        ArrayList<Integer> unlockList = new ArrayList<>();
+        for (UserInfo account : accounts)
+            unlockList.add(account.getId());
+
+
+        // 重新启用激活集合中的账号
+        int i = this.adminUserManagerService.unlockUserAccount(unlockList, 1);
+
+        ResponseCode responseCode;
+        if (i > 0)
+            responseCode = ResponseCode.UNLOCK_USER_ACCOUNT_SUCCESS;
+        else
+            responseCode = ResponseCode.UNLOCK_USER_ACCOUNT_FAIL;
+        return ResultFormatUtil.format(responseCode, unlockList);
     }
 
 

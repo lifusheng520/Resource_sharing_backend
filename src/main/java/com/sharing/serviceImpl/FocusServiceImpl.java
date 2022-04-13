@@ -49,6 +49,8 @@ public class FocusServiceImpl implements FocusService {
             String icon = focus.getFocusUserIcon();
             if(icon != null && !"".equals(icon))
                 focus.setFocusUserIcon(this.iconHostURL + icon);
+            else
+                focus.setFocusUserIcon("");
         }
         return resultList;
     }

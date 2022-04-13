@@ -106,4 +106,8 @@ public class UserResourceServiceImpl implements UserResourceService {
         return this.resourceMapper.reinstateResourceByList(reinstateResourceList);
     }
 
+    @Override
+    public List<UserResource> getUserResourceByIds(List<Integer> resourceIdList) {
+        return this.resourceMapper.queryUserResourceByIds(resourceIdList);
+    }
 }
