@@ -121,6 +121,11 @@ public class FavouriteServiceImpl implements FavouriteService {
     }
 
     @Override
+    public List<Integer> getOverTimeDeletedResourceIdList(int days) {
+        return this.favouriteMapper.queryOverTimeDeletedResourceIdList(days);
+    }
+
+    @Override
     public int cancelFavouriteByFolderIdList(List<Integer> folderIdList) {
         return this.favouriteMapper.deleteFavouriteByFolderIdList(folderIdList);
     }

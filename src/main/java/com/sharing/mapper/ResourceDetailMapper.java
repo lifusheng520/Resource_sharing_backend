@@ -62,4 +62,5 @@ public interface ResourceDetailMapper {
      */
     UserAndResource getUserAndResourceByResourceId(int resource_id);
 
+
 }

@@ -76,13 +76,14 @@ public class IllegalWordDisposeUtil {
      * @param txt 文本
      * @return 若包含返回true, 否则返回false
      */
-    public static boolean contains(String txt) {
+    public static boolean contain(String txt) {
         boolean flag = false;
         for (int i = 0; i < txt.length(); i++) {
             //  从第 i 个字符开始判断是否包含敏感词组
             int len = checkIllegalWord(txt, i);
             if (len > 0) {//大于0存在,返回true
                 flag = true;
+                break;
             }
         }
         return flag;

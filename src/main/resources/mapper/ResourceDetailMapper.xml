@@ -8,7 +8,7 @@
     <select id="getResourceById" resultType="userResource" parameterType="int">
         select * from resource
         where id = #{id}
-            AND r.state = '已通过审批';
+            AND state = '已通过审批';
     </select>
 
     <select id="getUserInfoById" resultType="userInfo" parameterType="int">
@@ -54,7 +54,7 @@
     <select id="countResourceNumberByUserId" parameterType="int" resultType="int">
         select count(*) from resource
         where user_id = #{user_id}
-            AND r.state = '已通过审批';
+            AND state = '已通过审批';
     </select>
 
     <select id="getUserAndResourceByResourceId" parameterType="int" resultMap="userAndResourceMap">

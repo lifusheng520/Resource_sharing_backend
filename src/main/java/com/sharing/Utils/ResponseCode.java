@@ -19,6 +19,7 @@ import lombok.Data;
  * #7001～7049 区间表示用户 管理员业务请求状态和消息
  *
  * #8001～8999 区间表示用户 关注业务请求状态和消息
+ * #9001～9999 区间表示用户 浏览记录业务请求状态和消息
  */
 public enum ResponseCode {
 
@@ -160,6 +161,15 @@ public enum ResponseCode {
     GET_PLATFORM_RESOURCE_SUCCESS(8006, "获取系统资源成功"),
     PLATFORM_DELETE_RESOURCE_SUCCESS(8007, "删除成功"),
     GET_CHECK_RESOURCE_SUCCESS(8008, "获取审批资源成功"),
+    CHECK_RESOURCE_SUCCESS(8009, "资源审批成功"),
+    CHECK_RESOURCE_FAIL(8010, "资源审批失败"),
+
+    /**
+     * 浏览记录业务
+     */
+    GET_BROWSE_RECORD_SUCCESS(9001, "获取浏览记录成功"),
+    DELETE_BROWSE_RECORD_SUCCESS(9002, "删除浏览记录成功"),
+    DELETE_BROWSE_RECORD_FAIL(9003, "删除浏览记录失败"),
 
 
     /* 用户错误 */

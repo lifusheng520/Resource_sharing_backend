@@ -2,15 +2,17 @@ package com.sharing.controller;
 
 import com.sharing.Utils.ResponseCode;
 import com.sharing.Utils.ResultFormatUtil;
-import com.sharing.pojo.IndexData;
-import com.sharing.pojo.MyPage;
-import com.sharing.pojo.UserAndResource;
+import com.sharing.pojo.*;
 import com.sharing.service.ResourceDetailService;
 import com.sharing.service.SupportService;
+import com.sharing.service.UserResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -30,10 +32,16 @@ public class ResourceFileServerController {
     private ResourceDetailService resourceDetailService;
 
     @Autowired
+    private UserResourceService userResourceService;
+
+    @Autowired
     private SupportService supportService;
 
     @Value("${files.icon.host.url}")
     private String iconHostURL;
+
+    @Value("${files.resource.upload.root.path}")
+    private String fileRootPath;
 
     /**
      * 获取资源种类
@@ -122,5 +130,77 @@ public class ResourceFileServerController {
         return ResultFormatUtil.format(ResponseCode.GET_FOCUS_USER_RESOURCE_SUCCESS, myPage);
     }
 
+    /**
+     * 播放视频接口
+     *
+     * @param resourceId 资源的id
+     * @return 返回删除结果
+     */
+    @GetMapping("/getVideo/{resourceId}")
+    public void getResourceVideo(@PathVariable Integer resourceId, HttpServletResponse response) {
+        if (resourceId == null || resourceId == 0)
+            return;
+
+        // 根据资源的id获取文件的磁盘信息
+        UserResource resource = this.userResourceService.getUserResourceById(resourceId);
+        String filePath = this.fileRootPath + File.separator + resource.getDiscipline() + File.separator + resource.getDisk_name();
+        File file = new File(filePath);
+
+        // 设置响应体内容
+        OutputStream outputStream = null;
+        FileInputStream inputStream = null;
+        try {
+            // 获得 response 的字节流
+            outputStream = response.getOutputStream();
+            // 判断文件是否存在
+            if (!file.exists()) {
+                //设置响应内容类型
+                response.setContentType("application/json;charset=UTF-8");
+                outputStream.write("未找到文件信息！".getBytes());
+                if (outputStream != null)
+                    outputStream.close();
+                return;
+            }
+
+            // 判断文件格式是否支持播放
+            if (!("mp4".equals(resource.getType()) || "webm".equals(resource.getType()) || "ogg".equals(resource.getType()))) {
+                //设置响应内容类型
+                response.setContentType("application/json;charset=UTF-8");
+                outputStream.write("这个资源的格式不支持播放！".getBytes());
+                if (outputStream != null)
+                    outputStream.close();
+                return;
+            }
+
+            //	获得视频文件的输入流
+            inputStream = new FileInputStream(file);
+            // 创建字节数组，数组大小为视频文件大小
+            byte[] data = new byte[inputStream.available()];
+            // 将视频文件读入到字节数组中
+            inputStream.read(data);
+
+            response.setContentType("video/" + resource.getType());
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + resource.getOrigin_name() + "\"");
+            response.setContentLength(data.length);
+            response.setHeader("Content-Range", "" + Integer.valueOf(data.length - 1));
+            response.setHeader("Accept-Ranges", "bytes");
+            response.setHeader("Etag", "W/\"9767057-1323779115364\"");
+
+            // 将视频文件的字节数组写入 response 中
+            outputStream.write(data);
+            outputStream.flush();
+
+        } catch (Exception e) {
+        } finally {
+            try {
+                if (null != outputStream)
+                    outputStream.close();
+
+                if (null != inputStream)
+                    inputStream.close();
+            } catch (IOException e) {
+            }
+        }
+    }
 
 }

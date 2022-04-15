@@ -103,6 +103,7 @@ public class ResourceFileManagerController {
         userResource.setIsDeleted(0);
         userResource.setMd5(md5);
         userResource.setDescription(description);
+
         // 审批状态
         userResource.setState("审批中");
 

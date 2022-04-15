@@ -114,7 +114,7 @@ public class PlatformResourceController {
 
         // 删除磁盘文件
         for (UserResource resource : resourceList) {
-            String fileName = this.uploadRootPath + File.separator + resource.getOrigin_name();
+            String fileName = this.uploadRootPath + File.separator + resource.getDiscipline() + File.separator + resource.getDisk_name();
             this.deleteDiskFile(fileName);
         }
 
@@ -149,6 +149,7 @@ public class PlatformResourceController {
         if (pageParam == null || pageParam.size() == 0)
             return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, null);
 
+        String search = pageParam.get("search");
         String currentPage = pageParam.get("currentPage");
         String pageSize = pageParam.get("pageSize");
         String total = pageParam.get("total");
@@ -159,10 +160,16 @@ public class PlatformResourceController {
         Integer totalPage = Integer.valueOf(total);
 
         // 获取需要审批的资源list
-        List<UserResource> checkResourceList = this.platformResourceService.getCheckResourceInfoListByPage((page - 1) * size, size);
-
-        if (totalPage < 0)
-            totalPage = this.platformResourceService.countCheckResourceNumbers();
+        List<UserResource> checkResourceList;
+        if (StrUtil.isEmpty(search)) {
+            checkResourceList = this.platformResourceService.getCheckResourceInfoListByPage(null, (page - 1) * size, size);
+            if (totalPage < 0)
+                totalPage = this.platformResourceService.countCheckResourceNumbers(null);
+        } else {
+            checkResourceList = this.platformResourceService.getCheckResourceInfoListByPage(search, (page - 1) * size, size);
+            if (totalPage < 0)
+                totalPage = this.platformResourceService.countCheckResourceNumbers(search);
+        }
 
         // 设置分页参数
         MyPage<UserResource> myPage = new MyPage<>();
@@ -175,5 +182,38 @@ public class PlatformResourceController {
         return ResultFormatUtil.format(responseCode, myPage);
     }
 
+
+    /**
+     * 将资源id集合中对应的资源通过审批
+     *
+     * @param resourceIdList 资源的id集合
+     * @return 返回资源审批结果
+     */
+    @PostMapping("/passResourceCheck")
+    public String passCheckByResourceIdList(@RequestBody List<Integer> resourceIdList) {
+        if (resourceIdList == null || resourceIdList.size() == 0)
+            return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, null);
+
+        // 更新资源状态
+        int i = this.platformResourceService.updateCheckStateByResourceIdList(resourceIdList, "已通过审批");
+        ResponseCode responseCode;
+        if (i > 0)
+            responseCode = ResponseCode.CHECK_RESOURCE_SUCCESS;
+        else
+            responseCode = ResponseCode.CHECK_RESOURCE_FAIL;
+        return ResultFormatUtil.format(responseCode, null);
+    }
+
+    /**
+     * 将资源id集合中对应的审批资源删除
+     *
+     * @param deleteResourceIdList 需要删除的资源的id集合
+     * @return 返回删除结果
+     */
+    @PostMapping("/deleteCheckResource")
+    public String deleteCheckResourceByIdList(@RequestBody List<Integer> deleteResourceIdList) {
+        String result = this.realDeleteResourceByIds(deleteResourceIdList);
+        return result;
+    }
 
 }

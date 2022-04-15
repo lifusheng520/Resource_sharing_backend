@@ -65,18 +65,36 @@ public interface PlatformResourceService {
     /**
      * 分页获取需要审批的资源list集合
      *
+     * @param search 搜索的内容
      * @param begin  取值的开始位置
      * @param number 需要取值的个数
      * @return 返回资源信息集合
      */
-    List<UserResource> getCheckResourceInfoListByPage(int begin, int number);
+    List<UserResource> getCheckResourceInfoListByPage(String search, int begin, int number);
 
     /**
      * 统计审批资源数量
      *
+     * @param like
      * @return 返回审批资源数量
      */
-    int countCheckResourceNumbers();
+    int countCheckResourceNumbers(String like);
+
+    /**
+     * 通过资源id集合，更新资源状态为通过审批
+     *
+     * @param idList 资源id集合
+     * @param state  审批状态
+     * @return 返回更新结果
+     */
+    int updateCheckStateByResourceIdList(List<Integer> idList, String state);
+
+    /**
+     * 获取需要审批的资源
+     *
+     * @return 返回资源信息集合
+     */
+    List<UserResource> getCheckResourceList();
 
 
 }

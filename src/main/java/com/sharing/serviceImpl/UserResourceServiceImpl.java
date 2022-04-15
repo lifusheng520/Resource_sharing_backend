@@ -110,4 +110,9 @@ public class UserResourceServiceImpl implements UserResourceService {
     public List<UserResource> getUserResourceByIds(List<Integer> resourceIdList) {
         return this.resourceMapper.queryUserResourceByIds(resourceIdList);
     }
+
+    @Override
+    public UserResource getUserResourceById(int id) {
+        return this.resourceMapper.queryUserResourceById(id);
+    }
 }

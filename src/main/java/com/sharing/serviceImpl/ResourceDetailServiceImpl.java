@@ -60,4 +60,5 @@ public class ResourceDetailServiceImpl implements ResourceDetailService {
         return this.resourceDetailMapper.countResourceNumberByUserId(user_id);
     }
 
+
 }

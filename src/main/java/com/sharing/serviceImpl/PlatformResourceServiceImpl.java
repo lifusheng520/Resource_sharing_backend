@@ -52,12 +52,22 @@ public class PlatformResourceServiceImpl implements PlatformResourceService {
     }
 
     @Override
-    public List<UserResource> getCheckResourceInfoListByPage(int begin, int number) {
-        return this.platformResourceMapper.queryCheckResourceInfoListByPage(begin, number);
+    public List<UserResource> getCheckResourceInfoListByPage(String search, int begin, int number) {
+        return this.platformResourceMapper.queryCheckResourceInfoListByPage(search, begin, number);
     }
 
     @Override
-    public int countCheckResourceNumbers() {
-        return this.platformResourceMapper.countCheckResourceNumbers();
+    public int countCheckResourceNumbers(String like) {
+        return this.platformResourceMapper.countCheckResourceNumbers(like);
+    }
+
+    @Override
+    public int updateCheckStateByResourceIdList(List<Integer> idList, String state) {
+        return this.platformResourceMapper.updateResourceStateByIdList(idList, state);
+    }
+
+    @Override
+    public List<UserResource> getCheckResourceList() {
+        return this.platformResourceMapper.queryCheckResourceList();
     }
 }

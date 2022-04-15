@@ -77,15 +77,35 @@
         </foreach>
     </delete>
 
-    <select id="queryCheckResourceInfoListByPage" resultType="UserResource" parameterType="int">
+    <select id="queryCheckResourceInfoListByPage" resultType="UserResource">
         select * from resource
-        where state = '审批中'
+        where state != '已通过审批'
+        <if test="search != null and search != ''">
+            and origin_name like concat('%', #{search}, '%')
+        </if>
         order by upload_time desc
         limit #{begin}, #{number};
     </select>
 
-    <select id="countCheckResourceNumbers" resultType="int">
+    <select id="countCheckResourceNumbers" resultType="int" parameterType="string">
         select count(*) from resource
+        where state != '已通过审批'
+        <if test="like != null and like != ''">
+            and origin_name like concat('%', #{like}, '%')
+        </if>
+    </select>
+
+    <update id="updateResourceStateByIdList" parameterType="list">
+        update resource
+        set state = #{state}
+        where id in
+        <foreach collection="idList" item="resource_id" separator="," open="(" close=")">
+            #{resource_id}
+        </foreach>
+    </update>
+
+    <select id="queryCheckResourceList" resultType="userResource">
+        select * from resource
         where state = '审批中';
     </select>
 

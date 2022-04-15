@@ -165,5 +165,13 @@ public interface UserResourceService {
      */
     List<UserResource> getUserResourceByIds(List<Integer> resourceIdList);
 
+    /**
+     * 通过资源的id获取资源信息
+     *
+     * @param id 资源id
+     * @return 返回id对应的资源
+     */
+    UserResource getUserResourceById(int id);
+
 
 }

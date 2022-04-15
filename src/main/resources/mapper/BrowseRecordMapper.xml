@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sharing.mapper.BrowseRecordMapper">
+
+    <insert id="insertRecord" parameterType="BrowseRecord">
+        insert into past_record(user_id, resource_id, time, isDeleted)
+        values (#{user_id}, #{resource_id}, #{time}, #{isDeleted});
+    </insert>
+
+    <select id="queryRecordListByUserId" parameterType="int" resultType="BrowseRecord">
+        SELECT pr.*, r.origin_name, u.name, u.headIcon
+        FROM past_record pr INNER JOIN resource r
+            ON pr.resource_id = r.id
+            LEFT JOIN user_info u
+            ON r.user_id = u.user_id
+        WHERE pr.user_id = #{userId}
+            AND pr.isDeleted = 0
+        ORDER BY pr.time DESC
+        LIMIT #{begin}, #{number};
+    </select>
+
+    <select id="countRecordNumberByUserId" parameterType="int" resultType="int">
+        SELECT count(*)
+        FROM past_record
+        WHERE user_id = #{userId}
+            AND isDeleted = 0;
+    </select>
+
+    <update id="deleteRecord" parameterType="list">
+        update past_record
+        set isDeleted = 1
+        where id in
+        <foreach collection="recordIdList" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </update>
+
+
+</mapper>

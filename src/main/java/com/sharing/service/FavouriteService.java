@@ -148,6 +148,14 @@ public interface FavouriteService {
     int clearOvertimeDeletedRecord(int days);
 
     /**
+     * 获取资源回收箱中的超时资源id集合
+     *
+     * @param days 给定的天数
+     * @return 返回更新结果
+     */
+    List<Integer> getOverTimeDeletedResourceIdList(int days);
+
+    /**
      * 通过收藏夹的id删除收藏
      *
      * @param folderIdList 收藏夹id集合

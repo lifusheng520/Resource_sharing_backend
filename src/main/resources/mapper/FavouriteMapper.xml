@@ -139,6 +139,11 @@
         WHERE (NOW() - DATE_ADD(time, INTERVAL #{days} DAY)) >= 0;
     </delete>
 
+    <select id="queryOverTimeDeletedResourceIdList" resultType="int" parameterType="int">
+        select resource_id from resource_deleted
+        where (NOW() - DATE_ADD(time, INTERVAL #{days} DAY)) >= 0;
+    </select>
+
     <delete id="deleteFavouriteByFolderIdList" parameterType="list">
         DELETE FROM favourite
         WHERE folder_id in

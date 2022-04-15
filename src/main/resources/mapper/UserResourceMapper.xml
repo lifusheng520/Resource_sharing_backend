@@ -137,5 +137,10 @@
         </foreach>
     </select>
 
+    <select id="queryUserResourceById" resultType="UserResource" parameterType="int">
+        select * from resource
+        where id = #{id};
+    </select>
+
 
 </mapper>

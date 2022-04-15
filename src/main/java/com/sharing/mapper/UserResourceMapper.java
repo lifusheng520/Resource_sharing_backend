@@ -171,5 +171,12 @@ public interface UserResourceMapper {
      */
     List<UserResource> queryUserResourceByIds(List<Integer> resourceIdList);
 
+    /**
+     * 通过资源的id获取资源信息
+     *
+     * @param id 资源id
+     * @return 返回id对应的资源
+     */
+    UserResource queryUserResourceById(int id);
 
 }
