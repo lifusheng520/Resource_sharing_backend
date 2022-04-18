@@ -6,8 +6,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.Random;
 
 /**
@@ -66,6 +69,31 @@ public class MyEmailSenderConfig {
         this.email.setSubject(title);
         this.email.setText(message);
         this.sender.send(this.email);
+    }
+
+    /**
+     * 发送HTML格式的邮件给用户
+     *
+     * @param to      用户邮箱地址
+     * @param title   邮箱标题
+     * @param content 邮箱内容消息
+     */
+    public boolean sendHTMLEmail(String to, String title, String content) throws MailSendException {
+        //使用MimeMessage，MIME协议
+        MimeMessage message = this.sender.createMimeMessage();
+        MimeMessageHelper helper;
+        try {
+            helper = new MimeMessageHelper(message, true);
+            helper.setFrom(this.username);
+            helper.setTo(to);
+            helper.setSubject(title);
+            helper.setText(content, true);
+            this.sender.send(message);
+        } catch (MessagingException | MailSendException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     /**

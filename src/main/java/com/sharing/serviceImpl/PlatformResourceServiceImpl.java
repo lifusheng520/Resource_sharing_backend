@@ -2,6 +2,7 @@ package com.sharing.serviceImpl;
 
 import com.sharing.mapper.PlatformResourceMapper;
 import com.sharing.pojo.CompleteResourceInfo;
+import com.sharing.pojo.Focus;
 import com.sharing.pojo.UserResource;
 import com.sharing.service.PlatformResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,5 +70,10 @@ public class PlatformResourceServiceImpl implements PlatformResourceService {
     @Override
     public List<UserResource> getCheckResourceList() {
         return this.platformResourceMapper.queryCheckResourceList();
+    }
+
+    @Override
+    public List<Focus> getPassCheckResourceFocusUserInfoList(List<Integer> resourceIdList) {
+        return this.platformResourceMapper.queryPassCheckResourceFocusUserInfoList(resourceIdList);
     }
 }

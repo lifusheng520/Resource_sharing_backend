@@ -3,7 +3,9 @@ package com.sharing.controller;
 import cn.hutool.core.util.StrUtil;
 import com.sharing.Utils.ResponseCode;
 import com.sharing.Utils.ResultFormatUtil;
+import com.sharing.config.MyEmailSenderConfig;
 import com.sharing.pojo.CompleteResourceInfo;
+import com.sharing.pojo.Focus;
 import com.sharing.pojo.MyPage;
 import com.sharing.pojo.UserResource;
 import com.sharing.service.PlatformResourceService;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +41,9 @@ public class PlatformResourceController {
 
     @Autowired
     private UserResourceService userResourceService;
+
+    @Autowired
+    private MyEmailSenderConfig emailSender;
 
     /**
      * 获取系统内的资源集合
@@ -196,12 +203,46 @@ public class PlatformResourceController {
 
         // 更新资源状态
         int i = this.platformResourceService.updateCheckStateByResourceIdList(resourceIdList, "已通过审批");
+
+        // 通过审批后，向绑定邮箱的用户发送推送
+        List<Focus> focusList = this.platformResourceService.getPassCheckResourceFocusUserInfoList(resourceIdList);
+        this.sendPushMessageByEmail(focusList);
+
         ResponseCode responseCode;
         if (i > 0)
             responseCode = ResponseCode.CHECK_RESOURCE_SUCCESS;
         else
             responseCode = ResponseCode.CHECK_RESOURCE_FAIL;
         return ResultFormatUtil.format(responseCode, null);
+    }
+
+    /**
+     * 发送资源推送邮件
+     *
+     * @param focusList 关注信息
+     */
+    public void sendPushMessageByEmail(List<Focus> focusList) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
+        for (Focus focus : focusList) {
+            // 如果关注的用户绑定了邮箱
+            String email = focus.getFocusUserEmail();
+            if (email == null || email.length() == 0)
+                continue;
+
+            StringBuffer title = new StringBuffer();
+            title.append("白给网")
+                    .append(" | 关注推送");
+
+            StringBuffer content = new StringBuffer();
+            content.append("你关注的用户: ").append(focus.getFocusUserName())
+                    .append(" 刚刚发布新的资源啦!").append("</br>")
+                    .append("名称: ").append(focus.getFocusOriginName()).append("</br>")
+                    .append("发布时间: ").append(format.format(new Date())).append("</br>")
+                    .append("赶快来看看吧!")
+                    .append("<a href=http://localhost:8086/focus>").append("查看详情").append("</a>");
+
+            this.emailSender.sendHTMLEmail(email, title.toString(), content.toString());
+        }
     }
 
     /**

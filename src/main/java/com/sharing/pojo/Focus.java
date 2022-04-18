@@ -29,4 +29,6 @@ public class Focus {
 
     private String focusUserIcon;
     private String focusUserName;
+    private String focusUserEmail;
+    private String focusOriginName;
 }

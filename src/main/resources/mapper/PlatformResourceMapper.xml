@@ -109,5 +109,17 @@
         where state = '审批中';
     </select>
 
+    <select id="queryPassCheckResourceFocusUserInfoList" resultType="Focus" parameterType="list">
+        SELECT f.*, ui.name focusUserName, ui.email focusUserEmail, r.origin_name focusOriginName
+        FROM resource r LEFT JOIN focus f
+            ON r.user_id = f.focus_uid
+            LEFT JOIN user_info ui
+            ON f.focus_uid = ui.user_id
+        WHERE r.id in
+        <foreach collection="resourceIdList" open="(" close=")" separator="," item="resourceId">
+            #{resourceId}
+        </foreach>
+    </select>
+
 
 </mapper>

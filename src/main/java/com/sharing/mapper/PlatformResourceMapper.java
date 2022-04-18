@@ -1,6 +1,7 @@
 package com.sharing.mapper;
 
 import com.sharing.pojo.CompleteResourceInfo;
+import com.sharing.pojo.Focus;
 import com.sharing.pojo.UserResource;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -101,5 +102,13 @@ public interface PlatformResourceMapper {
      * @return 返回资源信息集合
      */
     List<UserResource> queryCheckResourceList();
+
+    /**
+     * 根据id集合，获取刚刚通过审批的资源关注信息
+     *
+     * @param resourceIdList 通过审批的资源id集合
+     * @return 返回用户关注信息
+     */
+    List<Focus> queryPassCheckResourceFocusUserInfoList(List<Integer> resourceIdList);
 
 }

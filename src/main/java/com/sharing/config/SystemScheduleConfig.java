@@ -3,6 +3,7 @@ package com.sharing.config;
 import cn.hutool.core.util.StrUtil;
 import com.sharing.Utils.IllegalWordDisposeUtil;
 import com.sharing.Utils.TextTypeFileUtil;
+import com.sharing.pojo.Focus;
 import com.sharing.pojo.UserResource;
 import com.sharing.service.FavouriteService;
 import com.sharing.service.PlatformResourceService;
@@ -14,7 +15,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -43,6 +46,9 @@ public class SystemScheduleConfig {
 
     @Autowired
     private UserResourceService userResourceService;
+
+    @Autowired
+    private MyEmailSenderConfig sender;
 
     /**
      * cron(秒 分 时 日 月 周 年) *:所有值
@@ -101,8 +107,7 @@ public class SystemScheduleConfig {
     /**
      * 自动审批资源
      */
-//    @Scheduled(cron = "*/10 * * * * ?")
-    @Scheduled(cron = "0 * * 1 * ?")
+    @Scheduled(cron = "0 */1 * * * ?")
     public void autoCheckResource() {
         // 读取需要审批的资源集合
         List<UserResource> checkResourceList = this.platformResourceService.getCheckResourceList();
@@ -136,12 +141,45 @@ public class SystemScheduleConfig {
         }
 
         // 更新审批成功容器内的资源
-        if (passCheckResourceIdList.size() != 0)
+        if (passCheckResourceIdList.size() != 0){
             this.platformResourceService.updateCheckStateByResourceIdList(passCheckResourceIdList, "已通过审批");
+            List<Focus> focusUserInfoList = this.platformResourceService.getPassCheckResourceFocusUserInfoList(passCheckResourceIdList);
+            this.sendPushMessageByEmail(focusUserInfoList);
+
+        }
 
         // 更新审批失败的资源
         if (failCheckResourceIdList.size() != 0)
             this.platformResourceService.updateCheckStateByResourceIdList(failCheckResourceIdList, "资源违规");
+    }
+
+    /**
+     * 发送资源推送邮件
+     *
+     * @param focusList 关注信息
+     */
+    public void sendPushMessageByEmail(List<Focus> focusList) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
+        for (Focus focus : focusList) {
+            // 如果关注的用户绑定了邮箱
+            String email = focus.getFocusUserEmail();
+            if (email == null || email.length() == 0)
+                continue;
+
+            StringBuffer title = new StringBuffer();
+            title.append("白给网")
+                    .append(" | 关注推送");
+
+            StringBuffer content = new StringBuffer();
+            content.append("你关注的用户: ").append(focus.getFocusUserName())
+                    .append(" 刚刚发布新的资源啦!").append("</br>")
+                    .append("名称: ").append(focus.getFocusOriginName()).append("</br>")
+                    .append("发布时间: ").append(format.format(new Date())).append("</br>")
+                    .append("赶快来看看吧!")
+                    .append("<a href=http://localhost:8086/focus>").append("查看详情").append("</a>");
+
+            this.sender.sendHTMLEmail(email, title.toString(), content.toString());
+        }
     }
 
 }
