@@ -95,7 +95,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .antMatchers("/druid/**", "/index/**", "/rank/**", "/comment/**", "/focus/**").permitAll()
+                .antMatchers("/index/**", "/rank/**", "/comment/**", "/focus/**").permitAll()
                 // 允许所有的首页请求
                 .antMatchers("/user/icon/**").permitAll()
                 // 允许所有认证请求
@@ -107,6 +107,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/**").permitAll()
                 .antMatchers("/platform/**").hasAnyRole("admin")
                 .antMatchers("/admin/**").hasAnyRole("admin")
+                .antMatchers("/druid/**").hasAnyRole("admin")
 //                .antMatchers("/user/**").hasAnyRole("admin", "teacher", "student", "user")
                 .and()
                 .authorizeRequests()
