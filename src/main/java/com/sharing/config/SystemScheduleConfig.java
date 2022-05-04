@@ -107,7 +107,8 @@ public class SystemScheduleConfig {
     /**
      * 自动审批资源
      */
-    @Scheduled(cron = "0 */1 * * * ?")
+//    @Scheduled(cron = "0 */1 * * * ?")
+    @Scheduled(cron = "0 0 3 * * ?")
     public void autoCheckResource() {
         // 读取需要审批的资源集合
         List<UserResource> checkResourceList = this.platformResourceService.getCheckResourceList();

@@ -47,6 +47,7 @@
             <result column="isDeleted" property="isDeleted"/>
             <result column="md5" property="md5"/>
             <result column="description" property="description"/>
+            <result column="favorite_number" property="favorite_number"/>
         </association>
     </resultMap>
 
@@ -58,7 +59,9 @@
     </select>
 
     <select id="getUserAndResourceByResourceId" parameterType="int" resultMap="userAndResourceMap">
-        SELECT r.*, u.name name, u.headIcon headIcon, u.user_id user_id
+        SELECT r.*, u.name name, u.headIcon headIcon, u.user_id user_id, (select COUNT(DISTINCT f.user_id)
+	            from favourite f
+	            where f.resource_id = #{resource_id}) favorite_number
         FROM resource r INNER JOIN user_info u
         ON r.user_id = u.user_id
         WHERE r.id = #{resource_id}

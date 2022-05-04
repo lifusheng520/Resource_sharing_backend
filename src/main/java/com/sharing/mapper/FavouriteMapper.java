@@ -186,4 +186,5 @@ public interface FavouriteMapper {
      */
     int queryInsertFolderId(int user_id, String folder_name);
 
+
 }

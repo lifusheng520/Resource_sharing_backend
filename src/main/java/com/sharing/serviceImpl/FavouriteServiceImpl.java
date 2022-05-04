@@ -139,4 +139,5 @@ public class FavouriteServiceImpl implements FavouriteService {
     public int getInsertFolderId(int user_id, String folder_name) {
         return this.favouriteMapper.queryInsertFolderId(user_id, folder_name);
     }
+
 }

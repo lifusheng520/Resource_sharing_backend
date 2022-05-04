@@ -3,6 +3,7 @@ package com.sharing.controller;
 import com.sharing.Utils.ResponseCode;
 import com.sharing.Utils.ResultFormatUtil;
 import com.sharing.pojo.*;
+import com.sharing.service.FavouriteService;
 import com.sharing.service.ResourceDetailService;
 import com.sharing.service.SupportService;
 import com.sharing.service.UserResourceService;
@@ -36,6 +37,9 @@ public class ResourceFileServerController {
 
     @Autowired
     private SupportService supportService;
+
+    @Autowired
+    private FavouriteService favouriteService;
 
     @Value("${files.icon.host.url}")
     private String iconHostURL;
@@ -75,6 +79,7 @@ public class ResourceFileServerController {
         int id = userResourceDetail.getResource().getId();
         int number = this.supportService.countResourceSupportNumbers(id);
         userResourceDetail.getResource().setSupportNumber(number);
+
 
         // 设置头像URL
         String headIcon = userResourceDetail.getUserInfo().getHeadIcon();
