@@ -38,17 +38,20 @@ class CampusresourcemanagerApplicationTests {
 
 //        org.apache.poi.poifs.filesystem.OfficeXmlFileException
 //        org.apache.poi.POIXMLException
-        String word = "D:\\基地项目\\项目二\\1.需求分析说明书（模板）.doc";
-        String wordx = "D:\\基地项目\\项目二\\项目介绍模板.docx";
-        String ppt = "D:\\基地项目\\项目二\\2018401329-李福生-校园资料分享平台设计与实现.ppt";
-        String pptx = "D:\\基地项目\\项目二\\2018401329-李福生-校园资料分享平台设计与实现.pptx";
-        String pdf = "D:\\基地项目\\项目二\\24365智慧就业操作.pdf";
-        String vsdx = "D:\\基地项目\\项目二\\用例图.vsdx";
-        String vsd = "D:\\基地项目\\项目二\\用例图.vsd";
-
-        String string = TextTypeFileUtil.getFileString(pdf, TextTypeFileUtil.PDF);
-        System.out.println(string);
+//        String word = "D:\\基地项目\\项目二\\1.需求分析说明书（模板）.doc";
+//        String wordx = "D:\\基地项目\\项目二\\项目介绍模板.docx";
+//        String ppt = "D:\\基地项目\\项目二\\2018401329-李福生-校园资料分享平台设计与实现.ppt";
+//        String pptx = "D:\\基地项目\\项目二\\2018401329-李福生-校园资料分享平台设计与实现.pptx";
+//        String pdf = "D:\\基地项目\\项目二\\24365智慧就业操作.pdf";
+//        String vsdx = "D:\\基地项目\\项目二\\用例图.vsdx";
+//        String vsd = "D:\\基地项目\\项目二\\用例图.vsd";
+//
+//        String string = TextTypeFileUtil.getFileString(pdf, TextTypeFileUtil.PDF);
+//        System.out.println(string);
 //        System.out.println(TextTypeFileUtil.pptxString(ppt));
+
+        String str = "我是傻逼，哈nm";
+        System.out.println(IllegalWordDisposeUtil.getIllegalWord(str));
 
 
     }
