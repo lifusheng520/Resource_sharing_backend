@@ -54,7 +54,7 @@ public class SystemScheduleConfig {
      * cron(秒 分 时 日 月 周 年) *:所有值
      * 定时清理回收箱，超过{timeOutDays}天算过期
      */
-    @Scheduled(cron = "0 0 3 * * ?")
+    @Scheduled(cron = "0 0 0 * * ?")
 //    @Scheduled(cron = "*/10 * * * * ?")
     public void clearDeletedResource() {
         // 获取回收箱中超时的资源
