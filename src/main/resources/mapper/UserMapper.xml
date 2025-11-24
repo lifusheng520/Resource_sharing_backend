@@ -6,7 +6,7 @@
 <mapper namespace="com.sharing.mapper.UserMapper">
 
     <select id="getUserIdByUsername" resultType="int" parameterType="string">
-        select id from campusresourcesharing.user
+        select id from user
         where username = #{username};
     </select>
 

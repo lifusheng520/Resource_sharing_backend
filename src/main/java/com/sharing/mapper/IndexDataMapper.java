@@ -4,7 +4,6 @@ import com.sharing.pojo.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -37,7 +36,7 @@ public interface IndexDataMapper {
      *
      * @return 返回资源下载数的list集合
      */
-    int getResourceDownloadsList();
+    Integer getResourceDownloadsList();
 
     /**
      * 根据学科类别，查询学科资料中下载次数最多的资源

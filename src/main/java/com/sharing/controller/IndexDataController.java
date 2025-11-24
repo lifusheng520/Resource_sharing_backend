@@ -4,7 +4,6 @@ import com.sharing.Utils.ResponseCode;
 import com.sharing.Utils.ResultFormatUtil;
 import com.sharing.pojo.IndexData;
 import com.sharing.pojo.UserAndResource;
-import com.sharing.pojo.UserResource;
 import com.sharing.service.IndexDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,10 +38,10 @@ public class IndexDataController {
         IndexData indexData = new IndexData();
         // 获取首页数据
         int systemUserNumbers = this.indexDataService.getSystemUserNumbers();
-        int systemResourceNumbers = this.indexDataService.getSystemResourceNumbers();
+        Integer systemResourceNumbers = this.indexDataService.getSystemResourceNumbers();
         int resourceDownloads = this.indexDataService.getResourceDownloads();
         indexData.setUserNumber(systemUserNumbers);
-        indexData.setResourceNumber(systemResourceNumbers);
+        indexData.setResourceNumber(systemResourceNumbers == null ? 0 : systemResourceNumbers);
         indexData.setDownloadTimes(resourceDownloads);
 
         return ResultFormatUtil.format(ResponseCode.INDEX_SYSTEM_INFO_GET_SUCCESS, indexData);

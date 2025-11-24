@@ -37,7 +37,7 @@ public interface IndexDataService {
      *
      * @return 返回资源下载次数总和
      */
-    int getResourceDownloads();
+    Integer getResourceDownloads();
 
     /**
      * 获取每个学科中的资源

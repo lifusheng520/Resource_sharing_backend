@@ -32,6 +32,9 @@ import java.util.List;
 @EnableScheduling
 public class SystemScheduleConfig {
 
+    @Value("${frontend.url}")
+    private String frontendURL;
+
     @Value("${deleted.resource.record.timeout}")
     private int timeOutDays;
 
@@ -177,7 +180,7 @@ public class SystemScheduleConfig {
                     .append("名称: ").append(focus.getFocusOriginName()).append("</br>")
                     .append("发布时间: ").append(format.format(new Date())).append("</br>")
                     .append("赶快来看看吧!")
-                    .append("<a href=http://localhost:8086/focus>").append("查看详情").append("</a>");
+                    .append("<a href='" + this.frontendURL + "/focus>'").append("查看详情").append("</a>");
 
             this.sender.sendHTMLEmail(email, title.toString(), content.toString());
         }

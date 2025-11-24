@@ -50,4 +50,35 @@ public class CommentServiceImpl implements CommentService {
     public int countResourceCommentNumber(int resource_id) {
         return this.commentMapper.countResourceCommentNumber(resource_id);
     }
+
+    @Override
+    public int supportCommentById(int id) {
+        return this.commentMapper.supportCommentById(id);
+    }
+
+    @Override
+    public int recordUserSupportComment(int comment_id, int user_id) {
+        return this.commentMapper.recordUserSupportComment(comment_id, user_id);
+    }
+
+    @Override
+    public  boolean isUserSupportComment(int comment_id, int user_id) {
+        return this.commentMapper.searchUserSupportComment(comment_id, user_id).getAmount() > 0;
+    }
+
+    @Override
+    public  List<Integer> getUserSupportedCommentInList(int user_id, List<Integer> comment_ids) {
+        return this.commentMapper.getUserSupportedCommentInList(user_id, comment_ids);
+    }
+
+    @Override
+    public int cancelUserSupportComment(int user_id, int comment_id) {
+        return this.commentMapper.deleteUserSupportComment(user_id, comment_id);
+    }
+
+    @Override
+    public int deductCommentSupportNumber(int comment_id) {
+        return this.commentMapper.deductCommentSupportNumber(comment_id);
+    }
+    
 }

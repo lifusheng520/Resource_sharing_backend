@@ -3,6 +3,7 @@ package com.sharing.config;
 import com.sharing.config.handler.*;
 import com.sharing.serviceImpl.MyUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -25,6 +26,11 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 @EnableWebSecurity
 public class MySecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Value("${frontend.url}")
+    private String frontendURL;
+
+    public static final String ADMINISTATOR = "admin";
 
     @Autowired
     private MyUserDetailsServiceImpl userDetailsService;
@@ -78,7 +84,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         // 配置前端服务器前端URL端口
-        corsConfiguration.addAllowedOrigin("http://localhost:8086");
+        corsConfiguration.addAllowedOrigin(this.frontendURL);
 //        corsConfiguration.addAllowedOrigin("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
@@ -95,6 +101,8 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                // 允许注册请求
+                .antMatchers("/register").permitAll()
                 .antMatchers("/index/**", "/rank/**", "/comment/**", "/focus/**").permitAll()
                 // 允许所有的首页请求
                 .antMatchers("/user/icon/**").permitAll()
@@ -105,9 +113,9 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/updatePass").permitAll()
                 .antMatchers("/resource/**").permitAll()
                 .antMatchers("/user/**").permitAll()
-                .antMatchers("/platform/**").hasAnyRole("admin")
-                .antMatchers("/admin/**").hasAnyRole("admin")
-                .antMatchers("/druid/**").hasAnyRole("admin")
+                .antMatchers("/platform/**").hasAnyRole(MySecurityConfig.ADMINISTATOR)
+                .antMatchers("/admin/**").hasAnyRole(MySecurityConfig.ADMINISTATOR)
+                .antMatchers("/druid/**").hasAnyRole(MySecurityConfig.ADMINISTATOR)
 //                .antMatchers("/user/**").hasAnyRole("admin", "teacher", "student", "user")
                 .and()
                 .authorizeRequests()

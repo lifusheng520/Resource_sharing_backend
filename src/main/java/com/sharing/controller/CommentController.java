@@ -131,6 +131,7 @@ public class CommentController {
      * 获取资源的评论区内容信息
      *
      * @param resource_id 资源id
+     * 
      * @return 返回资源评论区内容的
      */
     @GetMapping("/load/{resource_id}")
@@ -216,5 +217,87 @@ public class CommentController {
 
         return ResultFormatUtil.format(responseCode, commentList);
     }
+
+    /**
+     * 对某条评论内容进行点赞
+     *
+     * @param params 请求参数
+     * @return 返回删除的结果json
+     */
+    @PostMapping("/support")
+    public String supportComment(@RequestBody Map<String, String> params) {
+        // 获取请求参数
+        String commentId = params.get("comment_id");
+        String userId = params.get("user_id");
+
+        // 是否已经点赞过该评论
+        boolean isSupported = this.commentService.isUserSupportComment(Integer.valueOf(commentId), Integer.valueOf(userId));
+        if (isSupported)
+            return ResultFormatUtil.format(ResponseCode.USER_ALREADY_SUPPORT_COMMENT, true);
+
+        // 为对应id的评论增加点赞数
+        int i = this.commentService.supportCommentById(Integer.valueOf(commentId));
+
+        // 记录用户点赞行为
+        this.commentService.recordUserSupportComment(Integer.valueOf(commentId), Integer.valueOf(userId));
+
+        ResponseCode responseCode;
+        if (i > 0)
+            responseCode = ResponseCode.UPDATE_COMMENT_SUPPORT_SUCCESS;
+        else
+            responseCode = ResponseCode.UPDATE_COMMENT_SUPPORT_FAIL;
+
+        return ResultFormatUtil.format(responseCode, null);
+    }
+
+    /**
+     * 评论区有哪些评论被当前用户点赞了
+     *
+     * @param params 请求参数，包含评论id list和用户id
+     * @return 返回删除的结果json
+     */
+    @PostMapping("/getSupportInfo")
+    public String supportInComment(@RequestBody Map<String, Object> params) {
+        // 获取请求参数
+        String userId = (String) params.get("user_id");
+        List<Integer> commentIdList = (List<Integer>) params.get("comment_id_list");
+
+        // 查询该评论区的评论中，有哪个comment被该用户点赞了
+        List<Integer> supportedCommentIdList = this.commentService.getUserSupportedCommentInList(Integer.valueOf(userId), commentIdList);
+
+        return ResultFormatUtil.format(ResponseCode.FIND_OUT_SUPPORTED_COMMENT_SUCCESS, supportedCommentIdList);
+    }
+
+    /**
+     * 取消点赞接口
+     *
+     * @param params 请求参数，包含评论id list和用户id
+     * @return 返回删除的结果json
+     */
+    @PostMapping("/cancelSupport")
+    public String cancelSupport(@RequestBody Map<String, String> params) {
+        // 获取请求参数
+        String userId = params.get("user_id");
+        String commentId = params.get("comment_id");
+
+        // 用户是否点赞过该评论
+        boolean isSupported = this.commentService.isUserSupportComment(Integer.valueOf(commentId), Integer.valueOf(userId));
+        if (!isSupported)
+            return ResultFormatUtil.format(ResponseCode.DO_NOT_EXIST_COMMENT_SUPPORT, null);
+
+        // 删除该用户对该评论的点赞记录
+        int j = this.commentService.cancelUserSupportComment(Integer.valueOf(userId), Integer.valueOf(commentId));
+
+        // 为对应id的评论减少点赞数
+        int i = this.commentService.deductCommentSupportNumber(Integer.valueOf(commentId));
+
+        ResponseCode responseCode;
+        if (i > 0 && j > 0)
+            responseCode = ResponseCode.ADD_COMMENT_SUPPORT_SUCCESS;
+        else
+            responseCode = ResponseCode.ADD_COMMENT_SUPPORT_FAIL;    
+        return ResultFormatUtil.format(responseCode, null);
+    }
+
 
 }

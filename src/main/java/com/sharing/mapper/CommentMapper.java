@@ -2,7 +2,10 @@ package com.sharing.mapper;
 
 import com.sharing.pojo.Comment;
 import com.sharing.pojo.CommentInfo;
+import com.sharing.pojo.CommentSupport;
+
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -69,5 +72,56 @@ public interface CommentMapper {
      */
     int countResourceCommentNumber(int resource_id);
 
+    /**
+     * 根据评论的id，增加评论的点赞数
+     *
+     * @param id 评论的id
+     * @return 返回更新行数
+     */
+    int supportCommentById(int id);
+
+    /**
+     * 插入一条用户对评论的点赞行为的记录
+     *
+     * @param comment_id 评论的id
+     * @param user_id    用户的id
+     * @return 返回受影响的行数
+     */
+    int recordUserSupportComment(int comment_id, int user_id);
+
+    /**
+     * 查询一条用户是否已经对某条评论点过赞de记录
+     *
+     * @param comment_id 评论的id
+     * @param user_id    用户的id
+     * @return 返回受影响的行数 CommentSupport
+     */
+    CommentSupport searchUserSupportComment(int comment_id, int user_id);
+
+    /**
+     * 获取评论区中被某用户点赞的评论id集合
+     *
+     * @param comment_ids 评论区的id list集合
+     * @param user_id    用户的id
+     * @return 被用户点赞的评论id集合
+     */
+    List<Integer> getUserSupportedCommentInList(@Param("user_id") int user_id, @Param("comment_ids") List<Integer> comment_ids);
+
+    /**
+     * 取消用户对某条评论的点赞
+     *
+     * @param comment_id 评论的id
+     * @param user_id    用户的id
+     * @return 返回受影响的行数
+     */
+    int deleteUserSupportComment(@Param("user_id") int user_id, @Param("comment_id") int comment_id);
+
+    /**
+     * 减少评论的点赞数
+     *
+     * @param comment_id 评论的id
+     * @return 返回受影响的行数
+     */
+    int deductCommentSupportNumber(int comment_id);
 
 }

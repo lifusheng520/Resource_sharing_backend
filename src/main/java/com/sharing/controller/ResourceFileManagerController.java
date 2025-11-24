@@ -260,7 +260,6 @@ public class ResourceFileManagerController {
      */
     @PostMapping("/updateInfo")
     public String updateUserResourceInfo(@RequestBody Map<String, String> params) {
-        System.out.println(params);
         if (params == null || params.size() == 0)
             return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_LOSE, "resource info");
         String id = params.get("id");
@@ -378,6 +377,14 @@ public class ResourceFileManagerController {
 
         // 删除回收箱中的记录
         int i1 = this.resourceService.deleteResourceDeletedRecordByList(deletedResourceList);
+
+        // 删除评论记录
+        //this.resourceService.deleteResourceCommentByList(deletedResourceList);
+
+        // 删除收藏记录
+        //this.resourceService.deleteResourceFavoriteByList(deletedResourceList);
+
+        
 
         // 从磁盘中将资源删除
         for (DeletedResource resource : deletedResourceList) {

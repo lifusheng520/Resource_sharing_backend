@@ -17,7 +17,8 @@
     </select>
 
     <select id="getResourceDownloadsList" resultType="int">
-        select sum(downloads) from resource;
+        <!-- select sum(downloads) from resource; -->
+        select COALESCE(sum(downloads), 0) from resource;
     </select>
 
     <select id="getResourceByDiscipline" parameterType="string" resultType="userResource" useCache="false">

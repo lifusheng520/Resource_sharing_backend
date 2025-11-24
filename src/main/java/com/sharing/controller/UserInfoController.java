@@ -34,6 +34,9 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserInfoController {
 
+    @Value("${user.default.icon.filename}")
+    private String defaultIcon;
+
     @Autowired
     private UserService userService;
 
@@ -54,7 +57,6 @@ public class UserInfoController {
      */
     @Autowired
     private MyEmailSenderConfig emailSender;
-
 
     /**
      * 修改用户密码接口
@@ -92,7 +94,6 @@ public class UserInfoController {
         }
         return ResultFormatUtil.format(ResponseCode.UPDATE_PASSWORD_FAIL, username);
     }
-
 
     /**
      * 向用户发送一封邮件，用于身份验证
@@ -187,14 +188,14 @@ public class UserInfoController {
         int id = Integer.valueOf(params.get("id"));
         String emailAddress = params.get("email");
 
-        //  获取一个六位数的验证码
+        // 获取一个六位数的验证码
         String verifyCode = MyEmailSenderConfig.generateVerifyCode(6);
 
         // 向用户输入的邮箱地址发送验证码
         String title = "邮箱绑定";
         String message = "绑定安全邮箱";
         boolean b = this.emailSender.sendEmail(emailAddress, title, message, verifyCode);
-        if (!b) {    // 邮箱发送失败
+        if (!b) { // 邮箱发送失败
             return ResultFormatUtil.format(ResponseCode.EMAIL_SEND_FAIL, emailAddress);
         }
 
@@ -235,7 +236,6 @@ public class UserInfoController {
         if (!file.exists())
             return;
 
-
         // 设置输出流格式
         ServletOutputStream outputStream = response.getOutputStream();
         response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(iconFileName, "UTF-8"));
@@ -246,7 +246,6 @@ public class UserInfoController {
         outputStream.flush();
         outputStream.close();
     }
-
 
     /**
      * 头像文件上传接口
@@ -262,12 +261,12 @@ public class UserInfoController {
         String originalFilename = file.getOriginalFilename();
         // 获取文件后缀名
         String type = FileUtil.extName(originalFilename);
-        //获取文件大小
+        // 获取文件大小
         long size = file.getSize();
 
         // 头像文件磁盘路径
         File uploadFile = new File(this.iconUploadPath);
-        if (!uploadFile.exists()) {   // 判断文件目录是否存在
+        if (!uploadFile.exists()) { // 判断文件目录是否存在
             uploadFile.mkdirs();
         }
         // 文件的唯一标识id
@@ -279,8 +278,8 @@ public class UserInfoController {
         try {
             // 先将头像写入到磁盘
             file.transferTo(distFile);
-        } catch (IOException e) {   // 上传失败
-//            e.printStackTrace();
+        } catch (IOException e) { // 上传失败
+            // e.printStackTrace();
             return ResultFormatUtil.format(ResponseCode.EXCEPTION_IO_UPLOAD, originalFilename);
         }
         // 文件的主机URL
@@ -318,7 +317,11 @@ public class UserInfoController {
         }
         // 设置用户头像URL
         String icon = userInfo.getHeadIcon();
-        userInfo.setHeadIcon(this.iconHostUrl + icon);
+        if (icon == null || "".equals(icon) || "null".equals(icon)) {
+            userInfo.setHeadIcon(this.iconHostUrl + this.defaultIcon);
+        } else
+            userInfo.setHeadIcon(this.iconHostUrl + icon);
+
         return ResultFormatUtil.format(ResponseCode.REQUEST_USER_INFO_SUCCESS, userInfo);
     }
 
@@ -330,7 +333,6 @@ public class UserInfoController {
      */
     @PostMapping("/updateInfo")
     public String updateUserInfo(@RequestBody Map<String, String> infoParams) {
-        System.out.println(infoParams);
         Integer id = Integer.valueOf(infoParams.get("id"));
 
         if (id == null) {
@@ -343,7 +345,6 @@ public class UserInfoController {
         userInfo.setName(infoParams.get("name"));
         userInfo.setSex(infoParams.get("sex"));
         userInfo.setAddress(infoParams.get("address"));
-        System.out.println(userInfo);
 
         // 将用户信息存储到数据库
         int i = this.userService.updateUserInfo(userInfo);

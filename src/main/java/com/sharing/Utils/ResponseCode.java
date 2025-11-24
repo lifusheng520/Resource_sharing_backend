@@ -111,6 +111,13 @@ public enum ResponseCode {
     GET_USER_ALL_COMMENT_SUCCESS(5005, "获取用户评论成功"),
     DELETE_COMMENT_SUCCESS(5006, "评论删除成功"),
     DELETE_COMMENT_FAIL(5007, "评论删除失败"),
+    UPDATE_COMMENT_SUPPORT_SUCCESS(5008, "评论点赞成功"),
+    UPDATE_COMMENT_SUPPORT_FAIL(5009, "评论点赞失败"),
+    USER_ALREADY_SUPPORT_COMMENT(5010, "用户已经点赞过该评论，不能重复点赞"),
+    FIND_OUT_SUPPORTED_COMMENT_SUCCESS(5011, "成功获取用户已点赞的评论列表"),
+    ADD_COMMENT_SUPPORT_SUCCESS(5012, "点赞记录修改成功"),
+    ADD_COMMENT_SUPPORT_FAIL(5013, "在修改点赞记录时发生了错误"),
+    DO_NOT_EXIST_COMMENT_SUPPORT(5014, "对应的记录不存在，无法修改点赞状态"),
 
     /**
      * 用户关注业务

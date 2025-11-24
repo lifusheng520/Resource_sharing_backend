@@ -5,6 +5,8 @@ import com.alibaba.druid.spring.boot.autoconfigure.properties.DruidStatPropertie
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
 import com.alibaba.druid.util.Utils;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -26,6 +28,13 @@ import java.util.Map;
 @Configuration
 public class MyDruidConfig {
 
+    //   从配置文件中获取Durid监控的账号密码
+    @Value("${spring.druid.monitor.login-username}")
+    private String loginUsername;
+
+    @Value("${spring.druid.monitor.login-password}")
+    private String loginPassword;
+
     @ConfigurationProperties(prefix = "spring.datasource")
     @Bean
     public DataSource getDruidDataSource() {
@@ -42,8 +51,8 @@ public class MyDruidConfig {
         HashMap<String, String> initParameters = new HashMap<>();
 
         //        增加配置
-        initParameters.put("loginUsername", "admin");   //登陆key为固定值（loginUsername， loginPassword）
-        initParameters.put("loginPassword", "123456");
+        initParameters.put("loginUsername", loginUsername);   //登陆key为固定值（loginUsername， loginPassword）
+        initParameters.put("loginPassword", loginPassword);
 
 //        允许谁可以访问(localhost:本地访问)
 //        initParameters.put("allow", "");

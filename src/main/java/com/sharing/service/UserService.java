@@ -2,7 +2,6 @@ package com.sharing.service;
 
 import com.sharing.pojo.User;
 import com.sharing.pojo.UserInfo;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

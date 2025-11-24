@@ -20,8 +20,8 @@ public class MyLogoutHandler implements LogoutHandler {
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         String headerToken = request.getHeader("token");
-        System.out.println("logout header Token = " + headerToken);
-        System.out.println("logout request getMethod = " + request.getMethod());
+
+        
         //
         if (headerToken != null && !"".equals(headerToken)) {
             //postMan测试时，自动假如的前缀，要去掉。

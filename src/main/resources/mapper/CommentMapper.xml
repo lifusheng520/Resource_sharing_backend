@@ -12,7 +12,7 @@
     </insert>
 
     <select id="getCommentAndUserInfo" parameterType="int" resultType="commentInfo">
-        SELECT c.user_id user_id, u.headIcon headIcon, u.name name, u2.name to_name, c.time time, c.content content, c.support_number support_number
+        SELECT c.id id, c.user_id user_id, u.headIcon headIcon, u.name name, u2.name to_name, c.time time, c.content content, c.support_number support_number
         FROM comment c inner join user_info u
                         on c.user_id = u.user_id
                 left join user_info u2
@@ -50,6 +50,57 @@
         select count(*) from comment
         where resource_id = #{resource_id};
     </select>
+
+    <update id="supportCommentById" parameterType="int">
+        update comment
+        <set>
+            support_number = support_number + 1
+        </set>
+        where id = #{id};
+    </update>
+
+    <insert id="recordUserSupportComment" parameterType="int">
+        insert into comment_support(comment_id, user_id)
+        values (#{comment_id}, #{user_id});
+    </insert>
+
+    <select id="searchUserSupportComment" parameterType="int" resultType="commentSupport">
+        select count(*) amount from comment_support
+        where comment_id = #{comment_id} and user_id = #{user_id};
+    </select>
+
+    <select id="getUserSupportedCommentInList" resultType="int">
+        <if test="comment_ids != null and comment_ids.size() > 0">
+            select comment_id from comment_support
+            where user_id = #{user_id}
+            and comment_id in
+            <foreach collection="comment_ids" open="(" close=")" item="id" separator=",">
+                #{id}
+            </foreach>;
+        </if>
+
+         <!-- comment_ids 为空时，返回空结果 -->
+        <if test="comment_ids == null or comment_ids.size() == 0">
+            select comment_id from comment_support
+            where 1 = 0   <!-- 永远返回空 -->
+        </if>
+    </select>
+
+    <delete id="deleteUserSupportComment">
+        DELETE FROM comment_support
+        WHERE comment_id = #{comment_id} AND user_id = #{user_id};
+    </delete>
+
+
+    <update id="deductCommentSupportNumber" parameterType="int">
+        update comment
+        <set>
+            support_number = support_number - 1
+        </set>
+        where id = #{comment_id};
+    </update>
+
+
 
 
 </mapper>

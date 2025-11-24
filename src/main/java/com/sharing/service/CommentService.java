@@ -65,5 +65,58 @@ public interface CommentService {
      */
     int countResourceCommentNumber(int resource_id);
 
+    /**
+     * 根据评论的id，增加评论点赞数量
+     *
+     * @param id 评论的id
+     * @return 返回受影响的行数
+     */
+    int supportCommentById(int id);
+
+    /**
+     * 记录用户对评论的点赞行为
+     *
+     * @param comment_id 评论的id
+     * @param user_id    用户的id
+     * @return 返回受影响的行数
+     */
+    int recordUserSupportComment(int comment_id, int user_id);
+
+    /**
+     * 判断用户是否已经点赞过该评论
+     *
+     * @param comment_id 评论的id
+     * @param user_id    用户的id
+     * @return 返回受影响的行数
+     */
+    boolean isUserSupportComment(int comment_id, int user_id);
+
+
+    /**
+     * 获取评论区中被某用户点赞的评论id集合
+     *
+     * @param comment_ids 评论区的id list集合
+     * @param user_id    用户的id
+     * @return 被用户点赞的评论id集合
+     */
+    List<Integer> getUserSupportedCommentInList(int user_id, List<Integer> comment_ids);
+
+    /**
+     * 取消用户对某条评论的点赞
+     *
+     * @param comment_id 评论的id
+     * @param user_id    用户的id
+     * @return 返回受影响的行数
+     */
+    int cancelUserSupportComment(int user_id, int comment_id);
+
+    /**
+     * 减少评论的点赞数量
+     *
+     * @param comment_id 评论的id
+     * @return 返回受影响的行数
+     */
+    int deductCommentSupportNumber(int comment_id);
+
 
 }

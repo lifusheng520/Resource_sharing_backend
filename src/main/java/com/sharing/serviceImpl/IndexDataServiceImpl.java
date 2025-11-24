@@ -45,7 +45,7 @@ public class IndexDataServiceImpl implements IndexDataService {
     }
 
     @Override
-    public int getResourceDownloads() {
+    public Integer getResourceDownloads() {
         return this.indexDataMapper.getResourceDownloadsList();
     }
 
@@ -58,6 +58,10 @@ public class IndexDataServiceImpl implements IndexDataService {
                 continue;
             // 查询科目资源
             UserAndResource userAndResource = this.indexDataMapper.getUserAndResourceByDiscipline(discipline);
+
+            if (userAndResource == null)
+                continue;
+
             // 获取资源点赞数量
             int id = userAndResource.getResource().getId();
             int supportNumbers = this.supportService.countResourceSupportNumbers(id);

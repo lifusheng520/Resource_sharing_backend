@@ -20,6 +20,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommentInfo {
+    private int id;
     private int user_id;
     private String headIcon;
     private String name;

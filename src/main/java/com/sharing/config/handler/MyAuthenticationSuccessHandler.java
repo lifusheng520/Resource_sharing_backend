@@ -44,6 +44,11 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
         user.setIsEnable(loginInfo.getUser().getEnabled());
         user.setToken(loginInfo.getToken());
         user.setRoles(loginInfo.getAuthorities());
+
+
+        //System.err.println("\n这里" + loginInfo.getUser().getHeadIcon() + "\n");
+
+        
         user.setHeadIcon(loginInfo.getUser().getHeadIcon());
         user.setUserInfo_id(loginInfo.getUserInfo_id());
 
