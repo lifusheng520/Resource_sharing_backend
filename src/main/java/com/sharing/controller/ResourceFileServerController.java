@@ -70,6 +70,10 @@ public class ResourceFileServerController {
 
         UserAndResource userResourceDetail = this.resourceDetailService.getUserResourceDetail(resourceId);
 
+        if (userResourceDetail == null) {
+            return ResultFormatUtil.format(ResponseCode.RESOURCE_NOT_SEARCH, null);
+        }
+
         if (userResourceDetail.getResource().getIsDeleted() == 1) {
             return ResultFormatUtil.format(ResponseCode.RESOURCE_IS_NOT_EXIST, null);
         }
