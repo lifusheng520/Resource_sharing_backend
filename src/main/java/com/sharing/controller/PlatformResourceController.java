@@ -33,6 +33,9 @@ import java.util.Map;
 @RequestMapping("/platform")
 public class PlatformResourceController {
 
+    @Value("${frontend.url}")
+    private String frontendURL;
+
     @Value("${files.resource.upload.root.path}")
     private String uploadRootPath;
 
@@ -239,7 +242,7 @@ public class PlatformResourceController {
                     .append("名称: ").append(focus.getFocusOriginName()).append("</br>")
                     .append("发布时间: ").append(format.format(new Date())).append("</br>")
                     .append("赶快来看看吧!")
-                    .append("<a href=http://localhost:8086/focus>").append("查看详情").append("</a>");
+                    .append("<a href=" + this.frontendURL + "/focus>").append("查看详情").append("</a>");
 
             this.emailSender.sendHTMLEmail(email, title.toString(), content.toString());
         }

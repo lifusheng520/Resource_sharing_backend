@@ -7,6 +7,9 @@ import lombok.Data;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Value;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -20,6 +23,8 @@ import java.io.Serializable;
  */
 
 public class ResultFormatUtil implements Serializable {
+
+    public static final String frontendURL = "https://delightful-tree-05678bb00.3.azurestaticapps.net";
 
     public static final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -64,7 +69,7 @@ public class ResultFormatUtil implements Serializable {
         //设置响应内容类型
         response.setContentType("application/json;charset=UTF-8");
         // 设置响应头跨域参数，否则页面获取不到正常的JSON数据集
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:8086");
+        response.setHeader("Access-Control-Allow-Origin", ResultFormatUtil.frontendURL);
         response.setHeader("Access-Control-Allow-Headers", "*");
         response.setHeader("Access-Control-Allow-Credentials", "true");
 
