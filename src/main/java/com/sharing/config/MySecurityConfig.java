@@ -31,6 +31,9 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${frontend.url}")
     private String frontendURL;
 
+    @Value("${backend.url}")
+    private String backendURL;
+
     public static final String ADMINISTATOR = "admin";
 
     @Autowired
@@ -85,8 +88,11 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfiguration = new CorsConfiguration();
     
+        // 允许来自前端的跨域请求
         corsConfiguration.addAllowedOriginPattern(this.frontendURL);
-
+        // 允许来自后端自己的同源(origin)请求
+        corsConfiguration.addAllowedOriginPattern(this.backendURL);
+        
         // 允许请求携带cookies
         corsConfiguration.setAllowCredentials(true);
 
