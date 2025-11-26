@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
@@ -69,10 +70,9 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(this.userDetailsService).passwordEncoder(this.passwordEncoder());
     }
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring()
-            .antMatchers("/druid/**");
+    @Bean
+    public WebSecurityCustomizer ignoringCustomizer() {
+        return (web) -> web.ignoring().antMatchers("/druid/**");
     }
 
     /**
