@@ -70,8 +70,9 @@ public class ResultFormatUtil implements Serializable {
         response.setContentType("application/json;charset=UTF-8");
         // 设置响应头跨域参数，否则页面获取不到正常的JSON数据集
         response.setHeader("Access-Control-Allow-Origin", ResultFormatUtil.frontendURL);
-        response.setHeader("Access-Control-Allow-Headers", "*");
         response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Headers", "*");
+
 
         // 允许跨域请求
         response.setHeader("Access-Control-Allow-Method", "POST,GET");

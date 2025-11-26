@@ -45,16 +45,13 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
         user.setToken(loginInfo.getToken());
         user.setRoles(loginInfo.getAuthorities());
 
-
-        //System.err.println("\n这里" + loginInfo.getUser().getHeadIcon() + "\n");
-
         
         user.setHeadIcon(loginInfo.getUser().getHeadIcon());
         user.setUserInfo_id(loginInfo.getUserInfo_id());
 
         // 将用户token写入响应头中
-//        response.setHeader("token", loginInfo.getToken());
-        response.setHeader("token", "hahahahaha");
+        //response.setHeader("token", loginInfo.getToken());
+        //response.setHeader("token", "hahahahaha");
 
         ResultFormatUtil.ApiResult data = ResultFormatUtil.ApiResult.build(ResponseCode.LOGIN_SUCCESS, user);
         ResultFormatUtil.writeJSON(request, response, data);

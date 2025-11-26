@@ -83,13 +83,15 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        // 配置前端服务器前端URL端口
-        corsConfiguration.addAllowedOrigin(this.frontendURL);
-//        corsConfiguration.addAllowedOrigin("*");
-        corsConfiguration.addAllowedHeader("*");
-        corsConfiguration.addAllowedMethod("*");
+    
+        corsConfiguration.addAllowedOriginPattern(this.frontendURL);
+
         // 允许请求携带cookies
         corsConfiguration.setAllowCredentials(true);
+
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedMethod("*");
+
         source.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsFilter(source);
     }
