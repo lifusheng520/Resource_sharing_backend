@@ -2,10 +2,15 @@ package com.sharing.config;
 
 import com.sharing.config.handler.*;
 import com.sharing.serviceImpl.MyUserDetailsServiceImpl;
+
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -67,7 +72,6 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(this.userDetailsService).passwordEncoder(this.passwordEncoder());
@@ -84,20 +88,37 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
      * @return
      */
     @Bean
+    @Order(Ordered.HIGHEST_PRECEDENCE)
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-    
+
         // 允许来自前端的跨域请求
         corsConfiguration.addAllowedOriginPattern(this.frontendURL);
         // 允许来自后端自己的同源(origin)请求
         corsConfiguration.addAllowedOriginPattern(this.backendURL);
+
+        // 允许的请求方法
+        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+        // 明确指出请求头信息
+        corsConfiguration.setAllowedHeaders(Arrays.asList(
+                "Content-Type",
+                "X-Requested-With",
+                "Accept",
+                "Origin",
+                "Authorization"));
+
+        //
+        corsConfiguration.setExposedHeaders(Arrays.asList(
+                "Set-Cookie",
+                "Authorization"));
         
+        // 1000 * 60 (mins) * 60(hours) 1小时过期
+        corsConfiguration.setMaxAge(3600L);
+
         // 允许请求携带cookies
         corsConfiguration.setAllowCredentials(true);
-
-        corsConfiguration.addAllowedHeader("*");
-        corsConfiguration.addAllowedMethod("*");
 
         source.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsFilter(source);
@@ -109,53 +130,52 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().and()
                 .csrf().disable()
                 .authorizeRequests()
-                    .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                    .antMatchers("/druid/**").permitAll()
-                    // 允许注册请求
-                    .antMatchers("/register").permitAll()
-                    .antMatchers("/index/**", "/rank/**", "/comment/**", "/focus/**").permitAll()
-                    // 允许所有的首页请求
-                    .antMatchers("/user/icon/**").permitAll()
-                    // 允许所有认证请求
-                    .antMatchers("/auth/**").permitAll()
-                    .antMatchers("/file/**").permitAll()
-                    .antMatchers("/user/authEmail/**").permitAll()
-                    .antMatchers("/user/updatePass").permitAll()
-                    .antMatchers("/resource/**").permitAll()
-                    .antMatchers("/user/**").permitAll()
-                    .antMatchers("/platform/**").hasAnyRole(MySecurityConfig.ADMINISTATOR)
-                    .antMatchers("/admin/**").hasAnyRole(MySecurityConfig.ADMINISTATOR)
-                    .anyRequest().authenticated()
-
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                .antMatchers("/druid/**").permitAll()
+                // 允许注册请求
+                .antMatchers("/register").permitAll()
+                .antMatchers("/index/**", "/rank/**", "/comment/**", "/focus/**").permitAll()
+                // 允许所有的首页请求
+                .antMatchers("/user/icon/**").permitAll()
+                // 允许所有认证请求
+                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/file/**").permitAll()
+                .antMatchers("/user/authEmail/**").permitAll()
+                .antMatchers("/user/updatePass").permitAll()
+                .antMatchers("/resource/**").permitAll()
+                .antMatchers("/user/**").permitAll()
+                .antMatchers("/platform/**").hasAnyRole(MySecurityConfig.ADMINISTATOR)
+                .antMatchers("/admin/**").hasAnyRole(MySecurityConfig.ADMINISTATOR)
+                .anyRequest().authenticated()
 
                 .and()
                 // 退出登录的处理端口
                 .logout().logoutUrl("/auth/logout")
-                    // 设置退出登录处理器
-                    .addLogoutHandler(this.myLogoutHandler)
-                    // 退出登录成功处理器
-                    .logoutSuccessHandler(this.myLogoutSuccessHandler)
-                    // 退出登录成功后，删除session会话
-                    .deleteCookies("JSESSIONID")
+                // 设置退出登录处理器
+                .addLogoutHandler(this.myLogoutHandler)
+                // 退出登录成功处理器
+                .logoutSuccessHandler(this.myLogoutSuccessHandler)
+                // 退出登录成功后，删除session会话
+                .deleteCookies("JSESSIONID")
                 .and()
                 // 登录设置
                 .formLogin()
-                    // 配置登录认证处理端口
-                    .loginProcessingUrl("/auth/login")
-                    // 设置表单参数名
-                    .usernameParameter("username")
-                    .passwordParameter("password")
-                    // 登录成功处理器
-                    .successHandler(this.myAuthenticationSuccessHandler)
-                    // 登录失败处理器
-                    .failureHandler(this.myAuthenticationFailHandler)
+                // 配置登录认证处理端口
+                .loginProcessingUrl("/auth/login")
+                // 设置表单参数名
+                .usernameParameter("username")
+                .passwordParameter("password")
+                // 登录成功处理器
+                .successHandler(this.myAuthenticationSuccessHandler)
+                // 登录失败处理器
+                .failureHandler(this.myAuthenticationFailHandler)
                 .and()
                 // 记住我
                 .rememberMe()
                 // 即登录页面的记住登录按钮的参数名
-                    .rememberMeParameter("remember-me")
-                    //  会话过期时间   （单位：秒）
-                    .tokenValiditySeconds(1800)
+                .rememberMeParameter("remember-me")
+                // 会话过期时间 （单位：秒）
+                .tokenValiditySeconds(1800)
                 .and()
                 // 未登录设置(登录认证入口)
                 .exceptionHandling().authenticationEntryPoint(this.myAuthenticationEntryPoint)
@@ -164,13 +184,13 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().accessDeniedHandler(this.myAccessDeniedHandler)
                 .and()
                 .sessionManagement()
-                    // 设置session失效过期处理器
-                    .invalidSessionStrategy(this.myInvalidSessionStrategyHandler)
-                    // 设置只允许一个用户登录
-                    .maximumSessions(1)
-                    // 禁止其他地方登录账号   （false：另一个人登录时当前用户被挤下线   true：当前账号已登录，后面用户不能再登录该账号）
-                    .maxSessionsPreventsLogin(false)
-                    // 用户被挤下线时的处理类
-                    .expiredSessionStrategy(this.mySessionInformationExpiredStrategyHandler);
+                // 设置session失效过期处理器
+                .invalidSessionStrategy(this.myInvalidSessionStrategyHandler)
+                // 设置只允许一个用户登录
+                .maximumSessions(1)
+                // 禁止其他地方登录账号 （false：另一个人登录时当前用户被挤下线 true：当前账号已登录，后面用户不能再登录该账号）
+                .maxSessionsPreventsLogin(false)
+                // 用户被挤下线时的处理类
+                .expiredSessionStrategy(this.mySessionInformationExpiredStrategyHandler);
     }
 }
