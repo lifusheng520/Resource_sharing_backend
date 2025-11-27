@@ -87,6 +87,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
      *
      * @return
      */
+    /*
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public CorsFilter corsFilter() {
@@ -94,35 +95,39 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
         // 允许来自前端的跨域请求
-        corsConfiguration.addAllowedOriginPattern(this.frontendURL);
-        // 允许来自后端自己的同源(origin)请求
-        corsConfiguration.addAllowedOriginPattern(this.backendURL);
+        //corsConfiguration.addAllowedOriginPattern(this.frontendURL);
+        corsConfiguration.setAllowedOrigins(Arrays.asList(
+        "https://delightful-tree-05678bb00.3.azurestaticapps.net"
+        ));
 
         // 允许的请求方法
+        //corsConfiguration.addAllowedMethod("*");
         corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
         // 明确指出请求头信息
+        //corsConfiguration.addAllowedHeader("*");
         corsConfiguration.setAllowedHeaders(Arrays.asList(
-                "Content-Type",
-                "X-Requested-With",
-                "Accept",
-                "Origin",
-                "Authorization"));
-
-        //
-        corsConfiguration.setExposedHeaders(Arrays.asList(
-                "Set-Cookie",
-                "Authorization"));
-        
-        // 1000 * 60 (mins) * 60(hours) 1小时过期
-        corsConfiguration.setMaxAge(3600L);
+            "Content-Type",
+            "X-Requested-With",
+            "Accept",
+            "Origin",
+            "Authorization"
+        ));
 
         // 允许请求携带cookies
         corsConfiguration.setAllowCredentials(true);
 
+
+        // 让 Set-Cookie 可见
+        corsConfiguration.setExposedHeaders(Arrays.asList("Set-Cookie", "Authorization"));
+
+        // 1000 * 60 (mins) * 60(hours) 1小时过期
+        corsConfiguration.setMaxAge(3600L);
+
         source.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsFilter(source);
     }
+     */
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
