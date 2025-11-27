@@ -64,7 +64,7 @@ public class ResourceFileManagerController {
 
         // 获取文件信息
         String originalFilename = file.getOriginalFilename();
-        String type = FileUtil.extName(originalFilename);
+        String type = FileUtil.extName(originalFilename).toLowerCase();
         long size = file.getSize();
 
         // 磁盘文件夹 = 上传根路径 + 文件类别
