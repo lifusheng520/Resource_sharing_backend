@@ -5,6 +5,9 @@ import lombok.Data;
 import java.io.*;
 import java.util.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+
 /**
  * 敏感词处理工具类
  *
@@ -31,7 +34,7 @@ public class IllegalWordDisposeUtil {
      * 初始化词库内容，将词组导入
      */
     static {
-        wordsFilePath = "src/main/resources/敏感词库/敏感词.txt";
+        wordsFilePath = "/home/azure2025/campusResource/src/illegalWordsRepository/敏感词.txt";
         importIllegalWordsByFile();
     }
 

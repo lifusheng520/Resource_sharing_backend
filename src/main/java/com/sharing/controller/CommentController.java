@@ -75,10 +75,13 @@ public class CommentController {
         String userId = params.get("user_id");
         String content = params.get("content");
         String toId = params.get("to_id");
-        String tempContent = content.replaceAll(" ", "");
+        String checkContent = content.replaceAll("\\s+", "");
 
-        if (!this.strIsNotNull(resourceId) && !this.strIsNotNull(userId) && !this.strIsNotNull(tempContent))
-            return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_LOSE, "rid,uid");
+        System.out.println("controller收到的评论内容为：");
+        System.out.println(content);
+
+        if (!this.strIsNotNull(resourceId) && !this.strIsNotNull(userId) && !this.strIsNotNull(checkContent))
+            return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_LOSE, "rid, uid, content");
 
         Comment comment = new Comment();
         comment.setResource_id(Integer.valueOf(resourceId));
@@ -93,7 +96,7 @@ public class CommentController {
 
         // 对评论进行敏感词过滤，用 * 替其中的换敏感字符
         char replace = '*';
-        String hiddenStr = IllegalWordDisposeUtil.hideIllegalWords(tempContent, replace);
+        String hiddenStr = IllegalWordDisposeUtil.hideIllegalWords(content, replace);
 
         // 统计评论中的屏蔽符号
         int countHide = this.countStringSign(hiddenStr, replace);
@@ -260,6 +263,9 @@ public class CommentController {
     public String supportInComment(@RequestBody Map<String, Object> params) {
         // 获取请求参数
         String userId = (String) params.get("user_id");
+        if (userId == null || userId.equals(""))
+            return ResultFormatUtil.format(ResponseCode.REQUEST_PARAM_ERROR, "user_id");
+
         List<Integer> commentIdList = (List<Integer>) params.get("comment_id_list");
 
         // 查询该评论区的评论中，有哪个comment被该用户点赞了
